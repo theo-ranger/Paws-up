@@ -10,24 +10,47 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         CollectCardView()
+        Spacer()
+        ButtonView()
     }
 }
+
 
 struct CollectCardView: View {
     var imagePaths = ["cat-portrait", "dog-portrait"] // Array of images paths
     
-    @State var ignore = 0 //"spaceholder" variable
-    
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem()]) {
+            LazyVGrid(columns: [GridItem(), GridItem()]) {
                 ForEach(imagePaths, id: \.self, content: { name in
                     CardView(imageName: name)
                 }
                 )
             }
         }
-        Spacer()
+    }
+}
+
+
+struct CardView: View {
+    var imageName: String
+    
+    var body: some View {
+        VStack {
+            Image(imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 200, height: 200, alignment: .center)
+                .clipped()
+            Text("title")
+        }
+    }
+}
+
+struct ButtonView: View {
+    @State var ignore = 0 //"spaceholder" variable
+    
+    var body: some View {
         HStack {
             button1
             Spacer()
@@ -44,8 +67,6 @@ struct CollectCardView: View {
            ignore += 1
         },label:{
             Image(systemName: "pawprint.fill")
-        
-            
         })
     }
 
@@ -54,17 +75,14 @@ struct CollectCardView: View {
            ignore += 1
         },label:{
             Image(systemName: "pawprint")
-        
-            
         })
     }
+    
     var button3: some View {
         Button(action: {
            ignore += 1
         },label:{
             Image(systemName: "pawprint.fill")
-        
-            
         })
     }
 
@@ -73,20 +91,7 @@ struct CollectCardView: View {
            ignore += 1
         },label:{
             Image(systemName: "pawprint")
-        
-            
         })
-    }
-}
-
-
-struct CardView: View {
-    var imageName: String
-    
-    var body: some View {
-        ZStack {
-            Image(imageName) //image
-        }
     }
 }
 
