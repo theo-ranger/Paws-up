@@ -20,12 +20,17 @@ struct CollectCardView: View {
     var imagePaths = ["cat-portrait", "dog-portrait"] // Array of images paths
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(), GridItem()]) {
-                ForEach(imagePaths, id: \.self, content: { name in
-                    CardView(imageName: name)
+        NavigationView {
+            ScrollView {
+                LazyVGrid(columns: [GridItem(), GridItem()]) {
+                    ForEach(imagePaths, id: \.self, content: { name in
+                        NavigationLink(
+                            destination: ImageView(imageName: name)) {
+                                CardView(imageName: name)
+                          }
+                    }
+                    )
                 }
-                )
             }
         }
     }
@@ -42,7 +47,7 @@ struct CardView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
-            Text("title")
+            Text(imageName)
         }
     }
 }
@@ -92,6 +97,15 @@ struct ButtonView: View {
         },label:{
             Image(systemName: "pawprint")
         })
+    }
+}
+
+
+struct ImageView: View {
+    var imageName: String
+    
+    var body: some View {
+        Image(imageName)
     }
 }
 
