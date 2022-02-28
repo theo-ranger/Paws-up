@@ -71,7 +71,7 @@ struct ButtonView: View {
         Button(action: {
            ignore += 1
         },label:{
-            Image(systemName: "pawprint.fill")
+            Image(systemName: "pawprint.fill").foregroundColor(Color("logo-pink"))
         })
     }
 
@@ -79,7 +79,7 @@ struct ButtonView: View {
         Button(action: {
            ignore += 1
         },label:{
-            Image(systemName: "pawprint")
+            Image(systemName: "pawprint").foregroundColor(Color("logo-pink"))
         })
     }
     
@@ -87,7 +87,7 @@ struct ButtonView: View {
         Button(action: {
            ignore += 1
         },label:{
-            Image(systemName: "pawprint.fill")
+            Image(systemName: "pawprint.fill").foregroundColor(Color("logo-pink"))
         })
     }
 
@@ -95,7 +95,7 @@ struct ButtonView: View {
         Button(action: {
            ignore += 1
         },label:{
-            Image(systemName: "pawprint")
+            Image(systemName: "pawprint").foregroundColor(Color("logo-pink"))
         })
     }
 }
