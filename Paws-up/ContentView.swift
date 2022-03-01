@@ -9,9 +9,17 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
+        HStack {
+            UserButtonView()
+            Spacer()
+            SearchBar(text: .constant(""))
+            Spacer()
+            NewPostButtonView()
+        }
+        
         CollectCardView()
         Spacer()
-        ButtonView()
+        BottomButtonView()
     }
 }
 
@@ -47,16 +55,17 @@ struct CardView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
-            Text(imageName)
+            Text(imageName).foregroundColor(.black)
         }
     }
 }
 
-struct ButtonView: View {
+struct BottomButtonView: View {
     @State var ignore = 0 //"spaceholder" variable
     
     var body: some View {
         HStack {
+            Spacer()
             button1
             Spacer()
             button2
@@ -64,42 +73,116 @@ struct ButtonView: View {
             button3
             Spacer()
             button4
+            Spacer()
         }
     }
     
     var button1: some View {
         Button(action: {
            ignore += 1
-        },label:{
-            Image(systemName: "pawprint.fill").foregroundColor(Color("logo-pink"))
+        }, label: {
+            Image(systemName: "pawprint.fill").foregroundColor(Color("logo-pink")).font(.system(size: 30))
         })
     }
 
     var button2: some View {
         Button(action: {
            ignore += 1
-        },label:{
-            Image(systemName: "pawprint").foregroundColor(Color("logo-pink"))
+        }, label: {
+            Image(systemName: "pawprint").foregroundColor(Color("logo-pink")).font(.system(size: 30))
         })
     }
     
     var button3: some View {
         Button(action: {
            ignore += 1
-        },label:{
-            Image(systemName: "pawprint.fill").foregroundColor(Color("logo-pink"))
+        }, label: {
+            Image(systemName: "pawprint.fill").foregroundColor(Color("logo-pink")).font(.system(size: 30))
         })
     }
 
     var button4: some View {
         Button(action: {
            ignore += 1
-        },label:{
-            Image(systemName: "pawprint").foregroundColor(Color("logo-pink"))
+        }, label: {
+            Image(systemName: "pawprint").foregroundColor(Color("logo-pink")).font(.system(size: 30))
         })
     }
 }
 
+struct UserButtonView: View {
+    
+    var body: some View {
+        userIcon.frame(alignment: Alignment.topLeading)
+        Spacer()
+        
+    }
+    
+    @State var userName = "user"
+    
+    var userIcon: some View {
+        Button(action: {
+            userName //TODO: tap to show user profile
+        }, label: {
+            Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 30))
+        })
+    }
+    
+}
+
+struct NewPostButtonView: View {
+    
+    var body: some View {
+        penIcon.frame(alignment: Alignment.topTrailing)
+        Spacer()
+        
+    }
+    
+    @State var post = "text"
+    
+    var penIcon: some View {
+        Button(action: {
+            post //TODO: tap to write a new post
+        }, label: {
+            Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 30))
+        })
+    }
+    
+}
+
+struct SearchBar: View {
+    @Binding var text: String
+ 
+    @State private var isEditing = false
+ 
+    var body: some View {
+        HStack {
+ 
+            TextField("Search ...", text: $text)
+                .padding(7)
+                .padding(.horizontal, 25)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+                .padding(.horizontal, 5)
+                .onTapGesture {
+                    self.isEditing = true
+                }
+ 
+            if isEditing {
+                Button(action: {
+                    self.isEditing = false
+                    self.text = ""
+ 
+                }) {
+                    Text("Cancel")
+                }
+                .padding(.trailing, 10)
+                .transition(.move(edge: .trailing))
+                .animation(.default)
+            }
+        }
+    }
+}
 
 struct ImageView: View {
     var imageName: String
