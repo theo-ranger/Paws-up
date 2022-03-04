@@ -25,7 +25,7 @@ struct ContentView: View {
 
 
 struct CollectCardView: View {
-    var imagePaths = ["cat-portrait", "dog-portrait"] // Array of images paths
+    var imagePaths = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"] // Array of images paths
     
     var body: some View {
         NavigationView {
@@ -39,7 +39,7 @@ struct CollectCardView: View {
                     }
                     )
                 }
-            }
+            }.padding(5)
         }
     }
 }
@@ -48,6 +48,31 @@ struct CollectCardView: View {
 struct CardView: View {
     var imageName: String
     
+    @State
+    var likes: Int = 0
+    
+    @State
+    var liked: Bool = false
+    
+    var heartEmpty: some View {
+        Button(action: {
+            if (!liked) {
+                likes += 1
+            } else {
+                likes -= 1
+            }
+            liked = !liked
+        }, label: {
+            if (liked) {
+                Image(systemName: "heart.fill")
+                    .foregroundColor(Color("logo-pink"))
+            } else {
+                Image(systemName: "heart")
+                    .foregroundColor(Color("logo-pink"))
+            }
+        })
+    }
+    
     var body: some View {
         VStack {
             Image(imageName)
@@ -55,7 +80,14 @@ struct CardView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
-            Text(imageName).foregroundColor(.black)
+            HStack{
+                Spacer()
+                Text(imageName).foregroundColor(.black)
+                Spacer()
+                heartEmpty
+                Text(String(likes))
+                    .foregroundColor(Color("logo-pink"))
+            }
         }
     }
 }
@@ -115,7 +147,6 @@ struct UserButtonView: View {
     var body: some View {
         userIcon.frame(alignment: Alignment.topLeading)
         Spacer()
-        
     }
     
     @State var userName = "user"
