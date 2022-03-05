@@ -16,7 +16,7 @@ struct ContentView: View {
             Spacer()
             NewPostButtonView()
         }
-        
+        Spacer()
         CollectCardView()
         Spacer()
         BottomButtonView()
@@ -40,13 +40,19 @@ struct CollectCardView: View {
                     )
                 }
             }.padding(5)
+                .navigationBarHidden(true)
+                .animation(.default, value: true)
         }
     }
 }
 
 
 struct CardView: View {
+    var userName: String = "User"
+    
     var imageName: String
+    
+    var testTitle: String = "I really really really really really really really love dogs."
     
     @State
     var likes: Int = 0
@@ -81,13 +87,13 @@ struct CardView: View {
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
             HStack{
-                Spacer()
-                Text(imageName).foregroundColor(.black)
+                Text(userName).foregroundColor(.black)
                 Spacer()
                 heartEmpty
                 Text(String(likes))
                     .foregroundColor(Color("logo-pink"))
             }
+            Text(testTitle).foregroundColor(.black)
         }
     }
 }
@@ -209,11 +215,12 @@ struct SearchBar: View {
                 }
                 .padding(.trailing, 10)
                 .transition(.move(edge: .trailing))
-                .animation(.default)
+                .animation(.default, value: true)
             }
         }
     }
 }
+
 
 struct ImageView: View {
     var imageName: String
