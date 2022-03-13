@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Paws-up
 //
-//  Created by Hanning Xu on 2/12/22.
+//  Created by Hanning Xu and Jiayu Shi on 2/12/22.
 //
 
 import SwiftUI

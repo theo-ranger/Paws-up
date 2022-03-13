@@ -14,6 +14,8 @@
 		02873E3B27B8CB5F001D46CC /* Paws_upTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E3A27B8CB5F001D46CC /* Paws_upTests.swift */; };
 		02873E4527B8CB5F001D46CC /* Paws_upUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E4427B8CB5F001D46CC /* Paws_upUITests.swift */; };
 		02873E4727B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E4627B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift */; };
+		02D5A2AD27DD6E9400A8BB56 /* Paws-upPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D5A2AC27DD6E9400A8BB56 /* Paws-upPostModel.swift */; };
+		02D5A2AF27DD70D500A8BB56 /* Paws-upPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D5A2AE27DD70D500A8BB56 /* Paws-upPostViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		02873E4027B8CB5F001D46CC /* Paws-upUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Paws-upUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02873E4427B8CB5F001D46CC /* Paws_upUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paws_upUITests.swift; sourceTree = "<group>"; };
 		02873E4627B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paws_upUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		02D5A2AC27DD6E9400A8BB56 /* Paws-upPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Paws-upPostModel.swift"; sourceTree = "<group>"; };
+		02D5A2AE27DD70D500A8BB56 /* Paws-upPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Paws-upPostViewModel.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +100,8 @@
 			children = (
 				02873E2927B8CB5E001D46CC /* Paws_upApp.swift */,
 				02873E2B27B8CB5E001D46CC /* ContentView.swift */,
+				02D5A2AC27DD6E9400A8BB56 /* Paws-upPostModel.swift */,
+				02D5A2AE27DD70D500A8BB56 /* Paws-upPostViewModel.swift */,
 				02873E2D27B8CB5F001D46CC /* Assets.xcassets */,
 				02873E2F27B8CB5F001D46CC /* Preview Content */,
 			);
@@ -257,6 +263,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02D5A2AF27DD70D500A8BB56 /* Paws-upPostViewModel.swift in Sources */,
+				02D5A2AD27DD6E9400A8BB56 /* Paws-upPostModel.swift in Sources */,
 				02873E2C27B8CB5E001D46CC /* ContentView.swift in Sources */,
 				02873E2A27B8CB5E001D46CC /* Paws_upApp.swift in Sources */,
 			);
