@@ -21,7 +21,7 @@ class PostViewModel {
     
     static let timeStamps = ["", "", "", "", "", ""]
     
-    static var contents: Array<Content> = createContentArray()
+    static let contents: Array<Content> = createContentArray()
     
     static func createContentArray() -> Array<Content> {
         var contents: Array<Content> = []
