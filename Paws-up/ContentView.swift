@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    let viewModel: PostViewModel
+    
     var body: some View {
         HStack {
             UserButtonView()
@@ -17,59 +19,41 @@ struct ContentView: View {
             NewPostButtonView()
         }
         Spacer()
-        CollectCardView()
+        NavigationView {
+            ScrollView {
+                LazyVGrid(columns: [GridItem(), GridItem()]) {
+                    ForEach(viewModel.posts) { post in
+                        NavigationLink(
+                            destination: ImageView(imageName: post.content.imageAddress)) {
+                                CardView(post: post)
+                          }
+                    }
+                }
+            }.padding(5)
+                .navigationBarHidden(true)
+                .animation(.default, value: true)
+        }
         Spacer()
         BottomButtonView()
     }
 }
 
 
-struct CollectCardView: View {
-    var imagePaths = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"] // Array of images paths
-    
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(), GridItem()]) {
-                    ForEach(imagePaths, id: \.self, content: { name in
-                        NavigationLink(
-                            destination: ImageView(imageName: name)) {
-                                CardView(imageName: name)
-                          }
-                    }
-                    )
-                }
-            }.padding(5)
-                .navigationBarHidden(true)
-                .animation(.default, value: true)
-        }
-    }
-}
-
-
 struct CardView: View {
-    var userName: String = "User"
-    
-    var imageName: String
-    
-    var testTitle: String = "I really really really really really really really love dogs."
-    
+    //TODO: change @State
     @State
-    var likes: Int = 0
-    
-    @State
-    var liked: Bool = false
-    
+    var post: PostModel<PostViewModel.Content>.Post
+       
     var heartEmpty: some View {
         Button(action: {
-            if (!liked) {
-                likes += 1
+            if (!post.liked) {
+                post.likes += 1
             } else {
-                likes -= 1
+                post.likes -= 1
             }
-            liked = !liked
+            post.liked = !post.liked
         }, label: {
-            if (liked) {
+            if (post.liked) {
                 Image(systemName: "heart.fill")
                     .foregroundColor(Color("logo-pink"))
             } else {
@@ -81,19 +65,19 @@ struct CardView: View {
     
     var body: some View {
         VStack {
-            Image(imageName)
+            Image(post.content.imageAddress)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
             HStack{
-                Text(userName).foregroundColor(.black)
+                Text(post.content.userName).foregroundColor(.black)
                 Spacer()
                 heartEmpty
-                Text(String(likes))
+                Text(String(post.likes))
                     .foregroundColor(Color("logo-pink"))
             }
-            Text(testTitle).foregroundColor(.black)
+            Text(post.content.title).foregroundColor(.black)
         }
     }
 }
@@ -232,6 +216,8 @@ struct ImageView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let app = PostViewModel()
+        
+        ContentView(viewModel: app)
     }
 }

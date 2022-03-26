@@ -47,7 +47,7 @@ class PostViewModel {
     private var model: PostModel<Content> = PostViewModel.createPostContent()
     
     var posts: Array<PostModel<Content>.Post> {
-        return model.posts
+        model.posts
     }
     
     struct Content {
