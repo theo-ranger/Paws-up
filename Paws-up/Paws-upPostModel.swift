@@ -11,6 +11,27 @@ import SwiftUI
 struct PostModel<PostContent> {
     private(set) var posts: Array<Post>
     
+    mutating func like(_ post: Post) {
+        let chosenIndex = index(of: post)
+        
+        if (posts[chosenIndex].liked) {
+            posts[chosenIndex].likes = posts[chosenIndex].likes - 1
+            posts[chosenIndex].liked.toggle()
+        } else {
+            posts[chosenIndex].likes = posts[chosenIndex].likes + 1
+            posts[chosenIndex].liked.toggle()
+        }
+    }
+    
+    func index(of post: Post) ->Int {
+        for index in 0..<posts.count {
+            if posts[index].id == post.id {
+                return index
+            }
+        }
+        return 0
+    }
+    
     init(numberOfPosts: Int, createPostContent: (Int) -> PostContent) {
         posts = Array<Post>()
         

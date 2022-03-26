@@ -58,4 +58,10 @@ class PostViewModel {
         var userImageAddress: String
         var timeStamp: String
     }
+    
+    // MARK: -Intent(s)
+    
+    func like(_ post: PostModel<Content>.Post) {
+        model.like(post)
+    }
 }

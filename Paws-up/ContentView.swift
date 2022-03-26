@@ -25,7 +25,7 @@ struct ContentView: View {
                     ForEach(viewModel.posts) { post in
                         NavigationLink(
                             destination: ImageView(imageName: post.content.imageAddress)) {
-                                CardView(post: post)
+                                CardView(viewModel: viewModel, post: post)
                           }
                     }
                 }
@@ -40,18 +40,14 @@ struct ContentView: View {
 
 
 struct CardView: View {
+    let viewModel: PostViewModel
     //TODO: change @State
     @State
     var post: PostModel<PostViewModel.Content>.Post
-       
+    
     var heartEmpty: some View {
         Button(action: {
-            if (!post.liked) {
-                post.likes += 1
-            } else {
-                post.likes -= 1
-            }
-            post.liked = !post.liked
+            viewModel.like(post)
         }, label: {
             if (post.liked) {
                 Image(systemName: "heart.fill")
