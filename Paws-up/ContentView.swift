@@ -40,7 +40,7 @@ struct ContentView: View {
 
 
 struct CardView: View {
-    let viewModel: PostViewModel
+    @ObservedObject var viewModel: PostViewModel
     //TODO: change @State
     @State
     var post: PostModel<PostViewModel.Content>.Post
@@ -52,6 +52,7 @@ struct CardView: View {
             if (post.liked) {
                 Image(systemName: "heart.fill")
                     .foregroundColor(Color("logo-pink"))
+                
             } else {
                 Image(systemName: "heart")
                     .foregroundColor(Color("logo-pink"))

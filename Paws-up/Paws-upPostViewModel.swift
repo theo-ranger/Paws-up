@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class PostViewModel {
+class PostViewModel: ObservableObject {
     
     static let imageAddresses = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"]
     
@@ -44,7 +44,7 @@ class PostViewModel {
         }
     }
     
-    private var model: PostModel<Content> = PostViewModel.createPostContent()
+    @Published private var model: PostModel<Content> = PostViewModel.createPostContent()
     
     var posts: Array<PostModel<Content>.Post> {
         model.posts

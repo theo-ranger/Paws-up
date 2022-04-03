@@ -17,9 +17,11 @@ struct PostModel<PostContent> {
         if (posts[chosenIndex].liked) {
             posts[chosenIndex].likes = posts[chosenIndex].likes - 1
             posts[chosenIndex].liked.toggle()
+            print("unliked")
         } else {
             posts[chosenIndex].likes = posts[chosenIndex].likes + 1
             posts[chosenIndex].liked.toggle()
+            print("liked")
         }
     }
     
@@ -42,8 +44,8 @@ struct PostModel<PostContent> {
     }
     
     struct Post: Identifiable {
-        var likes: Int
-        var liked: Bool
+        var likes: Int = 0
+        var liked: Bool = false
         var id: Int
         var content: PostContent
     }
