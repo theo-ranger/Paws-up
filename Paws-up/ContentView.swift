@@ -45,18 +45,19 @@ struct CardView: View {
     @State
     var post: PostModel<PostViewModel.Content>.Post
     
+    @State private var didLike:Bool = false
+    
     var heartEmpty: some View {
         Button(action: {
             viewModel.like(post)
+            didLike = post.liked
         }, label: {
-            if (post.liked) {
+            
                 Image(systemName: "heart.fill")
-                    .foregroundColor(Color("logo-pink"))
+                    .foregroundColor(didLike ? Color("logo-pink") : Color.blue)
+                    
                 
-            } else {
-                Image(systemName: "heart")
-                    .foregroundColor(Color("logo-pink"))
-            }
+            
         })
     }
     
