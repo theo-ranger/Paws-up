@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    let viewModel: PostViewModel
+    @ObservedObject var viewModel: PostViewModel
     
     var body: some View {
         HStack {
@@ -40,27 +40,12 @@ struct ContentView: View {
 
 
 struct CardView: View {
-    @ObservedObject var viewModel: PostViewModel
-    //TODO: change @State
-    @State
+    var viewModel: PostViewModel
+
     var post: PostModel<PostViewModel.Content>.Post
     
-    @State private var didLike:Bool = false
-    
-    var heartEmpty: some View {
-        Button(action: {
-            viewModel.like(post)
-            didLike = post.liked
-        }, label: {
-            
-                Image(systemName: "heart.fill")
-                    .foregroundColor(didLike ? Color("logo-pink") : Color.blue)
-                    
-                
-            
-        })
-    }
-    
+    @State var didLike: Bool = true
+
     var body: some View {
         VStack {
             Image(post.content.imageAddress)
@@ -71,7 +56,15 @@ struct CardView: View {
             HStack{
                 Text(post.content.userName).foregroundColor(.black)
                 Spacer()
-                heartEmpty
+                Button(action: {
+                    didLike = post.liked
+                    viewModel.like(post)
+                }, label: {
+                        didLike ? Image(systemName: "heart")
+                        .foregroundColor(Color("logo-pink")) :
+                    Image(systemName: "heart.fill")
+                    .foregroundColor(Color("logo-pink"))
+                })
                 Text(String(post.likes))
                     .foregroundColor(Color("logo-pink"))
             }

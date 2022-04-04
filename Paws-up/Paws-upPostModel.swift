@@ -17,11 +17,9 @@ struct PostModel<PostContent> {
         if (posts[chosenIndex].liked) {
             posts[chosenIndex].likes = posts[chosenIndex].likes - 1
             posts[chosenIndex].liked.toggle()
-            print("unliked")
         } else {
             posts[chosenIndex].likes = posts[chosenIndex].likes + 1
             posts[chosenIndex].liked.toggle()
-            print("liked")
         }
     }
     
