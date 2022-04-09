@@ -11,32 +11,47 @@ struct ContentView: View {
     @ObservedObject var viewModel: PostViewModel
     
     var body: some View {
-        HStack {
-            UserButtonView()
-            Spacer()
-            SearchBar(text: .constant(""))
-            Spacer()
-            NewPostButtonView()
-        }
         Spacer()
-        NavigationView {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(), GridItem()]) {
-                    ForEach(viewModel.posts) { post in
-                        NavigationLink(
-                            destination: ImageView(imageName: post.content.imageAddress)) {
-                                CardView(viewModel: viewModel, post: post)
-                          }
-                    }
+        HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
+            VStack {
+                HStack {
+                    UserButtonView()
+                    Spacer()
+                    SearchBar(text: .constant(""))
+                    Spacer()
+                    NewPostButtonView()
                 }
-            }.padding(5)
-                .navigationBarHidden(true)
-                .animation(.default, value: true)
-        }
-        Spacer()
-        BottomButtonView()
+                Spacer()
+                NavigationView {
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(), GridItem()]) {
+                            ForEach(viewModel.posts) { post in
+                                NavigationLink(
+                                    destination: ImageView(imageName: post.content.imageAddress)) {
+                                        CardView(viewModel: viewModel, post: post)
+                                  }
+                            }
+                        }
+                    }.padding(5)
+                        .navigationBarHidden(true)
+                        .animation(.default, value: true)
+            }
+            }.tabItem {
+                Image(systemName: "allergens")
+                Text("Home")
+                    
+            }.tag(1)
+            Text("Donation Page").tabItem { Image(systemName: "pawprint.fill")
+                Text("Donation") }.tag(2)
+            Text("Adoption Page").tabItem { Image(systemName: "bandage")
+                Text("Adoption") }.tag(3)
+            Text("Report Stray Animals Page").tabItem { Image(systemName: "exclamationmark.bubble.circle")
+                Text("Report")}.tag(4)
+            Text("Pet Dating Page").tabItem { Image(systemName: "heart")
+                Text("Pet Dating")}.tag(5)
+        }.accentColor(Color("logo-pink"))
     }
-}
+    }}
 
 
 struct CardView: View {
@@ -73,56 +88,6 @@ struct CardView: View {
     }
 }
 
-struct BottomButtonView: View {
-    @State var ignore = 0 //"spaceholder" variable
-    
-    var body: some View {
-        HStack {
-            Spacer()
-            button1
-            Spacer()
-            button2
-            Spacer()
-            button3
-            Spacer()
-            button4
-            Spacer()
-        }
-    }
-    
-    var button1: some View {
-        Button(action: {
-           ignore += 1
-        }, label: {
-            Image(systemName: "pawprint.fill").foregroundColor(Color("logo-pink")).font(.system(size: 30))
-        })
-    }
-
-    var button2: some View {
-        Button(action: {
-           ignore += 1
-        }, label: {
-            Image(systemName: "pawprint").foregroundColor(Color("logo-pink")).font(.system(size: 30))
-        })
-    }
-    
-    var button3: some View {
-        Button(action: {
-           ignore += 1
-        }, label: {
-            Image(systemName: "pawprint.fill").foregroundColor(Color("logo-pink")).font(.system(size: 30))
-        })
-    }
-
-    var button4: some View {
-        Button(action: {
-           ignore += 1
-        }, label: {
-            Image(systemName: "pawprint").foregroundColor(Color("logo-pink")).font(.system(size: 30))
-        })
-    }
-}
-
 struct UserButtonView: View {
     
     var body: some View {
@@ -133,13 +98,29 @@ struct UserButtonView: View {
     @State var userName = "user"
     
     var userIcon: some View {
-        Button(action: {
-            userName //TODO: tap to show user profile
-        }, label: {
-            Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 30))
-        })
+        NavigationLink(destination: ProfileView()) {
+            Button(action: {
+            }) {
+                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+            }
+        }
     }
     
+}
+
+struct ProfileView: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("profile.username")
+                    .bold()
+                    .font(.title)
+                Text("Notifications: ")
+                Text("Seasonal Photos: ")
+                Text("Goal Date: ")
+            }
+        }
+    }
 }
 
 struct NewPostButtonView: View {
@@ -156,7 +137,7 @@ struct NewPostButtonView: View {
         Button(action: {
             post //TODO: tap to write a new post
         }, label: {
-            Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 30))
+            Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
         })
     }
     
