@@ -16,17 +16,11 @@ struct ContentView: View {
             NavigationView {
                 VStack {
                     HStack {
-                        Button(action: {
-                            print("clic")
-                        }, label: {
-                            NavigationLink(destination: ProfileView()) {
-                                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
-                            }
-                        }).frame(alignment: Alignment.topLeading)
+                        ProfileButton()
                         Spacer()
                         SearchBar(text: .constant(""))
                         Spacer()
-                        NewPostButtonView()
+                        NewPostButton()
                     }
                     Spacer()
                     ScrollView {
@@ -144,24 +138,42 @@ struct CircleImage: View {
     }
 }
 
-struct NewPostButtonView: View {
-    
+struct ProfileButton: View {
     var body: some View {
         penIcon.frame(alignment: Alignment.topTrailing)
         Spacer()
-        
     }
     
     @State var post = "text"
     
     var penIcon: some View {
-        Button(action: {
-            post //TODO: tap to write a new post
-        }, label: {
-            Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+        Button(action: { }, label: {
+            NavigationLink(destination: ProfileView()) {
+                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+            }
         })
     }
+}
+
+struct NewPostButton: View {
+    var body: some View {
+        penIcon.frame(alignment: Alignment.topTrailing)
+        Spacer()
+    }
     
+    var penIcon: some View {
+        Button(action: { }, label: {
+            NavigationLink(destination: NewPostView()) {
+                Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+            }
+        })
+    }
+}
+
+struct NewPostView: View {
+    var body: some View {
+        Text("New Post View")
+    }
 }
 
 struct SearchBar: View {
@@ -171,7 +183,6 @@ struct SearchBar: View {
  
     var body: some View {
         HStack {
- 
             TextField("Search ...", text: $text)
                 .padding(7)
                 .padding(.horizontal, 25)
@@ -213,7 +224,8 @@ struct ContentView_Previews: PreviewProvider {
         
         Group {
             ContentView(viewModel: app)
-            ContentView(viewModel: app)
+            ProfileView()
+            NewPostView()
         }
     }
 }
