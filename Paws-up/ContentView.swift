@@ -10,13 +10,19 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var viewModel: PostViewModel
     
+    @ObservedObject var profileViewModel: ProfileViewModel
+    
     var body: some View {
         Spacer()
         HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
             NavigationView {
                 VStack {
                     HStack {
-                        ProfileButton()
+                        Button(action: { }, label: {
+                            NavigationLink(destination: ProfileView(viewModel: profileViewModel, profile: profileViewModel.profile)) {
+                                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+                            }
+                        }).frame(alignment: Alignment.topTrailing)
                         Spacer()
                         SearchBar(text: .constant(""))
                         Spacer()
@@ -88,25 +94,12 @@ struct CardView: View {
     }
 }
 
-struct UserButtonView: View {
-    @State var userName = "user"
-    
-    @State var isLinkActive = false
-    
-    var body: some View {
-        NavigationLink(destination: ProfileView(), isActive: $isLinkActive) {
-            Button(action: {
-                self.isLinkActive = true
-                print("clic")
-            }, label: {
-                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
-            })
-        }.frame(alignment: Alignment.topLeading)
-        Spacer()
-    }
-}
 
 struct ProfileView: View {
+    var viewModel: ProfileViewModel
+
+    var profile: ProfileModel.Profile
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
@@ -114,12 +107,12 @@ struct ProfileView: View {
                 CircleImage(image: Image("denero"))
                     .offset(y: -130)
                     .padding(.bottom, -130)
-                Text("John DeNero")
+                Text(profile.userName)
                     .bold()
                     .font(.title)
-                Text("Birthyear: 1978")
-                Text("Favorite Animal: Dog")
-                Text("Email: denero@berkeley.edu")
+                Text("Birthyear: " + profile.birthYear)
+                Text("Favorite Animal: " + profile.favoriteAnimal)
+                Text("Email: " + profile.email)
             }
         }
     }
@@ -135,23 +128,6 @@ struct CircleImage: View {
                 Circle().stroke(.white, lineWidth: 4)
             }
             .shadow(radius: 7)
-    }
-}
-
-struct ProfileButton: View {
-    var body: some View {
-        penIcon.frame(alignment: Alignment.topTrailing)
-        Spacer()
-    }
-    
-    @State var post = "text"
-    
-    var penIcon: some View {
-        Button(action: { }, label: {
-            NavigationLink(destination: ProfileView()) {
-                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
-            }
-        })
     }
 }
 
@@ -222,9 +198,10 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let app = PostViewModel()
         
+        let profile = ProfileViewModel()
+        
         Group {
-            ContentView(viewModel: app)
-            ProfileView()
+            ContentView(viewModel: app, profileViewModel: profile)
             NewPostView()
         }
     }

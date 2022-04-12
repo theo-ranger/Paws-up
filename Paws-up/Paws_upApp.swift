@@ -11,9 +11,11 @@ import SwiftUI
 struct Paws_upApp: App {
     let app = PostViewModel()
     
+    let profile = ProfileViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: app)
+            ContentView(viewModel: app, profileViewModel: profile)
         }
     }
 }

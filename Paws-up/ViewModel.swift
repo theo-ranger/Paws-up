@@ -65,3 +65,34 @@ class PostViewModel: ObservableObject {
         model.like(post)
     }
 }
+
+class ProfileViewModel: ObservableObject {
+    static let profileArray = ["John DeNero", "1978", "denero@berkeley.edu", "Dog"]
+    
+    static let contents: ProfileModel.Profile = createContent()
+    
+    static func createContent() -> ProfileModel.Profile {
+        ProfileModel.Profile(userName: profileArray[0],
+                             birthYear: profileArray[1],
+                             email: profileArray[2],
+                             favoriteAnimal: profileArray[3])
+    }
+    
+    static func createProfile() -> ProfileModel {
+        ProfileModel() {
+            ProfileViewModel.contents
+        }
+    }
+    
+    @Published private var model: ProfileModel = ProfileViewModel.createProfile()
+    
+    var profile: ProfileModel.Profile {
+        model.profile
+    }
+    
+    // MARK: -Intent(s)
+    
+    func edit(_ profile: ProfileModel.Profile, _ feature: Int, _ setTo: String) {
+        model.edit(profile, feature, setTo)
+    }
+}
