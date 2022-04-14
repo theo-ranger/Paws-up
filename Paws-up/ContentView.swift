@@ -147,8 +147,28 @@ struct NewPostButton: View {
 }
 
 struct NewPostView: View {
+    @State private var title: String = ""
+    @State private var mainContent: String = ""
+    @State private var hashtag: String = ""
+    @State private var imagesNewPost: String = ""
     var body: some View {
-        Text("New Post View")
+        VStack(alignment: .leading) {
+            Text("Title: \(title)")
+            TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
+                print("title onEditingChanged - \(changed)")
+            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
+            
+            Text("Post content: \(mainContent)")
+            TextField("Enter your post content...", text: $mainContent, onEditingChanged: { (changed) in
+                print("mainContent onEditingChanged - \(changed)")
+            }).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
+            Text("Hashtags: \(hashtag)")
+            TextField("Optional: enter hashtags...", text: $hashtag, onEditingChanged: { (changed) in
+                print("hashtag onEditingChanged - \(changed)")
+            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
+            Text("Selected images: \(imagesNewPost)")
+            Spacer()
+        }.padding()
     }
 }
 
