@@ -167,6 +167,9 @@ struct NewPostView: View {
             TextField("Optional: enter hashtags...", text: $hashtag, onEditingChanged: { (changed) in
                 print("hashtag onEditingChanged - \(changed)")
             }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
+            Button(action: { }, label: {Text("Upload Images").fontWeight(.regular).foregroundColor(Color("logo-pink")).font(.system(size: 20));
+                NavigationLink("", destination: NewPostView())//TODO
+            }).padding(.horizontal, 0.0).buttonStyle(.bordered).foregroundColor(Color("logo-pink"))
             Text("Selected images: \(imagesNewPost)")
             Spacer()
             Button(action: { }, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
