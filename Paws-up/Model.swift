@@ -71,3 +71,5 @@ struct ProfileModel {
         var favoriteAnimal: String
     }
 }
+
+

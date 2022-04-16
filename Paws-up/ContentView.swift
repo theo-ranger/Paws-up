@@ -30,10 +30,10 @@ struct ContentView: View {
                     }
                     Spacer()
                     ScrollView {
-                        LazyVGrid(columns: [GridItem(), GridItem()]) {
+                        LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
                             ForEach(viewModel.posts) { post in
                                 NavigationLink(
-                                    destination: ImageView(imageName: post.content.imageAddress)) {
+                                    destination: ImageView(imageName: post.content.imageAddress).frame(width: 100, height: 200)) {
                                         CardView(viewModel: viewModel, post: post)
                                   }
                             }
@@ -43,7 +43,7 @@ struct ContentView: View {
                         .animation(.default, value: true)
                 }
             }.tabItem {
-                Image(systemName: "allergens")
+                Image(systemName: "house")
                 Text("Home")
                     
             }.tag(1)
@@ -151,6 +151,7 @@ struct NewPostView: View {
     @State private var mainContent: String = ""
     @State private var hashtag: String = ""
     @State private var imagesNewPost: String = ""
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Title: \(title)")
@@ -161,13 +162,16 @@ struct NewPostView: View {
             Text("Post content: \(mainContent)")
             TextField("Enter your post content...", text: $mainContent, onEditingChanged: { (changed) in
                 print("mainContent onEditingChanged - \(changed)")
-            }).padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
+            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
             Text("Hashtags: \(hashtag)")
             TextField("Optional: enter hashtags...", text: $hashtag, onEditingChanged: { (changed) in
                 print("hashtag onEditingChanged - \(changed)")
             }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
             Text("Selected images: \(imagesNewPost)")
             Spacer()
+            Button(action: { }, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+                NavigationLink("", destination: NewPostView())//TODO
+            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink"))
         }.padding()
     }
 }
