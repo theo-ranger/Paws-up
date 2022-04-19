@@ -6,6 +6,86 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseAuth
+
+@MainActor class LoginViewModel: ObservableObject {
+    
+    @Published var email = ""
+    @Published var password = ""
+    @Published var hasError = false
+    @Published var errorMessage = ""
+    @Published var isLoggedIn = false
+    var currentUser : User?
+    
+    private var handler = Auth.auth().addStateDidChangeListener{_,_ in }
+    
+    init() {
+        handler = Auth.auth().addStateDidChangeListener{ auth,user in
+            if let user = user {
+                self.isLoggedIn = true
+                self.currentUser = Auth.auth().currentUser
+            } else {
+                self.isLoggedIn = false
+                self.currentUser = nil
+            }
+        }
+    }
+    
+    func signIn() async {
+        hasError = false
+        do {
+            try await Auth.auth().signIn(withEmail: email, password: password)
+        } catch {
+            hasError = true
+            errorMessage = error.localizedDescription
+        }
+    }
+    
+    func signUp() async {
+        hasError = false
+        do {
+            try await Auth.auth().createUser(withEmail: email, password: password)
+        } catch {
+            hasError = true
+            errorMessage = error.localizedDescription
+        }
+    }
+    
+    func signOut() async {
+        hasError = false
+        do{
+            try Auth.auth().signOut()
+            
+        }catch{
+            hasError = true
+            errorMessage = error.localizedDescription
+        }
+        
+    }
+    
+    func getEmail() -> String {
+        print("here")
+        if currentUser != nil {
+            return (currentUser?.email!)!
+        } else {
+            print("sad")
+            return ""
+        }
+    }
+    
+    func getUID() -> String {
+        if currentUser != nil {
+            return (currentUser?.uid)!
+        } else {
+            return ""
+        }
+    }
+    
+    deinit{
+        Auth.auth().removeStateDidChangeListener(handler)
+    }
+}
 
 class PostViewModel: ObservableObject {
     

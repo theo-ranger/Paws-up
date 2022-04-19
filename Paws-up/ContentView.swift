@@ -8,10 +8,96 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var loginModel = LoginViewModel()
+    
     @ObservedObject var viewModel: PostViewModel
     
     @ObservedObject var profileViewModel: ProfileViewModel
     
+    
+    var body: some View {
+        VStack {
+            if (loginModel.isLoggedIn) {
+                MainView(loginModel: loginModel, viewModel: viewModel, profileViewModel: profileViewModel)
+            } else {
+                LoginView(loginModel: loginModel)
+            }
+        }
+        .alert("Error", isPresented: $loginModel.hasError) {
+        } message: {
+            Text(loginModel.errorMessage)
+        }
+        .padding()
+    }
+}
+
+struct LoginView: View {
+    @ObservedObject var loginModel: LoginViewModel
+    let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0)
+    
+    var body: some View {
+           VStack{
+               Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
+                               .resizable()
+                               .aspectRatio(contentMode: .fit)
+                               .frame(width: 150, height: 150)
+                               .clipShape(Circle())
+                               .padding(.bottom, 75)
+               Text("Log in or Sign up")
+                   .font(.largeTitle)
+                   .foregroundColor(Color("logo-pink"))
+                   .fontWeight(.semibold)
+                   .padding(.bottom, 20)
+               TextField("Email", text: $loginModel.email)
+                   .keyboardType(.emailAddress)
+                   .disableAutocorrection(true)
+                   .autocapitalization(.none)
+                   .padding()
+                   .background(lightGreyColor)
+                   .cornerRadius(5.0)
+                   .padding(.bottom, 20)
+               SecureField("Password", text: $loginModel.password)
+                   .padding()
+                   .background(lightGreyColor)
+                   .cornerRadius(5.0)
+                   .padding(.bottom, 20)
+               Button(action: {
+                   Task {
+                       await loginModel.signIn()
+                   }
+               }){
+                   Text("Log In")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(width: 220, height: 60)
+                    .background(Color("logo-pink"))
+                    .cornerRadius(15.0)
+                    .padding(.bottom, 20)
+               }
+               Button(action: {
+                   Task {
+                       await loginModel.signUp()
+                   }
+               }){
+                   Text("Sign Up")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(width: 220, height: 60)
+                    .background(Color("logo-pink"))
+                    .cornerRadius(15.0)
+               }
+           }.padding()
+        }
+}
+
+struct MainView: View {
+    @ObservedObject var loginModel: LoginViewModel
+    
+    @ObservedObject var viewModel: PostViewModel
+    
+    @ObservedObject var profileViewModel: ProfileViewModel
     var body: some View {
         Spacer()
         HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
@@ -19,7 +105,7 @@ struct ContentView: View {
                 VStack {
                     HStack {
                         Button(action: { }, label: {
-                            NavigationLink(destination: ProfileView(viewModel: profileViewModel, profile: profileViewModel.profile)) {
+                            NavigationLink(destination: ProfileView(viewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel)) {
                                 Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
                             }
                         }).frame(alignment: Alignment.topTrailing)
@@ -57,7 +143,8 @@ struct ContentView: View {
                 Text("Pet Dating")}.tag(5)
         }.accentColor(Color("logo-pink"))
     }
-    }}
+    }
+}
 
 
 struct CardView: View {
@@ -100,6 +187,8 @@ struct ProfileView: View {
 
     var profile: ProfileModel.Profile
     
+    var loginModel: LoginViewModel
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
@@ -107,12 +196,21 @@ struct ProfileView: View {
                 CircleImage(image: Image("denero"))
                     .offset(y: -130)
                     .padding(.bottom, -130)
-                Text(profile.userName)
-                    .bold()
-                    .font(.title)
-                Text("Birthyear: " + profile.birthYear)
-                Text("Favorite Animal: " + profile.favoriteAnimal)
-                Text("Email: " + profile.email)
+//                Text(profile.userName)
+//                    .bold()
+//                    .font(.title)
+//                Text("Birthyear: " + profile.birthYear)
+//                Text("Favorite Animal: " + profile.favoriteAnimal)
+//                Text("Email: " + profile.email)
+                Text("UID: " + loginModel.getUID())
+                Text("Email: " + loginModel.getEmail())
+                Button(action: {
+                    Task {
+                        await loginModel.signOut()
+                    }
+                }) {
+                    Text("Log Out")
+                }
             }
         }
     }
