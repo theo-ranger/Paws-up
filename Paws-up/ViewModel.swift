@@ -17,12 +17,16 @@ import FirebaseAuth
     @Published var errorMessage = ""
     @Published var isLoggedIn = false
     var currentUser : User?
+    var curr_email = ""
     
     private var handler = Auth.auth().addStateDidChangeListener{_,_ in }
+    var ref = Database.database().reference()
     
     init() {
+        
+        print("loginviewmodel called")
         handler = Auth.auth().addStateDidChangeListener{ auth,user in
-            if let user = user {
+            if user != nil {
                 self.isLoggedIn = true
                 self.currentUser = Auth.auth().currentUser
             } else {
@@ -46,6 +50,7 @@ import FirebaseAuth
         hasError = false
         do {
             try await Auth.auth().createUser(withEmail: email, password: password)
+            curr_email = email
         } catch {
             hasError = true
             errorMessage = error.localizedDescription
@@ -65,11 +70,9 @@ import FirebaseAuth
     }
     
     func getEmail() -> String {
-        print("here")
         if currentUser != nil {
             return (currentUser?.email!)!
         } else {
-            print("sad")
             return ""
         }
     }
@@ -84,6 +87,57 @@ import FirebaseAuth
     
     deinit{
         Auth.auth().removeStateDidChangeListener(handler)
+    }
+}
+
+class PoostViewModel: ObservableObject {
+    @Published var posts: Array<Coontent> = []
+//    var content1 = Coontent(id: UUID().uuidString, timeStamp: NSDate().timeIntervalSince1970, title: "title", userName: "username", image: "parrot")
+    var ref: DatabaseReference!
+    init() {
+        if FirebaseApp.app() == nil { FirebaseApp.configure() }
+//        posts.append(content1)
+        ref = Database.database().reference()
+
+    }
+    
+    func addPost(userName: String, title: String, image: String) {
+        print(userName)
+        ref.child("posts").child(title).setValue(["id": UUID().uuidString, "timeStamp": String(NSDate().timeIntervalSince1970), "username": userName, "image": image])
+        fetchPosts()
+    }
+    
+    func fetchPosts() {
+        ref.child("posts").getData(completion:  { error, snapshot in
+          guard error == nil else {
+            print(error!.localizedDescription)
+            return;
+          }
+            let dict = snapshot.value as? Dictionary<String, Any> ?? nil;
+            if (dict == nil) {
+                return
+            }
+            let dic = dict as! Dictionary<String, Dictionary<String, String>>
+            var allPosts: [Coontent] = []
+            for (key, val) in dic {
+                
+                var content = Coontent(id: val["id"]!, timeStamp: val["timeStamp"]!, title: key, userName: val["username"]!, image: val["image"]!)
+                allPosts.append(content)
+                allPosts.sort {
+                    $0.timeStamp < $1.timeStamp
+                }
+                self.posts = allPosts
+            }
+
+        });
+    }
+    
+    struct Coontent: Identifiable {
+        var id: String
+        var timeStamp: String
+        var title: String
+        var userName: String
+        var image: String
     }
 }
 

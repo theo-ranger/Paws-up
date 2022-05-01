@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct ContentView: View {
     @ObservedObject var loginModel = LoginViewModel()
     
-    @ObservedObject var viewModel: PostViewModel
+    @ObservedObject var postModel: PoostViewModel
+
+//    @ObservedObject var viewModel: PostViewModel
+    
     
     @ObservedObject var profileViewModel: ProfileViewModel
     
@@ -18,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if (loginModel.isLoggedIn) {
-                MainView(loginModel: loginModel, viewModel: viewModel, profileViewModel: profileViewModel)
+                MainView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel)
             } else {
                 LoginView(loginModel: loginModel)
             }
@@ -95,7 +99,9 @@ struct LoginView: View {
 struct MainView: View {
     @ObservedObject var loginModel: LoginViewModel
     
-    @ObservedObject var viewModel: PostViewModel
+    @ObservedObject var postModel: PoostViewModel
+
+//    @ObservedObject var viewModel: PostViewModel
     
     @ObservedObject var profileViewModel: ProfileViewModel
     var body: some View {
@@ -112,21 +118,27 @@ struct MainView: View {
                         Spacer()
                         SearchBar(text: .constant(""))
                         Spacer()
-                        NewPostButton()
+                        NewPostButton(loginModel: loginModel, postModel: postModel)
                     }
                     Spacer()
                     ScrollView {
                         LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
-                            ForEach(viewModel.posts) { post in
+//                            ForEach(viewModel.posts) { post in
+//                                NavigationLink(
+//                                    destination: ImageView(imageName: post.content.imageAddress).frame(width: 100, height: 200)) {
+//                                        CardView(viewModel: viewModel, post: post)
+//                                  }
+//                            }
+                            ForEach(postModel.posts) { post in
                                 NavigationLink(
-                                    destination: ImageView(imageName: post.content.imageAddress).frame(width: 100, height: 200)) {
-                                        CardView(viewModel: viewModel, post: post)
+                                    destination: ImageView(imageName: post.image).frame(width: 100, height: 200)) {
+                                        CaardView(postModel: postModel, post: post)
                                   }
                             }
                         }
                     }.padding(5)
                         .navigationBarHidden(true)
-                        .animation(.default, value: true)
+                        .animation(.default, value: true).onAppear(perform: {postModel.fetchPosts()})
                 }
             }.tabItem {
                 Image(systemName: "house")
@@ -146,6 +158,25 @@ struct MainView: View {
     }
 }
 
+struct CaardView: View {
+    var postModel: PoostViewModel
+
+    var post: PoostViewModel.Coontent
+    
+
+    var body: some View {
+        VStack {
+            Image(post.image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 200, height: 200, alignment: .center)
+                .clipped()
+            Text(post.userName).foregroundColor(.black)
+            Text(post.title).foregroundColor(.black)
+            Text(post.timeStamp).foregroundColor(.black)
+            }
+        }
+    }
 
 struct CardView: View {
     var viewModel: PostViewModel
@@ -230,6 +261,8 @@ struct CircleImage: View {
 }
 
 struct NewPostButton: View {
+    var loginModel: LoginViewModel
+    var postModel: PoostViewModel
     var body: some View {
         penIcon.frame(alignment: Alignment.topTrailing)
         Spacer()
@@ -237,10 +270,42 @@ struct NewPostButton: View {
     
     var penIcon: some View {
         Button(action: { }, label: {
-            NavigationLink(destination: NewPostView()) {
+            NavigationLink(destination: NewPoostView(postModel: postModel, loginModel: loginModel)) {
                 Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
             }
         })
+    }
+}
+
+struct NewPoostView: View {
+    var postModel: PoostViewModel
+    var loginModel: LoginViewModel
+
+    @State private var title: String = ""
+    var animal = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"]
+    @State private var selected = "cat-portrait"
+    
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Title: \(title)")
+            TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
+                print("title onEditingChanged - \(changed)")
+            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
+            Text("Image:")
+            Picker("Please choose an animal", selection: $selected) {
+                            ForEach(animal, id: \.self) {
+                                Text($0)
+                            }
+                        }
+            Spacer()
+            Button(action: { addPost(username: loginModel.getEmail(), title: title, image: selected)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink"))
+        }.padding()
+    }
+    
+    func addPost(username: String, title: String, image: String) {
+        postModel.addPost(userName: username, title: title, image: image)
     }
 }
 
@@ -321,12 +386,13 @@ struct ImageView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let app = PostViewModel()
-        
+//        let app = PostViewModel()
+        let app = PoostViewModel()
+
         let profile = ProfileViewModel()
         
         Group {
-            ContentView(viewModel: app, profileViewModel: profile)
+            ContentView(postModel: app, profileViewModel: profile)
             NewPostView()
         }
     }
