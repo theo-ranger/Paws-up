@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 import FirebaseAuth
+import FirebaseStorage
 
 @MainActor class LoginViewModel: ObservableObject {
     
@@ -94,11 +95,16 @@ class PoostViewModel: ObservableObject {
     @Published var posts: Array<Coontent> = []
 //    var content1 = Coontent(id: UUID().uuidString, timeStamp: NSDate().timeIntervalSince1970, title: "title", userName: "username", image: "parrot")
     var ref: DatabaseReference!
+    var storageRef: StorageReference!
     init() {
         if FirebaseApp.app() == nil { FirebaseApp.configure() }
 //        posts.append(content1)
         ref = Database.database().reference()
 
+        let storage = Storage.storage()
+        
+        storageRef = storage.reference()
+        
     }
     
     func addPost(userName: String, title: String, image: String) {
@@ -108,6 +114,8 @@ class PoostViewModel: ObservableObject {
     }
     
     func fetchPosts() {
+        
+        
         ref.child("posts").getData(completion:  { error, snapshot in
           guard error == nil else {
             print(error!.localizedDescription)
@@ -120,6 +128,20 @@ class PoostViewModel: ObservableObject {
             let dic = dict as! Dictionary<String, Dictionary<String, String>>
             var allPosts: [Coontent] = []
             for (key, val) in dic {
+                // Create a reference to the file you want to download
+                let islandRef = self.storageRef.child("GettyImages-1175550351.jpg")
+
+                // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+                islandRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
+                  if let error = error {
+                    // Uh-oh, an error occurred!
+                      print("error")
+                  } else {
+                    // Data for "images/island.jpg" is returned
+                    let image = UIImage(data: data!)!
+                      print("succ")
+                  }
+                }
                 
                 var content = Coontent(id: val["id"]!, timeStamp: val["timeStamp"]!, title: key, userName: val["username"]!, image: val["image"]!)
                 allPosts.append(content)
