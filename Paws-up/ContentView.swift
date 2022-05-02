@@ -5,6 +5,7 @@
 //  Created by Hanning Xu and Jiayu Shi on 2/12/22.
 //
 
+import UIKit
 import SwiftUI
 import Firebase
 
@@ -158,6 +159,7 @@ struct MainView: View {
     }
 }
 
+
 struct CaardView: View {
     var postModel: PoostViewModel
 
@@ -282,8 +284,9 @@ struct NewPoostView: View {
     var loginModel: LoginViewModel
 
     @State private var title: String = ""
-    var animal = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"]
-    @State private var selected = "cat-portrait"
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State private var selectedImage = UIImage(named: "cat-portrait")
+    @State private var isImagePickerDisplay = false
     
     
     var body: some View {
@@ -293,18 +296,30 @@ struct NewPoostView: View {
                 print("title onEditingChanged - \(changed)")
             }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
             Text("Image:")
-            Picker("Please choose an animal", selection: $selected) {
-                            ForEach(animal, id: \.self) {
-                                Text($0)
-                            }
-                        }
+            Image(uiImage: selectedImage!)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .clipShape(Circle())
+                .frame(width: 300, height: 300)
+            Button("Camera") {
+                self.sourceType = .camera
+                self.isImagePickerDisplay.toggle()
+            }.padding()
+            
+            Button("Photo") {
+                self.sourceType = .photoLibrary
+                self.isImagePickerDisplay.toggle()
+            }.padding()
             Spacer()
-            Button(action: { addPost(username: loginModel.getEmail(), title: title, image: selected)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
-            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink"))
+
+            Button(action: { addPost(username: loginModel.getEmail(), title: title, image: selectedImage!)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
+                ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
+            }
         }.padding()
     }
     
-    func addPost(username: String, title: String, image: String) {
+    func addPost(username: String, title: String, image: UIImage) {
         postModel.addPost(userName: username, title: title, image: image)
     }
 }
@@ -389,6 +404,44 @@ struct ImageView: View {
     var body: some View {
         Image(imageName)
     }
+}
+
+struct ImagePickerView: UIViewControllerRepresentable {
+    
+    @Binding var selectedImage: UIImage?
+    @Environment(\.presentationMode) var isPresented
+    var sourceType: UIImagePickerController.SourceType
+        
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = self.sourceType
+        imagePicker.delegate = context.coordinator // confirming the delegate
+        return imagePicker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
+
+    }
+
+    // Connecting the Coordinator class with this struct
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(picker: self)
+    }
+}
+
+class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    var picker: ImagePickerView
+    
+    init(picker: ImagePickerView) {
+        self.picker = picker
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let selectedImage = info[.originalImage] as? UIImage else { return }
+        self.picker.selectedImage = selectedImage
+        self.picker.isPresented.wrappedValue.dismiss()
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

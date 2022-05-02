@@ -107,9 +107,20 @@ class PoostViewModel: ObservableObject {
         
     }
     
-    func addPost(userName: String, title: String, image: String) {
+    func addPost(userName: String, title: String, image: UIImage) {
         print(userName)
-        ref.child("posts").child(title).setValue(["id": UUID().uuidString, "timeStamp": String(NSDate().timeIntervalSince1970), "username": userName, "image": image])
+        let uid = UUID().uuidString
+        ref.child("posts").child(title).setValue(["id": uid, "timeStamp": String(NSDate().timeIntervalSince1970), "username": userName])
+        // Create a reference to the file you want to upload
+        let imgRef = storageRef.child(uid)
+        let compressed = image.jpegData(compressionQuality: 0.2)
+        // Upload the file to the path "images/rivers.jpg"
+        let uploadTask = imgRef.putData(compressed!, metadata: nil) { (metadata, error) in
+          guard let metadata = metadata else {
+            // Uh-oh, an error occurred!
+            return
+          }
+        }
         fetchPosts()
     }
     
@@ -130,7 +141,7 @@ class PoostViewModel: ObservableObject {
             var img: UIImage!
             for (key, val) in dic {
                 // Create a reference to the file you want to download
-                let islandRef = self.storageRef.child("pet-portrait-paintings-mantelpiece-masterpiece-2.jpg")
+                let islandRef = self.storageRef.child(val["id"]!)
 
                 // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
                 islandRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
@@ -158,6 +169,7 @@ class PoostViewModel: ObservableObject {
 
         });
     }
+    
     
     struct Coontent: Identifiable {
         var id: String
