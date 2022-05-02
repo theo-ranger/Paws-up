@@ -131,7 +131,7 @@ struct MainView: View {
 //                            }
                             ForEach(postModel.posts) { post in
                                 NavigationLink(
-                                    destination: ImageView(imageName: post.image).frame(width: 100, height: 200)) {
+                                    destination: ImageeView(img: post.image).frame(width: 100, height: 200)) {
                                         CaardView(postModel: postModel, post: post)
                                   }
                             }
@@ -166,7 +166,7 @@ struct CaardView: View {
 
     var body: some View {
         VStack {
-            Image(post.image)
+            Image(uiImage: post.image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200, alignment: .center)
@@ -375,6 +375,13 @@ struct SearchBar: View {
     }
 }
 
+struct ImageeView: View {
+    var img: UIImage
+    
+    var body: some View {
+        Image(uiImage: img)
+    }
+}
 
 struct ImageView: View {
     var imageName: String
