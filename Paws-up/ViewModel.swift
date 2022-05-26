@@ -24,7 +24,6 @@ import FirebaseStorage
     var ref = Database.database().reference()
     
     init() {
-        
         print("loginviewmodel called")
         handler = Auth.auth().addStateDidChangeListener{ auth,user in
             if user != nil {
@@ -60,10 +59,9 @@ import FirebaseStorage
     
     func signOut() async {
         hasError = false
-        do{
+        do {
             try Auth.auth().signOut()
-            
-        }catch{
+        } catch {
             hasError = true
             errorMessage = error.localizedDescription
         }
@@ -86,19 +84,19 @@ import FirebaseStorage
         }
     }
     
-    deinit{
+    deinit {
         Auth.auth().removeStateDidChangeListener(handler)
     }
 }
 
-class PoostViewModel: ObservableObject {
-    @Published var posts: Array<Coontent> = []
-//    var content1 = Coontent(id: UUID().uuidString, timeStamp: NSDate().timeIntervalSince1970, title: "title", userName: "username", image: "parrot")
+class PostViewModel: ObservableObject {
+    @Published var posts: Array<Content> = []
+
     var ref: DatabaseReference!
     var storageRef: StorageReference!
     init() {
         if FirebaseApp.app() == nil { FirebaseApp.configure() }
-//        posts.append(content1)
+
         ref = Database.database().reference()
 
         let storage = Storage.storage()
@@ -125,8 +123,6 @@ class PoostViewModel: ObservableObject {
     }
     
     func fetchPosts() {
-        
-        
         ref.child("posts").getData(completion:  { error, snapshot in
           guard error == nil else {
             print(error!.localizedDescription)
@@ -137,7 +133,7 @@ class PoostViewModel: ObservableObject {
                 return
             }
             let dic = dict as! Dictionary<String, Dictionary<String, String>>
-            var allPosts: [Coontent] = []
+            var allPosts: [Content] = []
             var img: UIImage!
             for (key, val) in dic {
                 // Create a reference to the file you want to download
@@ -152,92 +148,60 @@ class PoostViewModel: ObservableObject {
                     // Data for "images/island.jpg" is returned
                     let image = UIImage(data: data!)!
                       img = image
-                      print(img!)
-                    print(type(of: image))
-                      print("succ")
-                      var content = Coontent(id: val["id"]!, timeStamp: val["timeStamp"]!, title: key, userName: val["username"]!, image: img!)
+                      var content = Content(id: val["id"]!, timeStamp: val["timeStamp"]!, title: key, userName: val["username"]!, image: img!)
                       allPosts.append(content)
                       allPosts.sort {
                           $0.timeStamp < $1.timeStamp
                       }
+                      print(allPosts)
                       self.posts = allPosts
                   }
                 }
-                print("outside")
-
             }
-
         });
     }
     
     
-    struct Coontent: Identifiable {
+    struct Content: Identifiable {
         var id: String
         var timeStamp: String
         var title: String
         var userName: String
         var image: UIImage
     }
+    
+//    static let contents: Array<Content> = createContentArray()
+//
+//    static func createContentArray() -> Array<Content> {
+//        var contents: Array<Content> = []
+//
+//        for i in 0..<6 {
+//            contents.append(Content(title: PostViewModel.imageAddresses[i],
+//                                    articleContent: PostViewModel.articleContents[i],
+//                                    imageAddress: PostViewModel.imageAddresses[i],
+//                                    userName: PostViewModel.userNames[i],
+//                                    userImageAddress: PostViewModel.userImageAddresses[i],
+//                                    timeStamp: PostViewModel.timeStamps[i]))
+//        }
+//
+//        return contents
+//    }
+//
+//    static func createPostContent() -> PostModel<Content> {
+//        PostModel<Content>(numberOfPosts: 6) { index in
+//            PostViewModel.contents[index]
+//        }
+//    }
+//    
+//    @Published private var model: PostModel<Content> = PostViewModel.createPostContent()
+//
+//    // MARK: -Intent(s)
+//
+//    func like(_ post: PostModel<Content>.Post) {
+//        model.like(post)
+//    }
 }
 
-class PostViewModel: ObservableObject {
-    
-    static let imageAddresses = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"]
-    
-    static let titles = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"]
-    
-    static let userNames = ["Prince", "Ella", "Leah", "Irene", "Alfred", "Franklin"]
-    
-    static let userImageAddresses = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"]
-    
-    static let articleContents = ["cat-portrait", "dog-portrait", "dog-landscape", "cat-landscape", "parrot", "red-panda"]
-    
-    static let timeStamps = ["", "", "", "", "", ""]
-    
-    static let contents: Array<Content> = createContentArray()
-    
-    static func createContentArray() -> Array<Content> {
-        var contents: Array<Content> = []
-        
-        for i in 0..<6 {
-            contents.append(Content(title: PostViewModel.imageAddresses[i],
-                                    articleContent: PostViewModel.articleContents[i],
-                                    imageAddress: PostViewModel.imageAddresses[i],
-                                    userName: PostViewModel.userNames[i],
-                                    userImageAddress: PostViewModel.userImageAddresses[i],
-                                    timeStamp: PostViewModel.timeStamps[i]))
-        }
-        
-        return contents
-    }
-    
-    static func createPostContent() -> PostModel<Content> {
-        PostModel<Content>(numberOfPosts: 6) { index in
-            PostViewModel.contents[index]
-        }
-    }
-    
-    @Published private var model: PostModel<Content> = PostViewModel.createPostContent()
-    
-    var posts: Array<PostModel<Content>.Post> {
-        model.posts
-    }
-    
-    struct Content {
-        var title: String
-        var articleContent: String
-        var imageAddress: String
-        var userName: String
-        var userImageAddress: String
-        var timeStamp: String
-    }
-    
-    // MARK: -Intent(s)
-    
-    func like(_ post: PostModel<Content>.Post) {
-        model.like(post)
-    }
-}
 
 class ProfileViewModel: ObservableObject {
     static let profileArray = ["John DeNero", "1978", "denero@berkeley.edu", "Dog"]

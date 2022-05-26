@@ -10,8 +10,7 @@ import Firebase
 
 @main
 struct Paws_upApp: App {
-//    let app = PostViewModel()
-    let app = PoostViewModel()
+    let app = PostViewModel()
 
     let profile = ProfileViewModel()
     

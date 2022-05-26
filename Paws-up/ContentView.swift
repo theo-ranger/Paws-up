@@ -12,13 +12,9 @@ import Firebase
 struct ContentView: View {
     @ObservedObject var loginModel = LoginViewModel()
     
-    @ObservedObject var postModel: PoostViewModel
-
-//    @ObservedObject var viewModel: PostViewModel
-    
+    @ObservedObject var postModel: PostViewModel
     
     @ObservedObject var profileViewModel: ProfileViewModel
-    
     
     var body: some View {
         VStack {
@@ -36,9 +32,13 @@ struct ContentView: View {
     }
 }
 
+
 struct LoginView: View {
     @ObservedObject var loginModel: LoginViewModel
-    let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0)
+    let LIGHT_GREY = Color(red: 239.0/255.0,
+                               green: 243.0/255.0,
+                               blue: 244.0/255.0,
+                               opacity: 1.0)
     
     var body: some View {
            VStack{
@@ -58,12 +58,12 @@ struct LoginView: View {
                    .disableAutocorrection(true)
                    .autocapitalization(.none)
                    .padding()
-                   .background(lightGreyColor)
+                   .background(LIGHT_GREY)
                    .cornerRadius(5.0)
                    .padding(.bottom, 20)
                SecureField("Password", text: $loginModel.password)
                    .padding()
-                   .background(lightGreyColor)
+                   .background(LIGHT_GREY)
                    .cornerRadius(5.0)
                    .padding(.bottom, 20)
                Button(action: {
@@ -97,13 +97,12 @@ struct LoginView: View {
         }
 }
 
+
 struct MainView: View {
     @ObservedObject var loginModel: LoginViewModel
     
-    @ObservedObject var postModel: PoostViewModel
+    @ObservedObject var postModel: PostViewModel
 
-//    @ObservedObject var viewModel: PostViewModel
-    
     @ObservedObject var profileViewModel: ProfileViewModel
     var body: some View {
         Spacer()
@@ -124,48 +123,47 @@ struct MainView: View {
                     Spacer()
                     ScrollView {
                         LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
-//                            ForEach(viewModel.posts) { post in
-//                                NavigationLink(
-//                                    destination: ImageView(imageName: post.content.imageAddress).frame(width: 100, height: 200)) {
-//                                        CardView(viewModel: viewModel, post: post)
-//                                  }
-//                            }
                             ForEach(postModel.posts) { post in
                                 NavigationLink(
-                                    destination: ImageeView(img: post.image).frame(width: 100, height: 200)) {
-                                        CaardView(postModel: postModel, post: post)
+                                    destination: ImageView(img: post.image).frame(width: 100, height: 200)) {
+                                        CardView(postModel: postModel, post: post)
                                   }
                             }
                         }
                     }.padding(5)
                         .navigationBarHidden(true)
-                        .animation(.default, value: true).onAppear(perform: {postModel.fetchPosts()})
+                        .animation(.default, value: true)
+                        // FIXME: Redesign post appearance mechanism
+                        .onAppear(perform: {postModel.fetchPosts()})
                 }
             }.tabItem {
                 Image(systemName: "house")
-                Text("Home")
-                    
-            }.tag(1)
-            Text("Donation Page").tabItem { Image(systemName: "pawprint.fill")
+                Text("Home")}.tag(1)
+            Text("Donation Page").tabItem {
+                Image(systemName: "pawprint.fill")
                 Text("Donation") }.tag(2)
-            Text("Adoption Page").tabItem { Image(systemName: "bandage")
+            Text("Adoption Page").tabItem {
+                Image(systemName: "bandage")
                 Text("Adoption") }.tag(3)
-            Text("Report Stray Animals Page").tabItem { Image(systemName: "exclamationmark.bubble.circle")
+            Text("Report Stray Animals Page").tabItem {
+                Image(systemName: "exclamationmark.bubble.circle")
                 Text("Report")}.tag(4)
-            Text("Pet Dating Page").tabItem { Image(systemName: "heart")
+            Text("Pet Dating Page").tabItem {
+                Image(systemName: "heart")
                 Text("Pet Dating")}.tag(5)
-        }.accentColor(Color("logo-pink"))
-    }
+            }.accentColor(Color("logo-pink"))
+        }
     }
 }
 
 
-struct CaardView: View {
-    var postModel: PoostViewModel
+struct CardView: View {
+    var postModel: PostViewModel
 
-    var post: PoostViewModel.Coontent
+    var post: PostViewModel.Content
     
-
+    @State var didLike: Bool = true
+    
     var body: some View {
         VStack {
             Image(uiImage: post.image)
@@ -173,46 +171,26 @@ struct CaardView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
-            Text(post.userName).foregroundColor(.black)
+//            HStack{
+//                Text(post.content.userName).foregroundColor(.black)
+//                Spacer()
+//                Button(action: {
+//                    didLike = post.liked
+//                    viewModel.like(post)
+//                }, label: {
+//                        didLike ? Image(systemName: "heart")
+//                        .foregroundColor(Color("logo-pink")) :
+//                    Image(systemName: "heart.fill")
+//                    .foregroundColor(Color("logo-pink"))
+//                })
+//                Text(String(post.likes))
+//                    .foregroundColor(Color("logo-pink"))
+//            }
             Text(post.title).foregroundColor(.black)
             Text(post.timeStamp).foregroundColor(.black)
             }
         }
     }
-
-struct CardView: View {
-    var viewModel: PostViewModel
-
-    var post: PostModel<PostViewModel.Content>.Post
-    
-    @State var didLike: Bool = true
-
-    var body: some View {
-        VStack {
-            Image(post.content.imageAddress)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200, alignment: .center)
-                .clipped()
-            HStack{
-                Text(post.content.userName).foregroundColor(.black)
-                Spacer()
-                Button(action: {
-                    didLike = post.liked
-                    viewModel.like(post)
-                }, label: {
-                        didLike ? Image(systemName: "heart")
-                        .foregroundColor(Color("logo-pink")) :
-                    Image(systemName: "heart.fill")
-                    .foregroundColor(Color("logo-pink"))
-                })
-                Text(String(post.likes))
-                    .foregroundColor(Color("logo-pink"))
-            }
-            Text(post.content.title).foregroundColor(.black)
-        }
-    }
-}
 
 
 struct ProfileView: View {
@@ -229,12 +207,6 @@ struct ProfileView: View {
                 CircleImage(image: Image("denero"))
                     .offset(y: -130)
                     .padding(.bottom, -130)
-//                Text(profile.userName)
-//                    .bold()
-//                    .font(.title)
-//                Text("Birthyear: " + profile.birthYear)
-//                Text("Favorite Animal: " + profile.favoriteAnimal)
-//                Text("Email: " + profile.email)
                 Text("UID: " + loginModel.getUID())
                 Text("Email: " + loginModel.getEmail())
                 Button(action: {
@@ -249,6 +221,7 @@ struct ProfileView: View {
     }
 }
 
+
 struct CircleImage: View {
     var image: Image
 
@@ -262,9 +235,10 @@ struct CircleImage: View {
     }
 }
 
+
 struct NewPostButton: View {
     var loginModel: LoginViewModel
-    var postModel: PoostViewModel
+    var postModel: PostViewModel
     var body: some View {
         penIcon.frame(alignment: Alignment.topTrailing)
         Spacer()
@@ -272,15 +246,16 @@ struct NewPostButton: View {
     
     var penIcon: some View {
         Button(action: { }, label: {
-            NavigationLink(destination: NewPoostView(postModel: postModel, loginModel: loginModel)) {
+            NavigationLink(destination: NewPostView(postModel: postModel, loginModel: loginModel)) {
                 Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
             }
         })
     }
 }
 
-struct NewPoostView: View {
-    var postModel: PoostViewModel
+
+struct NewPostView: View {
+    var postModel: PostViewModel
     var loginModel: LoginViewModel
 
     @State private var title: String = ""
@@ -324,38 +299,6 @@ struct NewPoostView: View {
     }
 }
 
-struct NewPostView: View {
-    @State private var title: String = ""
-    @State private var mainContent: String = ""
-    @State private var hashtag: String = ""
-    @State private var imagesNewPost: String = ""
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("Title: \(title)")
-            TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
-                print("title onEditingChanged - \(changed)")
-            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
-            
-            Text("Post content: \(mainContent)")
-            TextField("Enter your post content...", text: $mainContent, onEditingChanged: { (changed) in
-                print("mainContent onEditingChanged - \(changed)")
-            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
-            Text("Hashtags: \(hashtag)")
-            TextField("Optional: enter hashtags...", text: $hashtag, onEditingChanged: { (changed) in
-                print("hashtag onEditingChanged - \(changed)")
-            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
-            Button(action: { }, label: {Text("Upload Images").fontWeight(.regular).foregroundColor(Color("logo-pink")).font(.system(size: 20));
-                NavigationLink("", destination: NewPostView())//TODO
-            }).padding(.horizontal, 0.0).buttonStyle(.bordered).foregroundColor(Color("logo-pink"))
-            Text("Selected images: \(imagesNewPost)")
-            Spacer()
-            Button(action: { }, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
-                NavigationLink("", destination: NewPostView())//TODO
-            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink"))
-        }.padding()
-    }
-}
 
 struct SearchBar: View {
     @Binding var text: String
@@ -390,7 +333,8 @@ struct SearchBar: View {
     }
 }
 
-struct ImageeView: View {
+
+struct ImageView: View {
     var img: UIImage
     
     var body: some View {
@@ -398,13 +342,6 @@ struct ImageeView: View {
     }
 }
 
-struct ImageView: View {
-    var imageName: String
-    
-    var body: some View {
-        Image(imageName)
-    }
-}
 
 struct ImagePickerView: UIViewControllerRepresentable {
     
@@ -429,6 +366,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
     }
 }
 
+
 class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     var picker: ImagePickerView
     
@@ -444,16 +382,13 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
     
 }
 
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-//        let app = PostViewModel()
-        let app = PoostViewModel()
+        let app = PostViewModel()
 
         let profile = ProfileViewModel()
         
-        Group {
-            ContentView(postModel: app, profileViewModel: profile)
-            NewPostView()
-        }
+        ContentView(postModel: app, profileViewModel: profile)
     }
 }
