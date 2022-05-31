@@ -9,6 +9,8 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 import FirebaseStorage
+import FirebaseCore
+import FirebaseFirestore
 
 @MainActor class LoginViewModel: ObservableObject {
     
@@ -91,13 +93,14 @@ import FirebaseStorage
 class PostViewModel: ObservableObject {
     @Published var posts: Array<Content> = []
 
-    var ref = Database.database().reference()
+    var databaseRef = Database.database().reference()
     var storageRef = Storage.storage().reference()
+    let db = Firestore.firestore()
     
     func addPost(userName: String, title: String, image: UIImage) {
         print(userName)
         let uid = UUID().uuidString
-        ref.child("posts").child(title).setValue(["id": uid, "timeStamp": String(NSDate().timeIntervalSince1970), "username": userName])
+        databaseRef.child("posts").child(title).setValue(["id": uid, "timeStamp": String(NSDate().timeIntervalSince1970), "username": userName])
         // Create a reference to the file you want to upload
         let imgRef = storageRef.child(uid)
         let compressed = image.jpegData(compressionQuality: 0.2)
@@ -112,12 +115,12 @@ class PostViewModel: ObservableObject {
     }
     
     func fetchPosts() {
-        ref.child("posts").getData(completion:  { error, snapshot in
+        databaseRef.child("posts").getData(completion:  { error, snapshot in
           guard error == nil else {
             print(error!.localizedDescription)
             return;
           }
-            let dict = snapshot.value as? Dictionary<String, Any> ?? nil;
+            let dict = snapshot?.value as? Dictionary<String, Any> ?? nil;
             if (dict == nil) {
                 return
             }
@@ -126,10 +129,10 @@ class PostViewModel: ObservableObject {
             var img: UIImage!
             for (key, val) in dic {
                 // Create a reference to the file you want to download
-                let islandRef = self.storageRef.child(val["id"]!)
+                let childRef = self.storageRef.child(val["id"]!)
 
                 // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-                islandRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
+                childRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
                   if let error = error {
                     // Uh-oh, an error occurred!
                       print("error")
