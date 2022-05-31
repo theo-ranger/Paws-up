@@ -98,9 +98,23 @@ class PostViewModel: ObservableObject {
     let db = Firestore.firestore()
     
     func addPost(userName: String, title: String, image: UIImage) {
-        print(userName)
         let uid = UUID().uuidString
-        databaseRef.child("posts").child(title).setValue(["id": uid, "timeStamp": String(NSDate().timeIntervalSince1970), "username": userName])
+//        databaseRef.child("posts").child(title).setValue(["id": uid, "timeStamp": String(NSDate().timeIntervalSince1970), "username": userName])
+        // Add a new document with a generated ID
+        var ref: DocumentReference? = nil
+        ref = db.collection("posts").addDocument(data: [
+            "id": uid,
+            "timeStamp": String(NSDate().timeIntervalSince1970),
+            "username": userName,
+            "title": title
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(ref!.documentID)")
+            }
+        }
+        print("post added" + userName)
         // Create a reference to the file you want to upload
         let imgRef = storageRef.child(uid)
         let compressed = image.jpegData(compressionQuality: 0.2)
@@ -115,42 +129,71 @@ class PostViewModel: ObservableObject {
     }
     
     func fetchPosts() {
-        databaseRef.child("posts").getData(completion:  { error, snapshot in
-          guard error == nil else {
-            print(error!.localizedDescription)
-            return;
-          }
-            let dict = snapshot?.value as? Dictionary<String, Any> ?? nil;
-            if (dict == nil) {
-                return
-            }
-            let dic = dict as! Dictionary<String, Dictionary<String, String>>
-            var allPosts: [Content] = []
-            var img: UIImage!
-            for (key, val) in dic {
-                // Create a reference to the file you want to download
-                let childRef = self.storageRef.child(val["id"]!)
-
-                // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-                childRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
-                  if let error = error {
-                    // Uh-oh, an error occurred!
-                      print("error")
-                  } else {
-                    // Data for "images/island.jpg" is returned
-                    let image = UIImage(data: data!)!
-                      img = image
-                      var content = Content(id: val["id"]!, timeStamp: val["timeStamp"]!, title: key, userName: val["username"]!, image: img!)
-                      allPosts.append(content)
-                      allPosts.sort {
-                          $0.timeStamp < $1.timeStamp
+        db.collection("posts").getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                var allPosts: [Content] = []
+                for document in querySnapshot!.documents {
+                    let dic = document.data() as! Dictionary<String, String>
+                    // Create a reference to the file you want to download
+                    let childRef = self.storageRef.child(dic["id"]!)
+                    print(dic["id"]!)
+                    // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+                    let image = UIImage(named: "cat-portrait")
+                    childRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
+                      if let error = error {
+                        // Uh-oh, an error occurred!
+                          print("image fetch error")
+                      } else {
+                        // Data for "images/island.jpg" is returned
+                        let image = UIImage(data: data!)!
+                          var content = Content(id: dic["id"]!, timeStamp: dic["timeStamp"]!, title: dic["title"]!, userName: dic["username"]!, image: image)
+                          allPosts.append(content)
+                          allPosts.sort {
+                              $0.timeStamp < $1.timeStamp
+                          }
+                          self.posts = allPosts
                       }
-                      print(allPosts)
-                      self.posts = allPosts
-                  }
+                    }
                 }
             }
-        });
+        }
+//        databaseRef.child("posts").getData(completion:  { error, snapshot in
+//          guard error == nil else {
+//            print(error!.localizedDescription)
+//            return;
+//          }
+//            let dict = snapshot?.value as? Dictionary<String, Any> ?? nil;
+//            if (dict == nil) {
+//                return
+//            }
+//            let dic = dict as! Dictionary<String, Dictionary<String, String>>
+//            var allPosts: [Content] = []
+//            var img: UIImage!
+//            for (key, val) in dic {
+//                // Create a reference to the file you want to download
+//                let childRef = self.storageRef.child(val["id"]!)
+//
+//                // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+//                childRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
+//                  if let error = error {
+//                    // Uh-oh, an error occurred!
+//                      print("error")
+//                  } else {
+//                    // Data for "images/island.jpg" is returned
+//                    let image = UIImage(data: data!)!
+//                      img = image
+//                      var content = Content(id: val["id"]!, timeStamp: val["timeStamp"]!, title: key, userName: val["username"]!, image: img!)
+//                      allPosts.append(content)
+//                      allPosts.sort {
+//                          $0.timeStamp < $1.timeStamp
+//                      }
+//                      self.posts = allPosts
+//                  }
+//                }
+//            }
+//        });
     }
     
     
