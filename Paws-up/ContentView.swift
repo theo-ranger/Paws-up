@@ -12,9 +12,9 @@ import Firebase
 struct ContentView: View {
     @ObservedObject var loginModel = LoginViewModel()
     
-    @ObservedObject var postModel: PostViewModel
+    @ObservedObject var postModel = PostViewModel()
     
-    @ObservedObject var profileViewModel: ProfileViewModel
+    @ObservedObject var profileViewModel = ProfileViewModel()
     
     var body: some View {
         VStack {

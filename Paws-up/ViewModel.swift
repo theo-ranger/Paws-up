@@ -24,7 +24,6 @@ import FirebaseStorage
     var ref = Database.database().reference()
     
     init() {
-        print("loginviewmodel called")
         handler = Auth.auth().addStateDidChangeListener{ auth,user in
             if user != nil {
                 self.isLoggedIn = true
@@ -92,18 +91,8 @@ import FirebaseStorage
 class PostViewModel: ObservableObject {
     @Published var posts: Array<Content> = []
 
-    var ref: DatabaseReference!
-    var storageRef: StorageReference!
-    init() {
-        if FirebaseApp.app() == nil { FirebaseApp.configure() }
-
-        ref = Database.database().reference()
-
-        let storage = Storage.storage()
-        
-        storageRef = storage.reference()
-        
-    }
+    var ref = Database.database().reference()
+    var storageRef = Storage.storage().reference()
     
     func addPost(userName: String, title: String, image: UIImage) {
         print(userName)
