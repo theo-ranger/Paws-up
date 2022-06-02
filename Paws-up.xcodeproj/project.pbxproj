@@ -16,6 +16,7 @@
 		02873E4727B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E4627B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift */; };
 		02D5A2AD27DD6E9400A8BB56 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D5A2AC27DD6E9400A8BB56 /* Model.swift */; };
 		02D5A2AF27DD70D500A8BB56 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D5A2AE27DD70D500A8BB56 /* ViewModel.swift */; };
+		965BAFD8284877F8008468E6 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965BAFD7284877F8008468E6 /* DataManager.swift */; };
 		966B5CE52845B79000C57260 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE42845B79000C57260 /* FirebaseAuth */; };
 		966B5CE72845B79000C57260 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE62845B79000C57260 /* FirebaseDatabase */; };
 		966B5CE92845B79000C57260 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE82845B79000C57260 /* FirebaseFirestore */; };
@@ -53,6 +54,7 @@
 		02873E4627B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paws_upUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		02D5A2AC27DD6E9400A8BB56 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		02D5A2AE27DD70D500A8BB56 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		965BAFD7284877F8008468E6 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		96BBA214280E924900B63582 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,6 +115,7 @@
 				02873E2B27B8CB5E001D46CC /* ContentView.swift */,
 				02D5A2AC27DD6E9400A8BB56 /* Model.swift */,
 				02D5A2AE27DD70D500A8BB56 /* ViewModel.swift */,
+				965BAFD7284877F8008468E6 /* DataManager.swift */,
 				02873E2D27B8CB5F001D46CC /* Assets.xcassets */,
 				96BBA214280E924900B63582 /* GoogleService-Info.plist */,
 				02873E2F27B8CB5F001D46CC /* Preview Content */,
@@ -293,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				02D5A2AF27DD70D500A8BB56 /* ViewModel.swift in Sources */,
+				965BAFD8284877F8008468E6 /* DataManager.swift in Sources */,
 				02D5A2AD27DD6E9400A8BB56 /* Model.swift in Sources */,
 				02873E2C27B8CB5E001D46CC /* ContentView.swift in Sources */,
 				02873E2A27B8CB5E001D46CC /* Paws_upApp.swift in Sources */,

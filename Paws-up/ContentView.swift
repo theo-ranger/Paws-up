@@ -134,7 +134,11 @@ struct MainView: View {
                         .navigationBarHidden(true)
                         .animation(.default, value: true)
                         // FIXME: Redesign post appearance mechanism
-                        .onAppear(perform: {postModel.fetchPosts()})
+//                        .onAppear(perform: {postModel.fetchPosts()})
+                        .onAppear(perform: {
+                            postModel.fetchPosts()
+                            DataManager.shared.fetchAll()})
+
                 }
             }.tabItem {
                 Image(systemName: "house")
@@ -160,7 +164,7 @@ struct MainView: View {
 struct CardView: View {
     var postModel: PostViewModel
 
-    var post: PostViewModel.Content
+    var post: Content
     
     @State var didLike: Bool = true
     

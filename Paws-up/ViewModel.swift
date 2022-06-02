@@ -129,6 +129,7 @@ class PostViewModel: ObservableObject {
     }
     
     func fetchPosts() {
+        DataManager.shared.fetchAll()
         db.collection("posts").getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
@@ -197,13 +198,6 @@ class PostViewModel: ObservableObject {
     }
     
     
-    struct Content: Identifiable {
-        var id: String
-        var timeStamp: String
-        var title: String
-        var userName: String
-        var image: UIImage
-    }
     
 //    static let contents: Array<Content> = createContentArray()
 //
