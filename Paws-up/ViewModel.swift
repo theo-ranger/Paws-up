@@ -106,7 +106,8 @@ class PostViewModel: ObservableObject {
             "id": uid,
             "timeStamp": String(NSDate().timeIntervalSince1970),
             "username": userName,
-            "title": title
+            "title": title,
+            "image": String(image.base64!)
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
@@ -119,9 +120,10 @@ class PostViewModel: ObservableObject {
         let imgRef = storageRef.child(uid)
         let compressed = image.jpegData(compressionQuality: 0.2)
         // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = imgRef.putData(compressed!, metadata: nil) { (metadata, error) in
-          guard let metadata = metadata else {
+        _ = imgRef.putData(compressed!, metadata: nil) { (metadata, error) in
+            guard metadata != nil else {
             // Uh-oh, an error occurred!
+            print("upload error")
             return
           }
         }
@@ -129,37 +131,42 @@ class PostViewModel: ObservableObject {
     }
     
     func fetchPosts() {
-        DataManager.shared.fetchAll()
-        db.collection("posts").getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                var allPosts: [Content] = []
-                for document in querySnapshot!.documents {
-                    let dic = document.data() as! Dictionary<String, String>
-                    // Create a reference to the file you want to download
-                    let childRef = self.storageRef.child(dic["id"]!)
-                    print(dic["id"]!)
-                    // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-                    let image = UIImage(named: "cat-portrait")
-                    childRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
-                      if let error = error {
-                        // Uh-oh, an error occurred!
-                          print("image fetch error")
-                      } else {
-                        // Data for "images/island.jpg" is returned
-                        let image = UIImage(data: data!)!
-                          var content = Content(id: dic["id"]!, timeStamp: dic["timeStamp"]!, title: dic["title"]!, userName: dic["username"]!, image: image)
-                          allPosts.append(content)
-                          allPosts.sort {
-                              $0.timeStamp < $1.timeStamp
-                          }
-                          self.posts = allPosts
-                      }
-                    }
-                }
-            }
+//        DataManager.shared.fetchAll()
+        PostDataSource.fetchItems {resources in
+            self.posts = PostDataSource.shared.posts
+            self.posts.sort {$0.timeStamp < $1.timeStamp}
+            print("done")
         }
+//        db.collection("posts").getDocuments() { (querySnapshot, err) in
+//            if let err = err {
+//                print("Error getting documents: \(err)")
+//            } else {
+//                var allPosts: [Content] = []
+//                for document in querySnapshot!.documents {
+//                    let dic = document.data() as! Dictionary<String, String>
+//                    // Create a reference to the file you want to download
+//                    let childRef = self.storageRef.child(dic["id"]!)
+//                    print(dic["id"]!)
+//                    // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+//                    let image = UIImage(named: "cat-portrait")
+//                    childRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
+//                      if let error = error {
+//                        // Uh-oh, an error occurred!
+//                          print("image fetch error")
+//                      } else {
+//                        // Data for "images/island.jpg" is returned
+//                        let image = UIImage(data: data!)!
+//                          var content = Content(id: dic["id"]!, timeStamp: dic["timeStamp"]!, title: dic["title"]!, userName: dic["username"]!, image: image)
+//                          allPosts.append(content)
+//                          allPosts.sort {
+//                              $0.timeStamp < $1.timeStamp
+//                          }
+//                          self.posts = allPosts
+//                      }
+//                    }
+//                }
+//            }
+//        }
 //        databaseRef.child("posts").getData(completion:  { error, snapshot in
 //          guard error == nil else {
 //            print(error!.localizedDescription)
@@ -260,5 +267,20 @@ class ProfileViewModel: ObservableObject {
     
     func edit(_ profile: ProfileModel.Profile, _ feature: Int, _ setTo: String) {
         model.edit(profile, feature, setTo)
+    }
+}
+
+extension UIImage {
+    var base64: String? {
+        self.jpegData(compressionQuality: 0.2)?.base64EncodedString()
+    }
+}
+
+extension String {
+    var imageFromBase64: UIImage? {
+        guard let imageData = Data(base64Encoded: self, options: .ignoreUnknownCharacters) else {
+            return nil
+        }
+        return UIImage(data: imageData)
     }
 }

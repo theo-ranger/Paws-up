@@ -134,11 +134,7 @@ struct MainView: View {
                         .navigationBarHidden(true)
                         .animation(.default, value: true)
                         // FIXME: Redesign post appearance mechanism
-//                        .onAppear(perform: {postModel.fetchPosts()})
-                        .onAppear(perform: {
-                            postModel.fetchPosts()
-                            DataManager.shared.fetchAll()})
-
+                        .onAppear(perform: {postModel.fetchPosts()})
                 }
             }.tabItem {
                 Image(systemName: "house")
