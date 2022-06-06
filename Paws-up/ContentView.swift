@@ -174,14 +174,12 @@ struct CardView: View {
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
             HStack {
-            // Button()
-                 Button(action: {
-                     postModel.likePost(userName: loginModel.getEmail(), post: post)
-                 }, label: {
-                     Image(systemName: "heart.fill")
-                 }
-            )
-            // Text()
+                Button(action: {
+                    postModel.likePost(userName: loginModel.getEmail(), post: post)
+                }, label: {
+                    Image(systemName: "heart.fill")
+                })
+                Text(postModel.likeCount(post: post))
             }
             Text(post.title).foregroundColor(.black)
             Text(post.timeStamp).foregroundColor(.black)

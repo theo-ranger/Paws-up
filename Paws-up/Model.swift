@@ -23,21 +23,6 @@ struct PostModel {
         var image: UIImage
         var likedUsers: String
     }
-    
-//    mutating func like(_ post: Post) {
-//        let chosenIndex = index(of: post)
-//
-//        if (posts[chosenIndex].liked) {
-//            posts[chosenIndex].likes = posts[chosenIndex].likes - 1
-//            posts[chosenIndex].liked.toggle()
-//        } else {
-//            posts[chosenIndex].likes = posts[chosenIndex].likes + 1
-//            posts[chosenIndex].liked.toggle()
-//        }
-//    }
-//    func like() {
-//        
-//    }
 }
 
 struct ProfileModel {

@@ -131,6 +131,7 @@ class PostViewModel: ObservableObject {
     }
     
     func likePost(userName: String, post: PostModel.Content) {
+        print(post.likedUsers)
         // Create a reference to the cities collection
         let postRef = db.collection("posts")
 
@@ -142,7 +143,6 @@ class PostViewModel: ObservableObject {
                 print("Error getting documents: \(err)")
             } else {
                 for document in querySnapshot!.documents {
-                    print("\(document.documentID) => \(document.data())")
                     var previousPost: PostModel.Content = PostDataSource.parsePost(document.data())
                     let newLikedUsers = previousPost.likedUsers + " " + userName
                     self.db.collection("posts").document(document.documentID).updateData([
@@ -157,13 +157,16 @@ class PostViewModel: ObservableObject {
                 }
             }
         }
+        fetchPosts()
     }
     
-//    func like() {
-//
-//    }
-    
-    // func share() {
+    func likeCount(post: PostModel.Content) -> String {
+        let likeList = post.likedUsers
+        if likeList == "" {
+            return "0"
+        }
+        return String(likeList.filter { $0 == " " }.count + 1)
+    }
 }
 
 
