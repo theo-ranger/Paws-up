@@ -47,7 +47,7 @@ class PostDataSource: DataSource {
     }
     
     
-    private static func parsePost(_ dict: [String: Any]) -> PostModel.Content {
+    static func parsePost(_ dict: [String: Any]) -> PostModel.Content {
         let dic = dict as! Dictionary<String, String>
         // Create a reference to the file you want to download
 //        let childRef = self.storageRef.child(dic["id"]!)
@@ -69,7 +69,8 @@ class PostDataSource: DataSource {
                            timeStamp: dic["timeStamp"]!,
                            title: dic["title"]!,
                            userName: dic["username"]!,
-                           image: image!)
+                           image: image!,
+                           likedUsers: dic["likedUsers"]!)
         
         return post
     }

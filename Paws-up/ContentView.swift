@@ -126,7 +126,7 @@ struct MainView: View {
                             ForEach(postModel.posts) { post in
                                 NavigationLink(
                                     destination: ImageView(img: post.image).frame(width: 100, height: 200)) {
-                                        CardView(postModel: postModel, post: post)
+                                        CardView(postModel: postModel, post: post, loginModel: loginModel)
                                   }
                             }
                         }
@@ -162,6 +162,8 @@ struct CardView: View {
 
     var post: PostModel.Content
     
+    var loginModel: LoginViewModel
+    
     @State var didLike: Bool = true
     
     var body: some View {
@@ -171,6 +173,16 @@ struct CardView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
+            HStack {
+            // Button()
+                 Button(action: {
+                     postModel.likePost(userName: loginModel.getEmail(), post: post)
+                 }, label: {
+                     Image(systemName: "heart.fill")
+                 }
+            )
+            // Text()
+            }
             Text(post.title).foregroundColor(.black)
             Text(post.timeStamp).foregroundColor(.black)
             }
@@ -325,6 +337,7 @@ struct ImageView: View {
     var body: some View {
         Image(uiImage: img)
     }
+    // TODO: Resize image
 }
 
 

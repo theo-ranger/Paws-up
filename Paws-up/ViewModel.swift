@@ -97,6 +97,17 @@ class PostViewModel: ObservableObject {
     var storageRef = Storage.storage().reference()
     let db = Firestore.firestore()
     
+    func fetchPosts() {
+        PostDataSource.fetchItems { resources in
+            self.posts = PostDataSource.shared.posts
+            self.posts.sort {$0.timeStamp > $1.timeStamp}
+            print("done")
+        }
+    }
+    
+    
+    // MARK: -Intent(s)
+    
     func addPost(userName: String, title: String, image: UIImage) {
         let uid = UUID().uuidString
         // Add a new document with a generated ID
@@ -106,7 +117,8 @@ class PostViewModel: ObservableObject {
             "timeStamp": String(NSDate().timeIntervalSince1970),
             "username": userName,
             "title": title,
-            "image": String(image.base64!)
+            "image": String(image.base64!),
+            "likedUsers": ""
         ]) { err in
             if let err = err {
                 print("Error adding document: \(err)")
@@ -115,27 +127,43 @@ class PostViewModel: ObservableObject {
             }
         }
         print("post added" + userName)
-        // Create a reference to the file you want to upload
-        let imgRef = storageRef.child(uid)
-        let compressed = image.jpegData(compressionQuality: 0.2)
-        // Upload the file to the path "images/rivers.jpg"
-        imgRef.putData(compressed!, metadata: nil) { (metadata, error) in
-            guard metadata != nil else {
-            // Uh-oh, an error occurred!
-            print("upload error")
-            return
-          }
-        }
         fetchPosts()
     }
     
-    func fetchPosts() {
-        PostDataSource.fetchItems { resources in
-            self.posts = PostDataSource.shared.posts
-            self.posts.sort {$0.timeStamp < $1.timeStamp}
-            print("done")
+    func likePost(userName: String, post: PostModel.Content) {
+        // Create a reference to the cities collection
+        let postRef = db.collection("posts")
+
+        // Create a query against the collection.
+        let query = postRef.whereField("id", isEqualTo: post.id)
+        
+        query.getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    print("\(document.documentID) => \(document.data())")
+                    var previousPost: PostModel.Content = PostDataSource.parsePost(document.data())
+                    let newLikedUsers = previousPost.likedUsers + " " + userName
+                    self.db.collection("posts").document(document.documentID).updateData([
+                        "likedUsers": newLikedUsers
+                    ]) { err in
+                        if let err = err {
+                            print("Error adding document: \(err)")
+                        } else {
+                            print("Document modified with ID: \(document.documentID)")
+                        }
+                    }
+                }
+            }
         }
     }
+    
+//    func like() {
+//
+//    }
+    
+    // func share() {
 }
 
 
