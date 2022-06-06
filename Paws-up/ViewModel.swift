@@ -91,7 +91,7 @@ import FirebaseFirestore
 }
 
 class PostViewModel: ObservableObject {
-    @Published var posts: Array<Content> = []
+    @Published var posts: Array<PostModel.Content> = []
 
     var databaseRef = Database.database().reference()
     var storageRef = Storage.storage().reference()
@@ -99,7 +99,6 @@ class PostViewModel: ObservableObject {
     
     func addPost(userName: String, title: String, image: UIImage) {
         let uid = UUID().uuidString
-//        databaseRef.child("posts").child(title).setValue(["id": uid, "timeStamp": String(NSDate().timeIntervalSince1970), "username": userName])
         // Add a new document with a generated ID
         var ref: DocumentReference? = nil
         ref = db.collection("posts").addDocument(data: [
@@ -120,7 +119,7 @@ class PostViewModel: ObservableObject {
         let imgRef = storageRef.child(uid)
         let compressed = image.jpegData(compressionQuality: 0.2)
         // Upload the file to the path "images/rivers.jpg"
-        _ = imgRef.putData(compressed!, metadata: nil) { (metadata, error) in
+        imgRef.putData(compressed!, metadata: nil) { (metadata, error) in
             guard metadata != nil else {
             // Uh-oh, an error occurred!
             print("upload error")
@@ -131,111 +130,12 @@ class PostViewModel: ObservableObject {
     }
     
     func fetchPosts() {
-//        DataManager.shared.fetchAll()
-        PostDataSource.fetchItems {resources in
+        PostDataSource.fetchItems { resources in
             self.posts = PostDataSource.shared.posts
             self.posts.sort {$0.timeStamp < $1.timeStamp}
             print("done")
         }
-//        db.collection("posts").getDocuments() { (querySnapshot, err) in
-//            if let err = err {
-//                print("Error getting documents: \(err)")
-//            } else {
-//                var allPosts: [Content] = []
-//                for document in querySnapshot!.documents {
-//                    let dic = document.data() as! Dictionary<String, String>
-//                    // Create a reference to the file you want to download
-//                    let childRef = self.storageRef.child(dic["id"]!)
-//                    print(dic["id"]!)
-//                    // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-//                    let image = UIImage(named: "cat-portrait")
-//                    childRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
-//                      if let error = error {
-//                        // Uh-oh, an error occurred!
-//                          print("image fetch error")
-//                      } else {
-//                        // Data for "images/island.jpg" is returned
-//                        let image = UIImage(data: data!)!
-//                          var content = Content(id: dic["id"]!, timeStamp: dic["timeStamp"]!, title: dic["title"]!, userName: dic["username"]!, image: image)
-//                          allPosts.append(content)
-//                          allPosts.sort {
-//                              $0.timeStamp < $1.timeStamp
-//                          }
-//                          self.posts = allPosts
-//                      }
-//                    }
-//                }
-//            }
-//        }
-//        databaseRef.child("posts").getData(completion:  { error, snapshot in
-//          guard error == nil else {
-//            print(error!.localizedDescription)
-//            return;
-//          }
-//            let dict = snapshot?.value as? Dictionary<String, Any> ?? nil;
-//            if (dict == nil) {
-//                return
-//            }
-//            let dic = dict as! Dictionary<String, Dictionary<String, String>>
-//            var allPosts: [Content] = []
-//            var img: UIImage!
-//            for (key, val) in dic {
-//                // Create a reference to the file you want to download
-//                let childRef = self.storageRef.child(val["id"]!)
-//
-//                // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-//                childRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
-//                  if let error = error {
-//                    // Uh-oh, an error occurred!
-//                      print("error")
-//                  } else {
-//                    // Data for "images/island.jpg" is returned
-//                    let image = UIImage(data: data!)!
-//                      img = image
-//                      var content = Content(id: val["id"]!, timeStamp: val["timeStamp"]!, title: key, userName: val["username"]!, image: img!)
-//                      allPosts.append(content)
-//                      allPosts.sort {
-//                          $0.timeStamp < $1.timeStamp
-//                      }
-//                      self.posts = allPosts
-//                  }
-//                }
-//            }
-//        });
     }
-    
-    
-    
-//    static let contents: Array<Content> = createContentArray()
-//
-//    static func createContentArray() -> Array<Content> {
-//        var contents: Array<Content> = []
-//
-//        for i in 0..<6 {
-//            contents.append(Content(title: PostViewModel.imageAddresses[i],
-//                                    articleContent: PostViewModel.articleContents[i],
-//                                    imageAddress: PostViewModel.imageAddresses[i],
-//                                    userName: PostViewModel.userNames[i],
-//                                    userImageAddress: PostViewModel.userImageAddresses[i],
-//                                    timeStamp: PostViewModel.timeStamps[i]))
-//        }
-//
-//        return contents
-//    }
-//
-//    static func createPostContent() -> PostModel<Content> {
-//        PostModel<Content>(numberOfPosts: 6) { index in
-//            PostViewModel.contents[index]
-//        }
-//    }
-//    
-//    @Published private var model: PostModel<Content> = PostViewModel.createPostContent()
-//
-//    // MARK: -Intent(s)
-//
-//    func like(_ post: PostModel<Content>.Post) {
-//        model.like(post)
-//    }
 }
 
 

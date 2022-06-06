@@ -160,7 +160,7 @@ struct MainView: View {
 struct CardView: View {
     var postModel: PostViewModel
 
-    var post: Content
+    var post: PostModel.Content
     
     @State var didLike: Bool = true
     
@@ -171,21 +171,6 @@ struct CardView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200, alignment: .center)
                 .clipped()
-//            HStack{
-//                Text(post.content.userName).foregroundColor(.black)
-//                Spacer()
-//                Button(action: {
-//                    didLike = post.liked
-//                    viewModel.like(post)
-//                }, label: {
-//                        didLike ? Image(systemName: "heart")
-//                        .foregroundColor(Color("logo-pink")) :
-//                    Image(systemName: "heart.fill")
-//                    .foregroundColor(Color("logo-pink"))
-//                })
-//                Text(String(post.likes))
-//                    .foregroundColor(Color("logo-pink"))
-//            }
             Text(post.title).foregroundColor(.black)
             Text(post.timeStamp).foregroundColor(.black)
             }
