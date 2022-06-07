@@ -111,8 +111,7 @@ class PostViewModel: ObservableObject {
     func addPost(userName: String, title: String, image: UIImage) {
         let uid = UUID().uuidString
         // Add a new document with a generated ID
-        var ref: DocumentReference? = nil
-        ref = db.collection("posts").addDocument(data: [
+        db.collection("posts").document(uid).setData([
             "id": uid,
             "timeStamp": String(NSDate().timeIntervalSince1970),
             "username": userName,
@@ -121,31 +120,35 @@ class PostViewModel: ObservableObject {
             "likedUsers": ""
         ]) { err in
             if let err = err {
-                print("Error adding document: \(err)")
+                print("Error writing document: \(err)")
             } else {
-                print("Document added with ID: \(ref!.documentID)")
+                print("Document successfully written!")
             }
         }
-        print("post added" + userName)
         fetchPosts()
     }
     
     func likePost(userName: String, post: PostModel.Content) {
         print(post.likedUsers)
         // Create a reference to the cities collection
-        let postRef = db.collection("posts")
-
-        // Create a query against the collection.
-        let query = postRef.whereField("id", isEqualTo: post.id)
-        
-        query.getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    var previousPost: PostModel.Content = PostDataSource.parsePost(document.data())
-                    let newLikedUsers = previousPost.likedUsers + " " + userName
-                    self.db.collection("posts").document(document.documentID).updateData([
+        let postRef = db.collection("posts").document(post.id)
+        postRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    let previousPost = PostDataSource.parsePost(document.data()!)
+                    let users = previousPost.likedUsers
+                    var newLikedUsers = ""
+                    if users.contains(userName) {
+                        var arr = users.components(separatedBy: " ")
+                        if let index = arr.firstIndex(of: userName) {
+                            arr.remove(at: index)
+                        }
+                        newLikedUsers = arr.joined(separator:" ")
+                    } else if users != "" {
+                        newLikedUsers = users + " " + userName
+                    } else {
+                        newLikedUsers = userName
+                    }
+                    postRef.updateData([
                         "likedUsers": newLikedUsers
                     ]) { err in
                         if let err = err {
@@ -154,9 +157,10 @@ class PostViewModel: ObservableObject {
                             print("Document modified with ID: \(document.documentID)")
                         }
                     }
+                } else {
+                    print("Document does not exist")
                 }
             }
-        }
         fetchPosts()
     }
     
