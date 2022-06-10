@@ -58,6 +58,7 @@ class PostDataSource: DataSource {
         let post = PostModel.Content(id: dic["id"]!,
                            timeStamp: dic["timeStamp"]!,
                            title: dic["title"]!,
+                           description: dic["description"]!,
                            userName: dic["username"]!,
                            image: image!,
                            likedUsers: dic["likedUsers"]!)

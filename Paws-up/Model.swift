@@ -19,6 +19,7 @@ struct PostModel {
         var id: String
         var timeStamp: String
         var title: String
+        var description: String
         var userName: String
         var image: UIImage
         var likedUsers: String

@@ -125,7 +125,7 @@ struct MainView: View {
                         LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
                             ForEach(postModel.posts) { post in
                                 NavigationLink(
-                                    destination: ImageView(img: post.image).frame(width: 100, height: 200)) {
+                                    destination: ImageView(post: post)) {
                                         CardView(postModel: postModel, post: post, loginModel: loginModel)
                                   }
                             }
@@ -259,6 +259,7 @@ struct NewPostView: View {
     var loginModel: LoginViewModel
 
     @State private var title: String = ""
+    @State private var description: String = ""
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var selectedImage = UIImage(named: "cat-portrait")
     @State private var isImagePickerDisplay = false
@@ -269,33 +270,35 @@ struct NewPostView: View {
             Text("Title: \(title)")
             TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
                 print("title onEditingChanged - \(changed)")
-            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 50)
-            Text("Image:")
+            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 40)
+            Text("Description: \(title)")
+            TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
+                print("description onEditingChanged - \(changed)")
+            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 40)
+            HStack {
+                Text("Image:")
+                Button("Camera") {
+                    self.sourceType = .camera
+                    self.isImagePickerDisplay.toggle()
+                }.padding()
+                Button("Photo") {
+                    self.sourceType = .photoLibrary
+                    self.isImagePickerDisplay.toggle()
+                }.padding()
+            }.frame(height: 40)
             Image(uiImage: selectedImage!)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .clipShape(Circle())
                 .frame(width: 300, height: 300)
-            Button("Camera") {
-                self.sourceType = .camera
-                self.isImagePickerDisplay.toggle()
-            }.padding()
-            
-            Button("Photo") {
-                self.sourceType = .photoLibrary
-                self.isImagePickerDisplay.toggle()
-            }.padding()
-            Spacer()
-
-            Button(action: { addPost(username: loginModel.getEmail(), title: title, image: selectedImage!)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
             }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
         }.padding()
     }
     
-    func addPost(username: String, title: String, image: UIImage) {
-        postModel.addPost(userName: username, title: title, image: image)
+    func addPost(username: String, title: String, description: String, image: UIImage) {
+        postModel.addPost(userName: username, title: title, description: description, image: image)
     }
 }
 
@@ -335,12 +338,30 @@ struct SearchBar: View {
 
 
 struct ImageView: View {
-    var img: UIImage
+    var post: PostModel.Content
     
     var body: some View {
-        Image(uiImage: img)
+        VStack {
+            Text("Title: " + post.title)
+            Text("By: " + post.userName)
+            Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
+            Text("Description: " + post.description)
+            Text("Liked users: " + post.likedUsers)
+            Text(post.timeStamp)
+            Image(uiImage: post.image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }
     }
     // TODO: Resize image
+    
+    func convertToDate(timeStamp: String) -> String {
+        let date = NSDate(timeIntervalSince1970: Double(timeStamp)!)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+        let dateString = formatter.string(from: date as Date)
+        return dateString
+    }
 }
 
 

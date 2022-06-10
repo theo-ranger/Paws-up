@@ -108,7 +108,7 @@ class PostViewModel: ObservableObject {
     
     // MARK: -Intent(s)
     
-    func addPost(userName: String, title: String, image: UIImage) {
+    func addPost(userName: String, title: String, description: String, image: UIImage) {
         let uid = UUID().uuidString
         // Add a new document with a generated ID
         db.collection("posts").document(uid).setData([
@@ -116,6 +116,7 @@ class PostViewModel: ObservableObject {
             "timeStamp": String(NSDate().timeIntervalSince1970),
             "username": userName,
             "title": title,
+            "description": description,
             "image": String(image.base64!),
             "likedUsers": ""
         ]) { err in
