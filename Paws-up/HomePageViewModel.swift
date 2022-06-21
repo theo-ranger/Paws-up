@@ -93,9 +93,7 @@ import FirebaseFirestore
 class PostViewModel: ObservableObject {
     @Published var posts: Array<PostModel.Content> = []
 
-    var databaseRef = Database.database().reference()
-    var storageRef = Storage.storage().reference()
-    let db = Firestore.firestore()
+    private var postModel: PostModel = PostModel()
     
     func fetchPosts() {
         PostDataSource.fetchItems { resources in
@@ -105,72 +103,16 @@ class PostViewModel: ObservableObject {
         }
     }
     
-    
-    // MARK: -Intent(s)
-    
     func addPost(userName: String, title: String, description: String, image: UIImage) {
-        let uid = UUID().uuidString
-        // Add a new document with a generated ID
-        db.collection("posts").document(uid).setData([
-            "id": uid,
-            "timeStamp": String(NSDate().timeIntervalSince1970),
-            "username": userName,
-            "title": title,
-            "description": description,
-            "image": String(image.base64!),
-            "likedUsers": ""
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-        fetchPosts()
+        postModel.addPost(userName: userName, title: title, description: description, image: image)
     }
     
     func likePost(userName: String, post: PostModel.Content) {
-        print(post.likedUsers)
-        // Create a reference to the cities collection
-        let postRef = db.collection("posts").document(post.id)
-        postRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    let previousPost = PostDataSource.parsePost(document.data()!)
-                    let users = previousPost.likedUsers
-                    var newLikedUsers = ""
-                    if users.contains(userName) {
-                        var arr = users.components(separatedBy: " ")
-                        if let index = arr.firstIndex(of: userName) {
-                            arr.remove(at: index)
-                        }
-                        newLikedUsers = arr.joined(separator:" ")
-                    } else if users != "" {
-                        newLikedUsers = users + " " + userName
-                    } else {
-                        newLikedUsers = userName
-                    }
-                    postRef.updateData([
-                        "likedUsers": newLikedUsers
-                    ]) { err in
-                        if let err = err {
-                            print("Error adding document: \(err)")
-                        } else {
-                            print("Document modified with ID: \(document.documentID)")
-                        }
-                    }
-                } else {
-                    print("Document does not exist")
-                }
-            }
-        fetchPosts()
+        postModel.likePost(userName: userName, post: post)
     }
     
     func likeCount(post: PostModel.Content) -> String {
-        let likeList = post.likedUsers
-        if likeList == "" {
-            return "0"
-        }
-        return String(likeList.filter { $0 == " " }.count + 1)
+        postModel.likeCount(post: post)
     }
 }
 
