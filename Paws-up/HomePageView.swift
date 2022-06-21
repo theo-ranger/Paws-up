@@ -115,13 +115,13 @@ struct HomePageView: View {
             }.tabItem {
                 Image(systemName: "house")
                 Text("Home")}.tag(1)
-            Text("Donation Page").tabItem {
+            DonationView().tabItem {
                 Image(systemName: "pawprint.fill")
                 Text("Donation") }.tag(2)
             Text("Adoption Page").tabItem {
                 Image(systemName: "bandage")
                 Text("Adoption") }.tag(3)
-            Text("Report Stray Animals Page").tabItem {
+            RescueView().tabItem {
                 Image(systemName: "exclamationmark.bubble.circle")
                 Text("Report")}.tag(4)
             Text("Pet Dating Page").tabItem {
