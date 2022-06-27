@@ -121,15 +121,11 @@
 		02873E2827B8CB5E001D46CC /* Paws-up */ = {
 			isa = PBXGroup;
 			children = (
+				96D50EBC286952FC00075588 /* HomePage */,
+				96D50EBB286952E000075588 /* Rescue */,
 				02873E2927B8CB5E001D46CC /* Paws_upApp.swift */,
 				02873E2B27B8CB5E001D46CC /* ContentView.swift */,
-				9653E3262861615600004B48 /* HomePageView.swift */,
-				9653E3282861616D00004B48 /* HomePageModel.swift */,
-				9653E32A2861617D00004B48 /* HomePageViewModel.swift */,
-				9653E32C2861619000004B48 /* RescueView.swift */,
 				9653E33228616A8000004B48 /* DonationView.swift */,
-				9653E32E2861619B00004B48 /* RescueModel.swift */,
-				9653E330286161A600004B48 /* RescueViewModel.swift */,
 				965BAFD7284877F8008468E6 /* DataManager.swift */,
 				02873E2D27B8CB5F001D46CC /* Assets.xcassets */,
 				96BBA214280E924900B63582 /* GoogleService-Info.plist */,
@@ -168,6 +164,26 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		96D50EBB286952E000075588 /* Rescue */ = {
+			isa = PBXGroup;
+			children = (
+				9653E32C2861619000004B48 /* RescueView.swift */,
+				9653E32E2861619B00004B48 /* RescueModel.swift */,
+				9653E330286161A600004B48 /* RescueViewModel.swift */,
+			);
+			path = Rescue;
+			sourceTree = "<group>";
+		};
+		96D50EBC286952FC00075588 /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				9653E3262861615600004B48 /* HomePageView.swift */,
+				9653E3282861616D00004B48 /* HomePageModel.swift */,
+				9653E32A2861617D00004B48 /* HomePageViewModel.swift */,
+			);
+			path = HomePage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
