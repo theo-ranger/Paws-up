@@ -2,13 +2,10 @@
 //  DataManager.swift
 //  Paws-up
 //
-//  Created by 那桐 on 6/1/22.
+//  Created by Hanning Xu on 7/3/22.
 //
 
 import Foundation
-import Firebase
-import FirebaseStorage
-import UIKit
 
 protocol DataSource {
     typealias completionHandler = (_ resources: [Any]) -> Void
@@ -17,61 +14,9 @@ protocol DataSource {
     static var fetchDispatch: DispatchGroup { get set }
 }
 
-class PostDataSource: DataSource {
-    static let shared = PostDataSource()
-    
-    static var storageRef = Storage.storage().reference()
-    
-    var posts: Array<PostModel.Content> = []
-    
-    static var fetchDispatch: DispatchGroup = DispatchGroup()
-    
-    // Fetch the list of gyms and report back to the completionHandler.
-    static func fetchItems(_ completion: @escaping DataSource.completionHandler) {
-        print("post fetch")
-        let db = Firestore.firestore()
-        
-        db.collection("posts").getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("[Error @ PostDataSource.fetchItems()]: \(err)")
-                return
-            } else {
-                let posts = querySnapshot!.documents.map { (document) -> PostModel.Content in
-                    let dict = document.data()
-                    return parsePost(dict)
-                }
-                completion(posts)
-                PostDataSource.shared.posts = posts
-            }
-        }
-    }
-    
-    
-    static func parsePost(_ dict: [String: Any]) -> PostModel.Content {
-        let dic = dict as! Dictionary<String, String>
-        // Create a reference to the file you want to download
-        print(dic["id"]!)
-        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-        var image = UIImage(named: "cat-portrait")
-        image = dic["image"]?.imageFromBase64
-        
-        let post = PostModel.Content(id: dic["id"]!,
-                           timeStamp: dic["timeStamp"]!,
-                           title: dic["title"]!,
-                           description: dic["description"]!,
-                           userName: dic["username"]!,
-                           image: image!,
-                           likedUsers: dic["likedUsers"]!)
-        
-        return post
-    }
-}
-
-
-/*
- The list of `DataSource` classes to fetch data from. Add to this list to add new data to the app.
-fileprivate let kDataSources: [DataSource.Type] = [
-    PostDataSource.self
+fileprivate let allDataSources: [DataSource.Type] = [
+    PostDataSource.self,
+    RescueDataSource.self
 ]
 
 class DataManager {
@@ -91,7 +36,7 @@ class DataManager {
 
     func fetchAll() {
         let requests = DispatchGroup()
-        for source in kDataSources {
+        for source in allDataSources {
             requests.enter()
             fetch(source: source) { _ in requests.leave() }
         }
@@ -122,6 +67,4 @@ class DataManager {
             }
         }
     }
-
 }
-*/

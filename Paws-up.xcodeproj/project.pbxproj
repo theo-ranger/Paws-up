@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02712E852872859200E698F9 /* RescueDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02712E842872859200E698F9 /* RescueDataSource.swift */; };
+		02712E872872860C00E698F9 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02712E862872860C00E698F9 /* DataManager.swift */; };
 		02873E2A27B8CB5E001D46CC /* Paws_upApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E2927B8CB5E001D46CC /* Paws_upApp.swift */; };
 		02873E2C27B8CB5E001D46CC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E2B27B8CB5E001D46CC /* ContentView.swift */; };
 		02873E2E27B8CB5F001D46CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02873E2D27B8CB5F001D46CC /* Assets.xcassets */; };
@@ -21,7 +23,7 @@
 		9653E32F2861619B00004B48 /* RescueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E32E2861619B00004B48 /* RescueModel.swift */; };
 		9653E331286161A600004B48 /* RescueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E330286161A600004B48 /* RescueViewModel.swift */; };
 		9653E33328616A8000004B48 /* DonationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E33228616A8000004B48 /* DonationView.swift */; };
-		965BAFD8284877F8008468E6 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965BAFD7284877F8008468E6 /* DataManager.swift */; };
+		965BAFD8284877F8008468E6 /* PostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965BAFD7284877F8008468E6 /* PostDataSource.swift */; };
 		966B5CE52845B79000C57260 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE42845B79000C57260 /* FirebaseAuth */; };
 		966B5CE72845B79000C57260 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE62845B79000C57260 /* FirebaseDatabase */; };
 		966B5CE92845B79000C57260 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE82845B79000C57260 /* FirebaseFirestore */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		02712E842872859200E698F9 /* RescueDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RescueDataSource.swift; sourceTree = "<group>"; };
+		02712E862872860C00E698F9 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		02873E2627B8CB5E001D46CC /* Paws-up.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Paws-up.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02873E2927B8CB5E001D46CC /* Paws_upApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paws_upApp.swift; sourceTree = "<group>"; };
 		02873E2B27B8CB5E001D46CC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -64,7 +68,7 @@
 		9653E32E2861619B00004B48 /* RescueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RescueModel.swift; sourceTree = "<group>"; };
 		9653E330286161A600004B48 /* RescueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RescueViewModel.swift; sourceTree = "<group>"; };
 		9653E33228616A8000004B48 /* DonationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationView.swift; sourceTree = "<group>"; };
-		965BAFD7284877F8008468E6 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		965BAFD7284877F8008468E6 /* PostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDataSource.swift; sourceTree = "<group>"; };
 		96BBA214280E924900B63582 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -97,6 +101,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02712E8328722C2D00E698F9 /* PetWiki */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PetWiki;
+			sourceTree = "<group>";
+		};
 		02873E1D27B8CB5E001D46CC = {
 			isa = PBXGroup;
 			children = (
@@ -123,10 +134,11 @@
 			children = (
 				96D50EBC286952FC00075588 /* HomePage */,
 				96D50EBB286952E000075588 /* Rescue */,
+				02712E8328722C2D00E698F9 /* PetWiki */,
 				02873E2927B8CB5E001D46CC /* Paws_upApp.swift */,
+				02712E862872860C00E698F9 /* DataManager.swift */,
 				02873E2B27B8CB5E001D46CC /* ContentView.swift */,
 				9653E33228616A8000004B48 /* DonationView.swift */,
-				965BAFD7284877F8008468E6 /* DataManager.swift */,
 				02873E2D27B8CB5F001D46CC /* Assets.xcassets */,
 				96BBA214280E924900B63582 /* GoogleService-Info.plist */,
 				02873E2F27B8CB5F001D46CC /* Preview Content */,
@@ -172,6 +184,7 @@
 				9653E32C2861619000004B48 /* RescueView.swift */,
 				9653E32E2861619B00004B48 /* RescueModel.swift */,
 				9653E330286161A600004B48 /* RescueViewModel.swift */,
+				02712E842872859200E698F9 /* RescueDataSource.swift */,
 			);
 			path = Rescue;
 			sourceTree = "<group>";
@@ -179,6 +192,7 @@
 		96D50EBC286952FC00075588 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
+				965BAFD7284877F8008468E6 /* PostDataSource.swift */,
 				9653E3262861615600004B48 /* HomePageView.swift */,
 				9653E3282861616D00004B48 /* HomePageModel.swift */,
 				9653E32A2861617D00004B48 /* HomePageViewModel.swift */,
@@ -327,10 +341,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				9653E32F2861619B00004B48 /* RescueModel.swift in Sources */,
-				965BAFD8284877F8008468E6 /* DataManager.swift in Sources */,
+				02712E872872860C00E698F9 /* DataManager.swift in Sources */,
+				965BAFD8284877F8008468E6 /* PostDataSource.swift in Sources */,
 				02873E2C27B8CB5E001D46CC /* ContentView.swift in Sources */,
 				9653E331286161A600004B48 /* RescueViewModel.swift in Sources */,
 				9653E32D2861619000004B48 /* RescueView.swift in Sources */,
+				02712E852872859200E698F9 /* RescueDataSource.swift in Sources */,
 				9653E32B2861617D00004B48 /* HomePageViewModel.swift in Sources */,
 				9653E33328616A8000004B48 /* DonationView.swift in Sources */,
 				9653E3272861615600004B48 /* HomePageView.swift in Sources */,

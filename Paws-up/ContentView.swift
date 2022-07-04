@@ -1,3 +1,11 @@
+//
+//  ContentView.swift
+//  Paws-up
+//
+//  Created by Hanning Xu and Jiayu Shi on 2/12/22.
+//
+
+
 import SwiftUI
 
 struct ContentView: View {
@@ -7,10 +15,12 @@ struct ContentView: View {
     
     @ObservedObject var profileViewModel = ProfileViewModel()
     
+    var rescueModel = RescueViewModel()
+    
     var body: some View {
         VStack {
             if (loginModel.isLoggedIn) {
-                HomePageView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel)
+                HomePageView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, rescueModel: rescueModel)
             } else {
                 LoginView(loginModel: loginModel)
             }

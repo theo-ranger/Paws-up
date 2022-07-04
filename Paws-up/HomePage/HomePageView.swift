@@ -80,6 +80,8 @@ struct HomePageView: View {
     @ObservedObject var postModel: PostViewModel
 
     @ObservedObject var profileViewModel: ProfileViewModel
+    
+    var rescueModel: RescueViewModel
     var body: some View {
         Spacer()
         HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
@@ -121,7 +123,7 @@ struct HomePageView: View {
             Text("Adoption Page").tabItem {
                 Image(systemName: "bandage")
                 Text("Adoption") }.tag(3)
-            RescueView().tabItem {
+            RescueView(rescueModel: rescueModel).tabItem {
                 Image(systemName: "exclamationmark.bubble.circle")
                 Text("Report")}.tag(4)
             Text("Pet Dating Page").tabItem {
