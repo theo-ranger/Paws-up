@@ -104,7 +104,28 @@ struct HomePageView: View {
                             ForEach(postModel.posts) { post in
                                 NavigationLink(
                                     destination: ImageView(post: post)) {
-                                        CardView(postModel: postModel, post: post, loginModel: loginModel)
+                                        VStack {
+                                            Image(uiImage: post.image)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 170, height: 200, alignment: .center)
+                                                .clipped()
+                                            HStack {
+                                                VStack {
+                                                    Text(post.title).foregroundColor(.black)
+                                                    Text(post.userName).foregroundColor(.black)
+                                                }
+                                                Spacer()
+                                                VStack {
+                                                    Button(action: {
+                                                    postModel.likePost(userName: loginModel.getEmail(), post: post)
+                                                    }, label: {
+                                                        Image(systemName: "heart.fill")
+                                                    })
+                                                    Text(postModel.likeCount(post: post))
+                                                }
+                                            }
+                                        }
                                   }
                             }
                         }
@@ -112,7 +133,7 @@ struct HomePageView: View {
                         .navigationBarHidden(true)
                         .animation(.default, value: true)
                         // FIXME: Redesign post appearance mechanism
-                        .onAppear(perform: {postModel.fetchPosts()})
+                        //.onAppear(perform: {postModel.fetchPosts()})
                 }
             }.tabItem {
                 Image(systemName: "house")

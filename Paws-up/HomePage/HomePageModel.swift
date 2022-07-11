@@ -51,41 +51,6 @@ struct PostModel {
         }
     }
     
-    func likePost(userName: String, post: PostModel.Content) {
-        print(post.likedUsers)
-        // Create a reference to the cities collection
-        let postRef = db.collection("posts").document(post.id)
-        postRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    let previousPost = PostDataSource.parsePost(document.data()!)
-                    let users = previousPost.likedUsers
-                    var newLikedUsers = ""
-                    if users.contains(userName) {
-                        var arr = users.components(separatedBy: " ")
-                        if let index = arr.firstIndex(of: userName) {
-                            arr.remove(at: index)
-                        }
-                        newLikedUsers = arr.joined(separator:" ")
-                    } else if users != "" {
-                        newLikedUsers = users + " " + userName
-                    } else {
-                        newLikedUsers = userName
-                    }
-                    postRef.updateData([
-                        "likedUsers": newLikedUsers
-                    ]) { err in
-                        if let err = err {
-                            print("Error adding document: \(err)")
-                        } else {
-                            print("Document modified with ID: \(document.documentID)")
-                        }
-                    }
-                } else {
-                    print("Document does not exist")
-                }
-            }
-    }
-    
     func likeCount(post: PostModel.Content) -> String {
         let likeList = post.likedUsers
         if likeList == "" {

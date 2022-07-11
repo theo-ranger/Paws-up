@@ -23,7 +23,7 @@
 		9653E32F2861619B00004B48 /* RescueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E32E2861619B00004B48 /* RescueModel.swift */; };
 		9653E331286161A600004B48 /* RescueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E330286161A600004B48 /* RescueViewModel.swift */; };
 		9653E33328616A8000004B48 /* DonationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E33228616A8000004B48 /* DonationView.swift */; };
-		965BAFD8284877F8008468E6 /* PostDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965BAFD7284877F8008468E6 /* PostDataSource.swift */; };
+		965BAFD8284877F8008468E6 /* PostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965BAFD7284877F8008468E6 /* PostRepository.swift */; };
 		966B5CE52845B79000C57260 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE42845B79000C57260 /* FirebaseAuth */; };
 		966B5CE72845B79000C57260 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE62845B79000C57260 /* FirebaseDatabase */; };
 		966B5CE92845B79000C57260 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 966B5CE82845B79000C57260 /* FirebaseFirestore */; };
@@ -68,7 +68,7 @@
 		9653E32E2861619B00004B48 /* RescueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RescueModel.swift; sourceTree = "<group>"; };
 		9653E330286161A600004B48 /* RescueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RescueViewModel.swift; sourceTree = "<group>"; };
 		9653E33228616A8000004B48 /* DonationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationView.swift; sourceTree = "<group>"; };
-		965BAFD7284877F8008468E6 /* PostDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDataSource.swift; sourceTree = "<group>"; };
+		965BAFD7284877F8008468E6 /* PostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRepository.swift; sourceTree = "<group>"; };
 		96BBA214280E924900B63582 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -192,7 +192,7 @@
 		96D50EBC286952FC00075588 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
-				965BAFD7284877F8008468E6 /* PostDataSource.swift */,
+				965BAFD7284877F8008468E6 /* PostRepository.swift */,
 				9653E3262861615600004B48 /* HomePageView.swift */,
 				9653E3282861616D00004B48 /* HomePageModel.swift */,
 				9653E32A2861617D00004B48 /* HomePageViewModel.swift */,
@@ -342,7 +342,7 @@
 			files = (
 				9653E32F2861619B00004B48 /* RescueModel.swift in Sources */,
 				02712E872872860C00E698F9 /* DataManager.swift in Sources */,
-				965BAFD8284877F8008468E6 /* PostDataSource.swift in Sources */,
+				965BAFD8284877F8008468E6 /* PostRepository.swift in Sources */,
 				02873E2C27B8CB5E001D46CC /* ContentView.swift in Sources */,
 				9653E331286161A600004B48 /* RescueViewModel.swift in Sources */,
 				9653E32D2861619000004B48 /* RescueView.swift in Sources */,
@@ -391,6 +391,7 @@
 		02873E4827B8CB5F001D46CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -452,6 +453,7 @@
 		02873E4927B8CB5F001D46CC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -497,6 +499,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

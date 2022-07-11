@@ -11,6 +11,7 @@ import FirebaseAuth
 import FirebaseStorage
 import FirebaseCore
 import FirebaseFirestore
+import Combine
 
 @MainActor class LoginViewModel: ObservableObject {
     
@@ -91,24 +92,29 @@ import FirebaseFirestore
 }
 
 class PostViewModel: ObservableObject {
-    @Published var posts: Array<PostModel.Content> = []
+    @Published var posts: [PostModel.Content] = []
+    @Published var postRepository = PostRepository()
+    
+    private var cancellables: Set<AnyCancellable> = []
 
     private var postModel: PostModel = PostModel()
     
+    init() {
+        postRepository.$posts
+            .assign(to: \.posts, on: self)
+            .store(in: &cancellables)
+    }
+    
     func fetchPosts() {
-        PostDataSource.fetchItems { resources in
-            self.posts = PostDataSource.shared.posts
-            self.posts.sort {$0.timeStamp > $1.timeStamp}
-            print("done")
-        }
+        postRepository.fetchPosts()
     }
     
     func addPost(userName: String, title: String, description: String, image: UIImage) {
-        postModel.addPost(userName: userName, title: title, description: description, image: image)
+        postRepository.addPost(userName: userName, title: title, description: description, image: image)
     }
     
     func likePost(userName: String, post: PostModel.Content) {
-        postModel.likePost(userName: userName, post: post)
+        postRepository.likePost(userName: userName, post: post)
     }
     
     func likeCount(post: PostModel.Content) -> String {
