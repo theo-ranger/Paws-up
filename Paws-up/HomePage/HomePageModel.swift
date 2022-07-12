@@ -20,7 +20,7 @@ struct Content: Identifiable, Codable {
     var description: String
     var userName: String
     var image: String
-    var likedUsers: [String: Bool]
+    var likedUsers: [String]
 }
 
 struct PostModel {

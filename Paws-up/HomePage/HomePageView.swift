@@ -88,7 +88,7 @@ struct TestView: View {
                 }, label: {
                     Image(systemName: "heart.fill")
                 })
-                Text(String(post.likedUsers.values.filter{$0}.count))
+                Text(String(post.likedUsers.count))
             }
             Button("Add Post") {
                 postModel.addPost(userName: "", title: "test", description: "", image: UIImage(imageLiteralResourceName: "denero"))

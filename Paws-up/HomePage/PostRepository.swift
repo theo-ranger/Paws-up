@@ -36,7 +36,7 @@ class PostRepository: ObservableObject {
             } else {
                 let posts = querySnapshot!.documents.map { (document) -> Content in
                     let dict = document.data()
-                    return self.parsePost(dict)
+                    return self.parsePost(dict)!
                 }
                 completion(posts)
                 self.posts = posts
@@ -51,17 +51,18 @@ class PostRepository: ObservableObject {
         }
     }
     
-    func parsePost(_ dict: [String: Any]) -> Content {
-        let dic = dict as! Dictionary<String, String>
-        let dic2 = dict as! Dictionary<String, [String: Bool]>
+    func parsePost(_ dict: [String: Any]) -> Content? {
+        guard let likedU = dict["likedUsers"] as? [String] else {
+            return nil
+        }
         
-        let post = Content(id: dic["id"]!,
-                           timeStamp: dic["timeStamp"]!,
-                           title: dic["title"]!,
-                           description: dic["description"]!,
-                           userName: dic["username"]!,
-                           image: dic["image"]!,
-                           likedUsers: dic2["likedUsers"]!)
+        let post = Content(id: dict["id"] as? String ?? "",
+                           timeStamp: dict["timeStamp"] as? String ?? "",
+                           title: dict["title"] as? String ?? "",
+                           description: dict["description"] as? String ?? "",
+                           userName: dict["username"] as? String ?? "",
+                           image: dict["image"] as? String ?? "",
+                           likedUsers: likedU)
     
         return post
     }
@@ -76,7 +77,7 @@ class PostRepository: ObservableObject {
             "title": title,
             "description": description,
             "image": String(image.base64!),
-            "likedUsers": [:]
+            "likedUsers": []
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -84,35 +85,33 @@ class PostRepository: ObservableObject {
                 print("Document successfully written!")
             }
         }
+        fetchPosts()
     }
     
     func likePost(userName: String, post: Content) {
         let postRef = db.collection("posts").document(post.id)
         postRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    let previousPost = self.parsePost(document.data()!)
-                    var users = previousPost.likedUsers
-                    if let val = users[userName] {
-                        if val {
-                            users[userName] = false
-                        } else {
-                            users[userName] = true
-                        }
-                    } else {
-                        users[userName] = true
-                    }
-                    postRef.updateData([
-                        "likedUsers": users
-                    ]) { err in
-                        if let err = err {
-                            print("Error adding document: \(err)")
-                        } else {
-                            print("Document modified with ID: \(document.documentID)")
-                        }
-                    }
+            if let document = document, document.exists {
+                let previousPost = self.parsePost(document.data()!)
+                var users = previousPost!.likedUsers
+                if users.contains(userName) {
+                    users = users.filter(){$0 != userName}
                 } else {
-                    print("Document does not exist")
+                    users.append(userName)
                 }
+                postRef.updateData([
+                    "likedUsers": users
+                ]) { err in
+                    if let err = err {
+                        print("Error adding document: \(err)")
+                    } else {
+                        print("Document modified with ID: \(document.documentID)")
+                    }
+                }
+            } else {
+                print("Document does not exist")
             }
+        }
+        fetchPosts()
     }
 }
