@@ -92,7 +92,7 @@ import Combine
 }
 
 class PostViewModel: ObservableObject {
-    @Published var posts: [PostModel.Content] = []
+    @Published var posts: [Content] = []
     @Published var postRepository = PostRepository()
     
     private var cancellables: Set<AnyCancellable> = []
@@ -113,12 +113,8 @@ class PostViewModel: ObservableObject {
         postRepository.addPost(userName: userName, title: title, description: description, image: image)
     }
     
-    func likePost(userName: String, post: PostModel.Content) {
+    func likePost(userName: String, post: Content) {
         postRepository.likePost(userName: userName, post: post)
-    }
-    
-    func likeCount(post: PostModel.Content) -> String {
-        postModel.likeCount(post: post)
     }
 }
 

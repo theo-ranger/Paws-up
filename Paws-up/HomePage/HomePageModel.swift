@@ -13,51 +13,18 @@ import FirebaseStorage
 import FirebaseCore
 import FirebaseFirestore
 
+struct Content: Identifiable, Codable {
+    var id: String
+    var timeStamp: String
+    var title: String
+    var description: String
+    var userName: String
+    var image: String
+    var likedUsers: [String: Bool]
+}
+
 struct PostModel {
     
-    struct Content: Identifiable {
-        var id: String
-        var timeStamp: String
-        var title: String
-        var description: String
-        var userName: String
-        var image: UIImage
-        var likedUsers: String
-    }
-    
-    var databaseRef = Database.database().reference()
-    var storageRef = Storage.storage().reference()
-    let db = Firestore.firestore()
-    
-    // MARK: -Intent(s)
-    
-    func addPost(userName: String, title: String, description: String, image: UIImage) {
-        let uid = UUID().uuidString
-        // Add a new document with a generated ID
-        db.collection("posts").document(uid).setData([
-            "id": uid,
-            "timeStamp": String(NSDate().timeIntervalSince1970),
-            "username": userName,
-            "title": title,
-            "description": description,
-            "image": String(image.base64!),
-            "likedUsers": ""
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
-    
-    func likeCount(post: PostModel.Content) -> String {
-        let likeList = post.likedUsers
-        if likeList == "" {
-            return "0"
-        }
-        return String(likeList.filter { $0 == " " }.count + 1)
-    }
 }
 
 struct ProfileModel {

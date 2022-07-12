@@ -10,14 +10,14 @@ import Firebase
 import FirebaseStorage
 import UIKit
 
-let postDataSource = "posts"
+let path = "posts"
 
 class PostRepository: ObservableObject {
     var databaseRef = Database.database().reference()
     var storageRef = Storage.storage().reference()
     let db = Firestore.firestore()
     
-    @Published var posts: [PostModel.Content] = []
+    @Published var posts: [Content] = []
     
     static var fetchDispatch: DispatchGroup = DispatchGroup()
     
@@ -29,12 +29,12 @@ class PostRepository: ObservableObject {
         print("post fetch")
         let db = Firestore.firestore()
         
-        db.collection(postDataSource).getDocuments() { (querySnapshot, err) in
+        db.collection(path).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("[Error @ PostDataSource.fetchItems()]: \(err)")
                 return
             } else {
-                let posts = querySnapshot!.documents.map { (document) -> PostModel.Content in
+                let posts = querySnapshot!.documents.map { (document) -> Content in
                     let dict = document.data()
                     return self.parsePost(dict)
                 }
@@ -51,22 +51,18 @@ class PostRepository: ObservableObject {
         }
     }
     
-    func parsePost(_ dict: [String: Any]) -> PostModel.Content {
+    func parsePost(_ dict: [String: Any]) -> Content {
         let dic = dict as! Dictionary<String, String>
-        // Create a reference to the file you want to download
-        print(dic["id"]!)
-        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-        var image = UIImage(named: "cat-portrait")
-        image = dic["image"]?.imageFromBase64
+        let dic2 = dict as! Dictionary<String, [String: Bool]>
         
-        let post = PostModel.Content(id: dic["id"]!,
+        let post = Content(id: dic["id"]!,
                            timeStamp: dic["timeStamp"]!,
                            title: dic["title"]!,
                            description: dic["description"]!,
                            userName: dic["username"]!,
-                           image: image!,
-                           likedUsers: dic["likedUsers"]!)
-        
+                           image: dic["image"]!,
+                           likedUsers: dic2["likedUsers"]!)
+    
         return post
     }
     
@@ -80,7 +76,7 @@ class PostRepository: ObservableObject {
             "title": title,
             "description": description,
             "image": String(image.base64!),
-            "likedUsers": ""
+            "likedUsers": [:]
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -90,28 +86,23 @@ class PostRepository: ObservableObject {
         }
     }
     
-    func likePost(userName: String, post: PostModel.Content) {
-        print(post.likedUsers)
-        // Create a reference to the cities collection
+    func likePost(userName: String, post: Content) {
         let postRef = db.collection("posts").document(post.id)
         postRef.getDocument { (document, error) in
                 if let document = document, document.exists {
                     let previousPost = self.parsePost(document.data()!)
-                    let users = previousPost.likedUsers
-                    var newLikedUsers = ""
-                    if users.contains(userName) {
-                        var arr = users.components(separatedBy: " ")
-                        if let index = arr.firstIndex(of: userName) {
-                            arr.remove(at: index)
+                    var users = previousPost.likedUsers
+                    if let val = users[userName] {
+                        if val {
+                            users[userName] = false
+                        } else {
+                            users[userName] = true
                         }
-                        newLikedUsers = arr.joined(separator:" ")
-                    } else if users != "" {
-                        newLikedUsers = users + " " + userName
                     } else {
-                        newLikedUsers = userName
+                        users[userName] = true
                     }
                     postRef.updateData([
-                        "likedUsers": newLikedUsers
+                        "likedUsers": users
                     ]) { err in
                         if let err = err {
                             print("Error adding document: \(err)")

@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  HomePageView.swift
 //  Paws-up
 //
 //  Created by Hanning Xu and Jiayu Shi on 2/12/22.
@@ -78,13 +78,17 @@ struct TestView: View {
     @ObservedObject var loginModel: LoginViewModel
     
     var body: some View {
-        let _ = print("post")
-        let __ = print(postModel.posts)
         VStack {
             List(postModel.posts) { post in
                 Text(post.title)
-                Image(uiImage: post.image)
+                Image(uiImage: post.image.imageFromBase64!)
                 Text(post.description)
+                Button(action: {
+                postModel.likePost(userName: loginModel.getEmail(), post: post)
+                }, label: {
+                    Image(systemName: "heart.fill")
+                })
+                Text(String(post.likedUsers.values.filter{$0}.count))
             }
             Button("Add Post") {
                 postModel.addPost(userName: "", title: "test", description: "", image: UIImage(imageLiteralResourceName: "denero"))
@@ -155,70 +159,70 @@ struct TestView: View {
 //    }
 //}
 //
-
-struct CardView: View {
-    var postModel: PostViewModel
-
-    var post: PostModel.Content
-    
-    var loginModel: LoginViewModel
-    
-    @State var didLike: Bool = true
-    
-    var body: some View {
-        VStack {
-            Image(uiImage: post.image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 170, height: 200, alignment: .center)
-                .clipped()
-            HStack {
-                VStack {
-                    Text(post.title).foregroundColor(.black)
-                    Text(post.userName).foregroundColor(.black)
-                }
-                Spacer()
-                VStack {
-                    Button(action: {
-                    postModel.likePost(userName: loginModel.getEmail(), post: post)
-                    }, label: {
-                        Image(systemName: "heart.fill")
-                    })
-                    Text(postModel.likeCount(post: post))
-                }
-            }
-        }
-    }
-}
-
-
-struct ProfileView: View {
-    var viewModel: ProfileViewModel
-
-    var profile: ProfileModel.Profile
-    
-    var loginModel: LoginViewModel
-    
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-                Spacer()
-                CircleImage(image: Image("denero"))
-                    .offset(y: -130)
-                    .padding(.bottom, -130)
-                Text("UID: " + loginModel.getUID())
-                Text("Email: " + loginModel.getEmail())
-                Button(action: {
-                    Task {
-                        await loginModel.signOut()
-                    }
-                }) {
-                    Text("Log Out")
-                }
-            }
-        }
-    }
-}
+//
+//struct CardView: View {
+//    var postModel: PostViewModel
+//
+//    var post: PostModel.Content
+//
+//    var loginModel: LoginViewModel
+//
+//    @State var didLike: Bool = true
+//
+//    var body: some View {
+//        VStack {
+//            Image(uiImage: post.image)
+//                .resizable()
+//                .aspectRatio(contentMode: .fill)
+//                .frame(width: 170, height: 200, alignment: .center)
+//                .clipped()
+//            HStack {
+//                VStack {
+//                    Text(post.title).foregroundColor(.black)
+//                    Text(post.userName).foregroundColor(.black)
+//                }
+//                Spacer()
+//                VStack {
+//                    Button(action: {
+//                    postModel.likePost(userName: loginModel.getEmail(), post: post)
+//                    }, label: {
+//                        Image(systemName: "heart.fill")
+//                    })
+//                    Text(postModel.likeCount(post: post))
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//
+//struct ProfileView: View {
+//    var viewModel: ProfileViewModel
+//
+//    var profile: ProfileModel.Profile
+//
+//    var loginModel: LoginViewModel
+//
+//    var body: some View {
+//        ScrollView {
+//            VStack(alignment: .leading, spacing: 10) {
+//                Spacer()
+//                CircleImage(image: Image("denero"))
+//                    .offset(y: -130)
+//                    .padding(.bottom, -130)
+//                Text("UID: " + loginModel.getUID())
+//                Text("Email: " + loginModel.getEmail())
+//                Button(action: {
+//                    Task {
+//                        await loginModel.signOut()
+//                    }
+//                }) {
+//                    Text("Log Out")
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 struct CircleImage: View {
@@ -336,32 +340,32 @@ struct SearchBar: View {
 }
 
 
-struct ImageView: View {
-    var post: PostModel.Content
-    
-    var body: some View {
-        VStack {
-            Text("Title: " + post.title)
-            Text("By: " + post.userName)
-            Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
-            Text("Description: " + post.description)
-            Text("Liked users: " + post.likedUsers)
-            Text(post.timeStamp)
-            Image(uiImage: post.image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-        }
-    }
-    // TODO: Resize image
-    
-    func convertToDate(timeStamp: String) -> String {
-        let date = NSDate(timeIntervalSince1970: Double(timeStamp)!)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
-        let dateString = formatter.string(from: date as Date)
-        return dateString
-    }
-}
+//struct ImageView: View {
+//    var post: Content
+//
+//    var body: some View {
+//        VStack {
+//            Text("Title: " + post.title)
+//            Text("By: " + post.userName)
+//            Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
+//            Text("Description: " + post.description)
+//            Text("Liked users: " + post.likedUsers)
+//            Text(post.timeStamp)
+//            Image(uiImage: post.image)
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//        }
+//    }
+//    // TODO: Resize image
+//
+//    func convertToDate(timeStamp: String) -> String {
+//        let date = NSDate(timeIntervalSince1970: Double(timeStamp)!)
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+//        let dateString = formatter.string(from: date as Date)
+//        return dateString
+//    }
+//}
 
 
 struct ImagePickerView: UIViewControllerRepresentable {
