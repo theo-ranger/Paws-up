@@ -73,88 +73,88 @@ struct LoginView: View {
         }
 }
 
-
-struct HomePageView: View {
+struct TestView: View {
+    @ObservedObject var postModel: PostViewModel
     @ObservedObject var loginModel: LoginViewModel
     
-    @ObservedObject var postModel: PostViewModel
-
-    @ObservedObject var profileViewModel: ProfileViewModel
-    
-    var rescueModel: RescueViewModel
     var body: some View {
-        Spacer()
-        HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
-            NavigationView {
-                VStack {
-                    HStack {
-                        Button(action: { }, label: {
-                            NavigationLink(destination: ProfileView(viewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel)) {
-                                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
-                            }
-                        }).frame(alignment: Alignment.topTrailing)
-                        Spacer()
-                        SearchBar(text: .constant(""))
-                        Spacer()
-                        NewPostButton(loginModel: loginModel, postModel: postModel)
-                    }
-                    Spacer()
-                    ScrollView {
-                        LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
-                            ForEach(postModel.posts) { post in
-                                NavigationLink(
-                                    destination: ImageView(post: post)) {
-                                        VStack {
-                                            Image(uiImage: post.image)
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                                .frame(width: 170, height: 200, alignment: .center)
-                                                .clipped()
-                                            HStack {
-                                                VStack {
-                                                    Text(post.title).foregroundColor(.black)
-                                                    Text(post.userName).foregroundColor(.black)
-                                                }
-                                                Spacer()
-                                                VStack {
-                                                    Button(action: {
-                                                    postModel.likePost(userName: loginModel.getEmail(), post: post)
-                                                    }, label: {
-                                                        Image(systemName: "heart.fill")
-                                                    })
-                                                    Text(postModel.likeCount(post: post))
-                                                }
-                                            }
-                                        }
-                                  }
-                            }
-                        }
-                    }.padding(5)
-                        .navigationBarHidden(true)
-                        .animation(.default, value: true)
-                        // FIXME: Redesign post appearance mechanism
-                        //.onAppear(perform: {postModel.fetchPosts()})
-                }
-            }.tabItem {
-                Image(systemName: "house")
-                Text("Home")}.tag(1)
-            DonationView().tabItem {
-                Image(systemName: "pawprint.fill")
-                Text("Donation") }.tag(2)
-            Text("Adoption Page").tabItem {
-                Image(systemName: "bandage")
-                Text("Adoption") }.tag(3)
-            RescueView(rescueModel: rescueModel).tabItem {
-                Image(systemName: "exclamationmark.bubble.circle")
-                Text("Report")}.tag(4)
-            Text("Pet Dating Page").tabItem {
-                Image(systemName: "heart")
-                Text("Pet Dating")}.tag(5)
-            }.accentColor(Color("logo-pink"))
+        let _ = print("post")
+        let __ = print(postModel.posts)
+        VStack {
+            List(postModel.posts) { post in
+                Text(post.title)
+                Image(uiImage: post.image)
+                Text(post.description)
+            }
+            Button("Add Post") {
+                postModel.addPost(userName: "", title: "test", description: "", image: UIImage(imageLiteralResourceName: "denero"))
+            }
         }
     }
 }
 
+//
+//struct HomePageView: View {
+//    @ObservedObject var loginModel: LoginViewModel
+//
+//    @ObservedObject var postModel: PostViewModel
+//
+//    @ObservedObject var profileViewModel: ProfileViewModel
+//
+//    var rescueModel: RescueViewModel
+//    var body: some View {
+//        Spacer()
+//        HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
+//            NavigationView {
+//                VStack {
+//                    HStack {
+//                        Button(action: { }, label: {
+//                            NavigationLink(destination: ProfileView(viewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel)) {
+//                                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+//                            }
+//                        }).frame(alignment: Alignment.topTrailing)
+//                        Spacer()
+//                        SearchBar(text: .constant(""))
+//                        Spacer()
+//                        NewPostButton(loginModel: loginModel, postModel: postModel)
+//                    }
+//                    Spacer()
+//                    ScrollView {
+//                        LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
+//                            ForEach(postModel.posts) { post in
+//                                NavigationLink(
+//                                    destination:
+//                                        ImageView(post: post)) {
+//                                            TestView(postModel: post, loginModel: loginModel, post: postModel)
+//                                  }
+//                            }
+//                        }
+//                    }.padding(5)
+//                        .navigationBarHidden(true)
+//                        .animation(.default, value: true)
+//                        // FIXME: Redesign post appearance mechanism
+//                        //.onAppear(perform: {postModel.fetchPosts()})
+//                }
+//            }.tabItem {
+//                Image(systemName: "house")
+//                Text("Home")}.tag(1)
+//            DonationView().tabItem {
+//                Image(systemName: "pawprint.fill")
+//                Text("Donation") }.tag(2)
+//            Text("Adoption Page").tabItem {
+//                Image(systemName: "bandage")
+//                Text("Adoption") }.tag(3)
+//            RescueView(rescueModel: rescueModel).tabItem {
+//                Image(systemName: "exclamationmark.bubble.circle")
+//                Text("Report")}.tag(4)
+//            Text("Pet Dating Page").tabItem {
+//                Image(systemName: "heart")
+//                Text("Pet Dating")}.tag(5)
+//            }.accentColor(Color("logo-pink"))
+//        }
+//    }
+//}
+//
 
 struct CardView: View {
     var postModel: PostViewModel

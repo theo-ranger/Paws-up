@@ -12,9 +12,7 @@ import UIKit
 
 let postDataSource = "posts"
 
-class PostRepository: DataSource {
-    static let shared = PostRepository()
-    
+class PostRepository: ObservableObject {
     var databaseRef = Database.database().reference()
     var storageRef = Storage.storage().reference()
     let db = Firestore.firestore()
@@ -23,7 +21,11 @@ class PostRepository: DataSource {
     
     static var fetchDispatch: DispatchGroup = DispatchGroup()
     
-    static func fetchItems(_ completion: @escaping DataSource.completionHandler) {
+    init() {
+        fetchPosts()
+    }
+    
+    func fetchItems(_ completion: @escaping DataSource.completionHandler) {
         print("post fetch")
         let db = Firestore.firestore()
         
@@ -34,23 +36,22 @@ class PostRepository: DataSource {
             } else {
                 let posts = querySnapshot!.documents.map { (document) -> PostModel.Content in
                     let dict = document.data()
-                    return parsePost(dict)
+                    return self.parsePost(dict)
                 }
                 completion(posts)
-                shared.posts = posts
+                self.posts = posts
             }
         }
     }
     
     func fetchPosts() {
-        PostRepository.fetchItems { resources in
-            self.posts = PostRepository.shared.posts
+        self.fetchItems { resources in
             self.posts.sort {$0.timeStamp > $1.timeStamp}
             print("done")
         }
     }
     
-    static func parsePost(_ dict: [String: Any]) -> PostModel.Content {
+    func parsePost(_ dict: [String: Any]) -> PostModel.Content {
         let dic = dict as! Dictionary<String, String>
         // Create a reference to the file you want to download
         print(dic["id"]!)
@@ -95,7 +96,7 @@ class PostRepository: DataSource {
         let postRef = db.collection("posts").document(post.id)
         postRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    let previousPost = PostRepository.parsePost(document.data()!)
+                    let previousPost = self.parsePost(document.data()!)
                     let users = previousPost.likedUsers
                     var newLikedUsers = ""
                     if users.contains(userName) {

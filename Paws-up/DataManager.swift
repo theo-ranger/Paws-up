@@ -15,7 +15,7 @@ protocol DataSource {
 }
 
 fileprivate let allDataSources: [DataSource.Type] = [
-    PostRepository.self,
+    //PostRepository.self,
     RescueDataSource.self
 ]
 
