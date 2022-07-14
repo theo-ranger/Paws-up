@@ -75,25 +75,45 @@ struct LoginView: View {
 
 struct TestView: View {
     @ObservedObject var postModel: PostViewModel
-    @ObservedObject var loginModel: LoginViewModel
     
     var body: some View {
         VStack {
             List(postModel.posts) { post in
-                Text(post.title)
-                Image(uiImage: post.image.imageFromBase64!)
-                Text(post.description)
-                Button(action: {
-                postModel.likePost(userName: loginModel.getEmail(), post: post)
-                }, label: {
-                    Image(systemName: "heart.fill")
-                })
-                Text(String(post.likedUsers.count))
+                CardView(postModel: postModel, post: post)
             }
             Button("Add Post") {
                 postModel.addPost(userName: "", title: "test", description: "", image: UIImage(imageLiteralResourceName: "denero"))
             }
         }
+    }
+}
+
+struct CardView: View {
+    var postModel: PostViewModel
+    var post: Content
+    static let username = LoginViewModel().getEmail()
+    
+    @State var liked: Bool
+    
+    init(postModel: PostViewModel, post: Content) {
+        self.postModel = postModel
+        self.post = post
+        liked = post.likedUsers.contains(CardView.username)
+    }
+    
+    var body: some View {
+        Text(post.title)
+        Image(uiImage: post.image.imageFromBase64!)
+        Text(post.description)
+        Button(action: {
+            liked.toggle()
+            postModel.likePost(userName: LoginViewModel().getEmail(), post: post)
+        }, label: {
+            if liked {Image(systemName: "heart.fill")}
+            else {Image(systemName: "heart")}
+        })
+        if liked {Text(String(post.likedUsers.count + 1))}
+        else {Text(String(post.likedUsers.count))}
     }
 }
 

@@ -112,6 +112,5 @@ class PostRepository: ObservableObject {
                 print("Document does not exist")
             }
         }
-        fetchPosts()
     }
 }

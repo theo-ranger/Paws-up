@@ -13,7 +13,7 @@ import FirebaseCore
 import FirebaseFirestore
 import Combine
 
-@MainActor class LoginViewModel: ObservableObject {
+class LoginViewModel: ObservableObject {
     
     @Published var email = ""
     @Published var password = ""
