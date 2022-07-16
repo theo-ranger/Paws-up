@@ -106,151 +106,125 @@ struct CardView: View {
     }
     
     var body: some View {
-        Text(post.title)
-        Image(uiImage: post.image.imageFromBase64!)
-        Text(post.description)
-        Button(action: {
-            liked.toggle()
-            if likeList.contains(username) {
-                likeList = likeList.filter(){$0 != username}
-            } else {
-                likeList.append(username)
+        VStack {
+            Image(uiImage: post.image.imageFromBase64!)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 170, height: 200, alignment: .center)
+                .clipped()
+            HStack {
+                VStack {
+                    Text(post.title).foregroundColor(.black)
+                    Text(username).foregroundColor(.black)
+                }
+                Spacer()
+                HStack {
+                    Button(action: {
+                        liked.toggle()
+                        if likeList.contains(username) {
+                            likeList = likeList.filter(){$0 != username}
+                        } else {
+                            likeList.append(username)
+                        }
+                        postModel.likePost(userName: username, post: post)
+                    }, label: {
+                        if liked {Image(systemName: "heart.fill")}
+                        else {Image(systemName: "heart")}
+                    })
+                    Text(String(likeList.count))
+                }
             }
-            postModel.likePost(userName: username, post: post)
-        }, label: {
-            if liked {Image(systemName: "heart.fill")}
-            else {Image(systemName: "heart")}
-        })
-        Text(String(likeList.count))
+        }
     }
 }
 
-//
-//struct HomePageView: View {
-//    @ObservedObject var loginModel: LoginViewModel
-//
-//    @ObservedObject var postModel: PostViewModel
-//
-//    @ObservedObject var profileViewModel: ProfileViewModel
-//
-//    var rescueModel: RescueViewModel
-//    var body: some View {
-//        Spacer()
-//        HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
-//            NavigationView {
-//                VStack {
-//                    HStack {
-//                        Button(action: { }, label: {
-//                            NavigationLink(destination: ProfileView(viewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel)) {
-//                                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
-//                            }
-//                        }).frame(alignment: Alignment.topTrailing)
-//                        Spacer()
-//                        SearchBar(text: .constant(""))
-//                        Spacer()
-//                        NewPostButton(loginModel: loginModel, postModel: postModel)
-//                    }
-//                    Spacer()
-//                    ScrollView {
-//                        LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
-//                            ForEach(postModel.posts) { post in
-//                                NavigationLink(
-//                                    destination:
-//                                        ImageView(post: post)) {
-//                                            TestView(postModel: post, loginModel: loginModel, post: postModel)
-//                                  }
-//                            }
-//                        }
-//                    }.padding(5)
-//                        .navigationBarHidden(true)
-//                        .animation(.default, value: true)
-//                        // FIXME: Redesign post appearance mechanism
-//                        //.onAppear(perform: {postModel.fetchPosts()})
-//                }
-//            }.tabItem {
-//                Image(systemName: "house")
-//                Text("Home")}.tag(1)
-//            DonationView().tabItem {
-//                Image(systemName: "pawprint.fill")
-//                Text("Donation") }.tag(2)
-//            Text("Adoption Page").tabItem {
-//                Image(systemName: "bandage")
-//                Text("Adoption") }.tag(3)
-//            RescueView(rescueModel: rescueModel).tabItem {
-//                Image(systemName: "exclamationmark.bubble.circle")
-//                Text("Report")}.tag(4)
-//            Text("Pet Dating Page").tabItem {
-//                Image(systemName: "heart")
-//                Text("Pet Dating")}.tag(5)
-//            }.accentColor(Color("logo-pink"))
-//        }
-//    }
-//}
-//
-//
-//struct CardView: View {
-//    var postModel: PostViewModel
-//
-//    var post: PostModel.Content
-//
-//    var loginModel: LoginViewModel
-//
-//    @State var didLike: Bool = true
-//
-//    var body: some View {
-//        VStack {
-//            Image(uiImage: post.image)
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//                .frame(width: 170, height: 200, alignment: .center)
-//                .clipped()
-//            HStack {
-//                VStack {
-//                    Text(post.title).foregroundColor(.black)
-//                    Text(post.userName).foregroundColor(.black)
-//                }
-//                Spacer()
-//                VStack {
-//                    Button(action: {
-//                    postModel.likePost(userName: loginModel.getEmail(), post: post)
-//                    }, label: {
-//                        Image(systemName: "heart.fill")
-//                    })
-//                    Text(postModel.likeCount(post: post))
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//
-//struct ProfileView: View {
-//    var viewModel: ProfileViewModel
-//
-//    var profile: ProfileModel.Profile
-//
-//    var loginModel: LoginViewModel
-//
-//    var body: some View {
-//        ScrollView {
-//            VStack(alignment: .leading, spacing: 10) {
-//                Spacer()
-//                CircleImage(image: Image("denero"))
-//                    .offset(y: -130)
-//                    .padding(.bottom, -130)
-//                Text("UID: " + loginModel.getUID())
-//                Text("Email: " + loginModel.getEmail())
-//                Button(action: {
-//                    Task {
-//                        await loginModel.signOut()
-//                    }
-//                }) {
-//                    Text("Log Out")
-//                }
-//            }
-//        }
-//    }
-//}
+
+struct HomePageView: View {
+    @ObservedObject var loginModel: LoginViewModel
+
+    @ObservedObject var postModel: PostViewModel
+
+    @ObservedObject var profileViewModel: ProfileViewModel
+
+    var rescueModel: RescueViewModel
+    var body: some View {
+        Spacer()
+        HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
+            NavigationView {
+                VStack {
+                    HStack {
+                        Button(action: { }, label: {
+                            NavigationLink(destination: ProfileView(viewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel)) {
+                                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+                            }
+                        }).frame(alignment: Alignment.topTrailing)
+                        Spacer()
+                        SearchBar(text: .constant(""))
+                        Spacer()
+                        NewPostButton(loginModel: loginModel, postModel: postModel)
+                    }
+                    Spacer()
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
+                            ForEach(postModel.posts) { post in
+                                NavigationLink(
+                                    destination:
+                                        ImageView(post: post)) {
+                                            CardView(postModel: postModel, post: post, username: loginModel.getEmail())
+                                  }
+                            }
+                        }
+                    }.padding(5)
+                        .navigationBarHidden(true)
+                        .animation(.default, value: true)
+                }
+            }.tabItem {
+                Image(systemName: "house")
+                Text("Home")}.tag(1)
+            DonationView().tabItem {
+                Image(systemName: "pawprint.fill")
+                Text("Donation") }.tag(2)
+            Text("Adoption Page").tabItem {
+                Image(systemName: "bandage")
+                Text("Adoption") }.tag(3)
+            RescueView(rescueModel: rescueModel).tabItem {
+                Image(systemName: "exclamationmark.bubble.circle")
+                Text("Report")}.tag(4)
+            Text("Pet Dating Page").tabItem {
+                Image(systemName: "heart")
+                Text("Pet Dating")}.tag(5)
+            }.accentColor(Color("logo-pink"))
+        }
+    }
+}
+
+struct ProfileView: View {
+    var viewModel: ProfileViewModel
+
+    var profile: ProfileModel.Profile
+
+    var loginModel: LoginViewModel
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                Spacer()
+                CircleImage(image: Image("denero"))
+                    .offset(y: -130)
+                    .padding(.bottom, -130)
+                Text("UID: " + loginModel.getUID())
+                Text("Email: " + loginModel.getEmail())
+                Button(action: {
+                    Task {
+                        await loginModel.signOut()
+                    }
+                }) {
+                    Text("Log Out")
+                }
+            }
+        }
+    }
+}
 
 
 struct CircleImage: View {
@@ -368,32 +342,31 @@ struct SearchBar: View {
 }
 
 
-//struct ImageView: View {
-//    var post: Content
-//
-//    var body: some View {
-//        VStack {
-//            Text("Title: " + post.title)
-//            Text("By: " + post.userName)
-//            Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
-//            Text("Description: " + post.description)
-//            Text("Liked users: " + post.likedUsers)
-//            Text(post.timeStamp)
-//            Image(uiImage: post.image)
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//        }
-//    }
-//    // TODO: Resize image
-//
-//    func convertToDate(timeStamp: String) -> String {
-//        let date = NSDate(timeIntervalSince1970: Double(timeStamp)!)
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
-//        let dateString = formatter.string(from: date as Date)
-//        return dateString
-//    }
-//}
+struct ImageView: View {
+    var post: Content
+
+    var body: some View {
+        VStack {
+            Text("Title: " + post.title)
+            Text("By: " + post.userName)
+            Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
+            Text("Description: " + post.description)
+            Text(post.timeStamp)
+            //Image(uiImage: post.image)
+                //.resizable()
+                //.aspectRatio(contentMode: .fit)
+        }
+    }
+    // TODO: Resize image
+
+    func convertToDate(timeStamp: String) -> String {
+        let date = NSDate(timeIntervalSince1970: Double(timeStamp)!)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+        let dateString = formatter.string(from: date as Date)
+        return dateString
+    }
+}
 
 
 struct ImagePickerView: UIViewControllerRepresentable {
