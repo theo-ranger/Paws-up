@@ -75,11 +75,12 @@ struct LoginView: View {
 
 struct TestView: View {
     @ObservedObject var postModel: PostViewModel
+    @ObservedObject var loginModel: LoginViewModel
     
     var body: some View {
         VStack {
             List(postModel.posts) { post in
-                CardView(postModel: postModel, post: post)
+                CardView(postModel: postModel, post: post, username: loginModel.getEmail())
             }
             Button("Add Post") {
                 postModel.addPost(userName: "", title: "test", description: "", image: UIImage(imageLiteralResourceName: "denero"))
@@ -91,14 +92,17 @@ struct TestView: View {
 struct CardView: View {
     var postModel: PostViewModel
     var post: Content
-    static let username = LoginViewModel().getEmail()
+    var username: String
     
     @State var liked: Bool
+    @State var likeList: [String]
     
-    init(postModel: PostViewModel, post: Content) {
+    init(postModel: PostViewModel, post: Content, username: String) {
         self.postModel = postModel
         self.post = post
-        liked = post.likedUsers.contains(CardView.username)
+        self.username = username
+        liked = post.likedUsers.contains(username)
+        likeList = post.likedUsers
     }
     
     var body: some View {
@@ -107,13 +111,17 @@ struct CardView: View {
         Text(post.description)
         Button(action: {
             liked.toggle()
-            postModel.likePost(userName: LoginViewModel().getEmail(), post: post)
+            if likeList.contains(username) {
+                likeList = likeList.filter(){$0 != username}
+            } else {
+                likeList.append(username)
+            }
+            postModel.likePost(userName: username, post: post)
         }, label: {
             if liked {Image(systemName: "heart.fill")}
             else {Image(systemName: "heart")}
         })
-        if liked {Text(String(post.likedUsers.count + 1))}
-        else {Text(String(post.likedUsers.count))}
+        Text(String(likeList.count))
     }
 }
 

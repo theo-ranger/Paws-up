@@ -20,7 +20,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if (loginModel.isLoggedIn) {
-                TestView(postModel: postModel)
+                TestView(postModel: postModel, loginModel: loginModel)
                 //HomePageView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, rescueModel: rescueModel)
             } else {
                 LoginView(loginModel: loginModel)
