@@ -15,8 +15,8 @@ struct RescueView: View {
     
     var mapView = MKMapView()
     
-    var locations: [Location] = []
-    @State var currentLocation = Location()
+    var locations: [RescueModel.Location] = []
+    @State var currentLocation = RescueModel.Location(message: "", timeStamp: "", photo: UIImage(imageLiteralResourceName: "denero"), petType: "", zip: "", id: "", name: "", coordinate: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), username: "", title: "")
     @State var showingDetail = false
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03))
 
@@ -24,7 +24,7 @@ struct RescueView: View {
         NavigationView {
             VStack {
                 NewLocationButton(loginModel: loginModel, rescueModel: rescueModel)
-                Map(coordinateRegion: $region, annotationItems: locations) { location in
+                Map(coordinateRegion: $region, annotationItems: RescueDataSource.shared.locations) { location in
                     MapAnnotation(coordinate: location.coordinate) {
                         MarkerView(showingDetail: $showingDetail, currentLocation: $currentLocation, location: location)
                     }
@@ -37,22 +37,22 @@ struct RescueView: View {
         }.onAppear()
     }
 }
-
-struct Location: Identifiable {
-    var message: String = ""
-    var timeStamp: String = ""
-    var photo: Image = Image("denero")
-    var petType: String = ""
-    var zip : String = ""
-    var id = UUID()
-    var name = ""
-    var coordinate = CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934)
-}
+//
+//struct Location: Identifiable {
+//    var message: String = ""
+//    var timeStamp: String = ""
+//    var photo: Image = Image("denero")
+//    var petType: String = ""
+//    var zip : String = ""
+//    var id = UUID()
+//    var name = ""
+//    var coordinate = CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934)
+//}
 
 struct MarkerView: View {
     @Binding var showingDetail: Bool
-    @Binding var currentLocation: Location
-    var location: Location
+    @Binding var currentLocation: RescueModel.Location
+    var location: RescueModel.Location
     var body: some View {
         
         ZStack {
@@ -67,7 +67,7 @@ struct MarkerView: View {
 }
 
 struct SmallCardView: View {
-    var location: Location
+    var location: RescueModel.Location
     @Binding var showingDetail: Bool
     var body: some View {
         ZStack {
