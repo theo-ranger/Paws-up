@@ -187,7 +187,7 @@ struct HomePageView: View {
             Text("Adoption Page").tabItem {
                 Image(systemName: "bandage")
                 Text("Adoption") }.tag(3)
-            RescueView(rescueModel: rescueModel).tabItem {
+            RescueView(rescueModel: rescueModel, loginModel: loginModel).tabItem {
                 Image(systemName: "exclamationmark.bubble.circle")
                 Text("Report")}.tag(4)
             Text("Pet Dating Page").tabItem {

@@ -35,7 +35,7 @@ struct RescueModel {
     
     // MARK: -Intent(s)
     
-    func addLocation(message: String, timeStamp: String, photo: UIImage, petType: String, zip: String, name: String, coordinate: CLLocationCoordinate2D, username: String,
+    func addLocation(message: String, photo: UIImage, petType: String, zip: String, name: String, coordinate: CLLocationCoordinate2D, username: String,
         title: String) {
         let uid = UUID().uuidString
         db.collection("locations").document(uid).setData([
@@ -43,7 +43,6 @@ struct RescueModel {
             "timeStamp": String(NSDate().timeIntervalSince1970),
             "username": username,
             "title": title,
-            "message": message,
             "photo": String(photo.base64!),
             "message": message,
             "petType": petType,

@@ -42,6 +42,12 @@ class RescueDataSource: DataSource {
         }
     }
     
+    static func fetchLocations() {
+        self.fetchItems { resources in
+            print("done")
+        }
+    }
+    
     
     static func parseLocation(_ dict: [String: Any]) -> RescueModel.Location {
         let dic = dict as! Dictionary<String, String>
