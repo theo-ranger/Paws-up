@@ -47,6 +47,7 @@ struct RescueModel {
             "message": message,
             "petType": petType,
             "zip": zip,
+            "name": name,
             "latitude": String(coordinate.latitude),
             "longitude": String(coordinate.longitude)
         ]) { err in

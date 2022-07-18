@@ -15,7 +15,6 @@ struct RescueView: View {
     
     var mapView = MKMapView()
     
-    var locations: [RescueModel.Location] = []
     @State var currentLocation = RescueModel.Location(message: "", timeStamp: "", photo: UIImage(imageLiteralResourceName: "denero"), petType: "", zip: "", id: "", name: "", coordinate: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), username: "", title: "")
     @State var showingDetail = false
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03))
@@ -24,17 +23,19 @@ struct RescueView: View {
         NavigationView {
             VStack {
                 NewLocationButton(loginModel: loginModel, rescueModel: rescueModel)
-                Map(coordinateRegion: $region, annotationItems: RescueDataSource.shared.locations) { location in
-                    MapAnnotation(coordinate: location.coordinate) {
-                        MarkerView(showingDetail: $showingDetail, currentLocation: $currentLocation, location: location)
+                ZStack {
+                    Map(coordinateRegion: $region, annotationItems: RescueDataSource.shared.locations) { location in
+                        MapAnnotation(coordinate: location.coordinate) {
+                            MarkerView(showingDetail: $showingDetail, currentLocation: $currentLocation, location: location)
+                        }
+                    }
+                        .frame(width: 400, height: 600)
+                    if showingDetail {
+                        SmallCardView(location: currentLocation, showingDetail: $showingDetail).offset(y: UIScreen.main.bounds.size.height / 2 - 200)
                     }
                 }
-                    .frame(width: 400, height: 600)
-                if showingDetail {
-                    SmallCardView(location: currentLocation, showingDetail: $showingDetail).offset(y: UIScreen.main.bounds.size.height / 2 - 200)
-                }
             }
-        }.onAppear()
+        }
     }
 }
 //

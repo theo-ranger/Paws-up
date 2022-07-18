@@ -11,20 +11,24 @@ import FirebaseStorage
 import UIKit
 import MapKit
 
-let rescueDataSource = "location"
+let rescueDataSource = "locations"
 
 class RescueDataSource: DataSource {
     static let shared = RescueDataSource()
     
     static var storageRef = Storage.storage().reference()
     
-    var locations: Array<RescueModel.Location> = []
+    @Published var locations: Array<RescueModel.Location> = []
     
     static var fetchDispatch: DispatchGroup = DispatchGroup()
     
+    init() {
+        RescueDataSource.fetchLocations()
+    }
+    
     // Fetch the list of gyms and report back to the completionHandler.
     static func fetchItems(_ completion: @escaping DataSource.completionHandler) {
-        print("post fetch")
+        print("location fetch")
         let db = Firestore.firestore()
         
         db.collection(rescueDataSource).getDocuments() { (querySnapshot, err) in
@@ -45,6 +49,9 @@ class RescueDataSource: DataSource {
     static func fetchLocations() {
         self.fetchItems { resources in
             print("done")
+            for location in RescueDataSource.shared.locations {
+                print(location.id)
+            }
         }
     }
     
