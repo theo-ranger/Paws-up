@@ -25,18 +25,134 @@ struct RescueView: View {
                 NewLocationButton(loginModel: loginModel, rescueModel: rescueModel)
                 Spacer()
                 ZStack {
-                    Map(coordinateRegion: $region, annotationItems: RescueDataSource.shared.locations) { location in
-                        MapAnnotation(coordinate: location.coordinate) {
-                            MarkerView(showingDetail: $showingDetail, currentLocation: $currentLocation, location: location)
-                        }
-                    }
-                        .frame(width: 400, height: 600)
+//                    Map(coordinateRegion: $region, annotationItems: RescueDataSource.shared.locations) { location in
+//                        MapAnnotation(coordinate: location.coordinate) {
+//                            MarkerView(showingDetail: $showingDetail, currentLocation: $currentLocation, location: location)
+//                        }
+//                    }
+//                        .frame(width: 400, height: 600)
+                    PickOnMapView()
                     if showingDetail {
                         SmallCardView(location: currentLocation, showingDetail: $showingDetail).offset(y: UIScreen.main.bounds.size.height / 2 - 200)
                     }
                 }
+                Spacer()
             }
         }
+    }
+}
+
+struct MapView: UIViewRepresentable {
+
+    @Binding var locationDisplayOutput: String
+    @Binding var searchedMapItem: MKMapItem? {
+        didSet {
+            if let searchedMapItem = searchedMapItem {
+                print("searched item: ", searchedMapItem)
+            }
+        }
+    }
+
+    let mapView = MKMapView()
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, MKMapViewDelegate {
+        var parent: MapView
+
+        init(_ parent: MapView) {
+            self.parent = parent
+        }
+
+        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {}
+        
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            parent.locationDisplayOutput = "\(mapView.centerCoordinate)"
+        }
+
+//        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//            let view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: nil)
+//            view.canShowCallout = true
+//            return view
+//        }
+    }
+
+    func makeUIView(context: Context) -> MKMapView {
+        
+        let region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03))
+
+        mapView.delegate = context.coordinator
+        mapView.region = region
+        mapView.showsScale = true
+        mapView.setUserTrackingMode(MKUserTrackingMode.none,
+                                    animated: true)
+        mapView.userTrackingMode = .none
+        mapView.showsUserLocation = true
+        mapView.showsCompass = true
+        for location in RescueDataSource.shared.locations {
+            let ann = MKPointAnnotation()
+            ann.title = location.name
+            ann.coordinate = location.coordinate
+            mapView.addAnnotation(ann)
+        }
+        return mapView
+    }
+
+    func updateUIView(_ view: MKMapView, context: Context) {
+    }
+
+    func testFunc()  {
+        print("Toggle Compass")
+    }
+    
+    func focusRegion(region: MKCoordinateRegion) {
+        mapView.setRegion(region, animated: true)
+    }
+}
+
+struct PickOnMapView: View {
+    
+    @State var displayLocation: String = ""
+    @State var searchActive: Bool = false
+
+    @State var selectedLocation: MKMapItem?
+    
+    var body: some View {
+        ZStack {
+            MapView(locationDisplayOutput: $displayLocation,
+                    searchedMapItem: $selectedLocation)
+                .ignoresSafeArea()
+            VStack {
+                addressDisplaybar.padding(.top, 25).onTapGesture(perform: { searchActive = true })
+                Spacer()
+            }
+            Image(systemName: "mappin").imageScale(.large)
+        }
+    }
+    
+    var addressDisplaybar: some View {
+        ZStack {
+            Rectangle()
+                .padding([.leading, .trailing], 25)
+                .cornerRadius(15)
+                .foregroundColor(.white)
+                .shadow(radius: 10)
+                .frame(maxHeight: 75)
+                Text("\(addressDisplayText())")
+                    .font(.system(size: 16)).padding(.leading, 10)
+                    .padding(.trailing, 25)
+        }
+    }
+    
+    func addressDisplayText() -> String {
+        if let selectedLocation = selectedLocation?.name {
+            return "\(selectedLocation)"
+        } else {
+            return "\(displayLocation)"
+        }
+
     }
 }
 //
@@ -50,6 +166,20 @@ struct RescueView: View {
 //    var name = ""
 //    var coordinate = CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934)
 //}
+
+    struct MaarkerView: View {
+        var location: RescueModel.Location
+        var body: some View {
+            
+            ZStack {
+                Button(action: {
+
+                }) {
+                    Image("denero").resizable().frame(width: 40, height: 40).clipShape(Circle())
+                }
+            }
+        }
+    }
 
 struct MarkerView: View {
     @Binding var showingDetail: Bool
@@ -67,6 +197,7 @@ struct MarkerView: View {
         }
     }
 }
+    
 
 struct SmallCardView: View {
     var location: RescueModel.Location
@@ -142,7 +273,7 @@ struct NewLocationView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 300, height: 300)
-            Button(action: { addLocation(message: description, photo: selectedImage!, petType: petType, zip: zip, name: name, coordinate: CLLocationCoordinate2D(latitude: 37.881684, longitude: -122.269934), username: loginModel.getEmail(), title: title)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+            Button(action: { addLocation(message: description, photo: selectedImage!, petType: petType, zip: zip, name: name, coordinate: CLLocationCoordinate2D(latitude: 37.881684, longitude: -122.269934), username: loginModel.getEmail(), title: title)}, label: {Text("Publish Location").foregroundColor(Color("logo-pink")).font(.system(size: 20));
             }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
