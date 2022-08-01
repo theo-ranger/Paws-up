@@ -73,21 +73,21 @@ struct LoginView: View {
         }
 }
 
-struct TestView: View {
-    @ObservedObject var postModel: PostViewModel
-    @ObservedObject var loginModel: LoginViewModel
-    
-    var body: some View {
-        VStack {
-            List(postModel.posts) { post in
-                CardView(postModel: postModel, post: post, username: loginModel.getEmail())
-            }
-            Button("Add Post") {
-                postModel.addPost(userName: "", title: "test", description: "", image: UIImage(imageLiteralResourceName: "denero"))
-            }
-        }
-    }
-}
+//struct TestView: View {
+//    @ObservedObject var postModel: PostViewModel
+//    @ObservedObject var loginModel: LoginViewModel
+//
+//    var body: some View {
+//        VStack {
+//            List(postModel.posts) { post in
+//                CardView(postModel: postModel, post: post, username: loginModel.getEmail())
+//            }
+//            Button("Add Post") {
+//                postModel.addPost(userName: "", title: "test", description: "", image: UIImage(imageLiteralResourceName: "denero"))
+//            }
+//        }
+//    }
+//}
 
 struct CardView: View {
     var postModel: PostViewModel
@@ -174,7 +174,7 @@ struct HomePageView: View {
                                   }
                             }
                         }
-                    }.padding(5)
+                    }
                         .navigationBarHidden(true)
                         .animation(.default, value: true)
                 }
@@ -268,42 +268,94 @@ struct NewPostView: View {
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var selectedImage = UIImage(named: "cat-portrait")
     @State private var isImagePickerDisplay = false
-    
+    @State private var tagInput: String = ""
+    private let tags: [String] = ["Dogs", "Cats", "Adoption"]
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Title: \(title)")
-            TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
-                print("title onEditingChanged - \(changed)")
-            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 40)
-            Text("Description: \(title)")
-            TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
-                print("description onEditingChanged - \(changed)")
-            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 40)
-            HStack {
-                Text("Image:")
+        Form {
+            Section(header: Text("Title")) {
+                TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
+                    print("title onEditingChanged - \(changed)")
+                })
+            }
+            
+            Section(header: Text("Description")) {
+                TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
+                    print("description onEditingChanged - \(changed)")
+                })
+            }
+            
+            Section(header: Text("Image")) {
                 Button("Camera") {
                     self.sourceType = .camera
                     self.isImagePickerDisplay.toggle()
-                }.padding()
+                }
                 Button("Photo") {
                     self.sourceType = .photoLibrary
                     self.isImagePickerDisplay.toggle()
-                }.padding()
-            }.frame(height: 40)
-            Image(uiImage: selectedImage!)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 300, height: 300)
-            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+                }
+            }
+            
+            Section(header: Text("Tags")) {
+                Picker("Selected Tag", selection: $tagInput) {
+                    ForEach(tags, id: \.self) {
+                        Text($0)
+                    }
+                }
+            }
+            
+//            Image(uiImage: selectedImage!)
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 300, height: 300)
+            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
             }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
-        }.padding()
+        }.navigationTitle("Add Post")
+//        VStack(alignment: .leading) {
+//            Text("Title: \(title)")
+//            TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
+//                print("title onEditingChanged - \(changed)")
+//            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 40)
+//            Text("Description: \(title)")
+//            TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
+//                print("description onEditingChanged - \(changed)")
+//            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 40)
+//            HStack {
+//                Text("Image:")
+//                Button("Camera") {
+//                    self.sourceType = .camera
+//                    self.isImagePickerDisplay.toggle()
+//                }.padding()
+//                Button("Photo") {
+//                    self.sourceType = .photoLibrary
+//                    self.isImagePickerDisplay.toggle()
+//                }.padding()
+//            }.frame(height: 40)
+//            Form {
+//                Section(header: Text("Name")) {
+//                    TextField("e.g. Find a good Japanese textbook", text: $tagInput)
+//                }
+//
+//                Section(header: Text("Relationships")) {
+//                    Text("TODO: add multi selector here")
+//                }
+//            }
+//            Image(uiImage: selectedImage!)
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 300, height: 300)
+//            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+//            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
+//                ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
+//            }
+//
+//        }.padding()
     }
     
-    func addPost(username: String, title: String, description: String, image: UIImage) {
-        postModel.addPost(userName: username, title: title, description: description, image: image)
+    func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
+        postModel.addPost(userName: username, title: title, description: description, image: image, tags: tags)
     }
 }
 
@@ -408,13 +460,8 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
     
 }
 
-
-struct ContentView_Previews: PreviewProvider {
+struct View_Previews: PreviewProvider {
     static var previews: some View {
-        let app = PostViewModel()
-
-        let profile = ProfileViewModel()
-        
-        ContentView(postModel: app, profileViewModel: profile)
+        NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
     }
 }

@@ -56,18 +56,23 @@ class PostRepository: ObservableObject {
             return nil
         }
         
+        guard let tags = dict["tags"] as? [String] else {
+            return nil
+        }
+        
         let post = Content(id: dict["id"] as? String ?? "",
                            timeStamp: dict["timeStamp"] as? String ?? "",
                            title: dict["title"] as? String ?? "",
                            description: dict["description"] as? String ?? "",
                            userName: dict["username"] as? String ?? "",
                            image: dict["image"] as? String ?? "",
-                           likedUsers: likedU)
+                           likedUsers: likedU,
+                           tags: tags)
     
         return post
     }
     
-    func addPost(userName: String, title: String, description: String, image: UIImage) {
+    func addPost(userName: String, title: String, description: String, image: UIImage, tags: String) {
         let uid = UUID().uuidString
         // Add a new document with a generated ID
         db.collection("posts").document(uid).setData([
@@ -77,7 +82,8 @@ class PostRepository: ObservableObject {
             "title": title,
             "description": description,
             "image": String(image.base64!),
-            "likedUsers": []
+            "likedUsers": [],
+            "tags": [tags]
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")

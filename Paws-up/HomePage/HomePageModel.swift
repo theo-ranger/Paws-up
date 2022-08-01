@@ -21,6 +21,7 @@ struct Content: Identifiable, Codable {
     var userName: String
     var image: String
     var likedUsers: [String]
+    var tags: [String]
 }
 
 struct PostModel {

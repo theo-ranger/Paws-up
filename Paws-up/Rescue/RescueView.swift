@@ -23,6 +23,7 @@ struct RescueView: View {
         NavigationView {
             VStack {
                 NewLocationButton(loginModel: loginModel, rescueModel: rescueModel)
+                Spacer()
                 ZStack {
                     Map(coordinateRegion: $region, annotationItems: RescueDataSource.shared.locations) { location in
                         MapAnnotation(coordinate: location.coordinate) {
@@ -91,7 +92,6 @@ struct NewLocationButton: View {
     var rescueModel: RescueViewModel
     var body: some View {
         penIcon.frame(alignment: Alignment.topTrailing)
-        Spacer()
     }
     
     var penIcon: some View {

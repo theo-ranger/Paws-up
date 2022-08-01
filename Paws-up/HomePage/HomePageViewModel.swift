@@ -109,8 +109,8 @@ class PostViewModel: ObservableObject {
         postRepository.fetchPosts()
     }
     
-    func addPost(userName: String, title: String, description: String, image: UIImage) {
-        postRepository.addPost(userName: userName, title: title, description: description, image: image)
+    func addPost(userName: String, title: String, description: String, image: UIImage, tags: String) {
+        postRepository.addPost(userName: userName, title: title, description: description, image: image, tags: tags)
     }
     
     func likePost(userName: String, post: Content) {
