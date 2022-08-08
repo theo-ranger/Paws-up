@@ -16,6 +16,8 @@
 		02873E3B27B8CB5F001D46CC /* Paws_upTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E3A27B8CB5F001D46CC /* Paws_upTests.swift */; };
 		02873E4527B8CB5F001D46CC /* Paws_upUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E4427B8CB5F001D46CC /* Paws_upUITests.swift */; };
 		02873E4727B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02873E4627B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift */; };
+		02AE4C242897703D0081F310 /* MapTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AE4C232897703D0081F310 /* MapTestView.swift */; };
+		02AE4C2628A07C2A0081F310 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AE4C2528A07C2A0081F310 /* FilterView.swift */; };
 		9653E3272861615600004B48 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E3262861615600004B48 /* HomePageView.swift */; };
 		9653E3292861616D00004B48 /* HomePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E3282861616D00004B48 /* HomePageModel.swift */; };
 		9653E32B2861617D00004B48 /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9653E32A2861617D00004B48 /* HomePageViewModel.swift */; };
@@ -61,6 +63,8 @@
 		02873E4027B8CB5F001D46CC /* Paws-upUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Paws-upUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02873E4427B8CB5F001D46CC /* Paws_upUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paws_upUITests.swift; sourceTree = "<group>"; };
 		02873E4627B8CB5F001D46CC /* Paws_upUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paws_upUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		02AE4C232897703D0081F310 /* MapTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapTestView.swift; path = "Paws-up/Rescue/MapTestView.swift"; sourceTree = SOURCE_ROOT; };
+		02AE4C2528A07C2A0081F310 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		9653E3262861615600004B48 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
 		9653E3282861616D00004B48 /* HomePageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageModel.swift; sourceTree = "<group>"; };
 		9653E32A2861617D00004B48 /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
@@ -171,6 +175,14 @@
 			path = "Paws-upUITests";
 			sourceTree = "<group>";
 		};
+		02AE4C2028976FF70081F310 /* Map Test */ = {
+			isa = PBXGroup;
+			children = (
+				02AE4C232897703D0081F310 /* MapTestView.swift */,
+			);
+			path = "Map Test";
+			sourceTree = "<group>";
+		};
 		96BBA211280E911C00B63582 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +193,7 @@
 		96D50EBB286952E000075588 /* Rescue */ = {
 			isa = PBXGroup;
 			children = (
+				02AE4C2028976FF70081F310 /* Map Test */,
 				9653E32C2861619000004B48 /* RescueView.swift */,
 				9653E32E2861619B00004B48 /* RescueModel.swift */,
 				9653E330286161A600004B48 /* RescueViewModel.swift */,
@@ -194,6 +207,7 @@
 			children = (
 				965BAFD7284877F8008468E6 /* PostRepository.swift */,
 				9653E3262861615600004B48 /* HomePageView.swift */,
+				02AE4C2528A07C2A0081F310 /* FilterView.swift */,
 				9653E3282861616D00004B48 /* HomePageModel.swift */,
 				9653E32A2861617D00004B48 /* HomePageViewModel.swift */,
 			);
@@ -340,10 +354,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02AE4C2628A07C2A0081F310 /* FilterView.swift in Sources */,
 				9653E32F2861619B00004B48 /* RescueModel.swift in Sources */,
 				02712E872872860C00E698F9 /* DataManager.swift in Sources */,
 				965BAFD8284877F8008468E6 /* PostRepository.swift in Sources */,
 				02873E2C27B8CB5E001D46CC /* ContentView.swift in Sources */,
+				02AE4C242897703D0081F310 /* MapTestView.swift in Sources */,
 				9653E331286161A600004B48 /* RescueViewModel.swift in Sources */,
 				9653E32D2861619000004B48 /* RescueView.swift in Sources */,
 				02712E852872859200E698F9 /* RescueDataSource.swift in Sources */,

@@ -164,6 +164,7 @@ struct HomePageView: View {
                         NewPostButton(loginModel: loginModel, postModel: postModel)
                     }
                     Spacer()
+                    // Here's the filter view
                     ScrollView {
                         LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
                             ForEach(postModel.posts) { post in
@@ -303,55 +304,11 @@ struct NewPostView: View {
                     }
                 }
             }
-            
-//            Image(uiImage: selectedImage!)
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .frame(width: 300, height: 300)
             Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
             }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
         }.navigationTitle("Add Post")
-//        VStack(alignment: .leading) {
-//            Text("Title: \(title)")
-//            TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
-//                print("title onEditingChanged - \(changed)")
-//            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 40)
-//            Text("Description: \(title)")
-//            TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
-//                print("description onEditingChanged - \(changed)")
-//            }).padding(.all).textFieldStyle(RoundedBorderTextFieldStyle()).frame(height: 40)
-//            HStack {
-//                Text("Image:")
-//                Button("Camera") {
-//                    self.sourceType = .camera
-//                    self.isImagePickerDisplay.toggle()
-//                }.padding()
-//                Button("Photo") {
-//                    self.sourceType = .photoLibrary
-//                    self.isImagePickerDisplay.toggle()
-//                }.padding()
-//            }.frame(height: 40)
-//            Form {
-//                Section(header: Text("Name")) {
-//                    TextField("e.g. Find a good Japanese textbook", text: $tagInput)
-//                }
-//
-//                Section(header: Text("Relationships")) {
-//                    Text("TODO: add multi selector here")
-//                }
-//            }
-//            Image(uiImage: selectedImage!)
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .frame(width: 300, height: 300)
-//            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
-//            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
-//                ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
-//            }
-//
-//        }.padding()
     }
     
     func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
@@ -463,5 +420,6 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
 struct View_Previews: PreviewProvider {
     static var previews: some View {
         NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
+        HomePageView(loginModel: LoginViewModel(), postModel: PostViewModel(), profileViewModel: ProfileViewModel(), rescueModel: RescueViewModel())
     }
 }
