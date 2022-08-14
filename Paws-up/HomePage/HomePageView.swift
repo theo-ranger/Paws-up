@@ -147,6 +147,9 @@ struct HomePageView: View {
     @ObservedObject var profileViewModel: ProfileViewModel
 
     var rescueModel: RescueViewModel
+    
+    @Binding var activeLabels: [String]
+    
     var body: some View {
         Spacer()
         HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
@@ -164,10 +167,13 @@ struct HomePageView: View {
                         NewPostButton(loginModel: loginModel, postModel: postModel)
                     }
                     Spacer()
+                    //FilterBar(labels: $activeLabels)
+                    Spacer()
                     // Here's the filter view
                     ScrollView {
                         LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
-                            ForEach(postModel.posts) { post in
+                            // Show only posts with active labels marked by activeLabels, an @State variable.
+                            ForEach(postModel.posts.filter {$0.tags.contains(where: activeLabels.contains)}) { post in
                                 NavigationLink(
                                     destination:
                                         ImageView(post: post)) {
