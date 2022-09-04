@@ -215,19 +215,50 @@ struct ProfileView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                Spacer()
-                Image("denero")
-                    .offset(y: -130)
-                    .padding(.bottom, -130)
-                Text("UID: " + loginModel.getUID())
-                Text("Email: " + loginModel.getEmail())
-                Button(action: {
-                    Task {
-                        await loginModel.signOut()
-                    }
-                }) {
-                    Text("Log Out")
+                HStack {
+                    Spacer()
+                    Image("denero").clipShape(Circle())
+                    Spacer()
                 }
+                HStack {
+                    Spacer()
+                    Text("John Denero").font(.system(size: 30))
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text("2.3k").font(.system(size: 18))
+                        Text("Followers").font(.system(size: 14))
+                    }
+                    Spacer().frame(width: 20)
+                    VStack {
+                        Text("417").font(.system(size: 18))
+                        Text("Following").font(.system(size: 14))
+                    }
+                    Spacer()
+                }
+//                Text("Email: " + loginModel.getEmail())
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text("Posts").font(.system(size: 14))
+                        Rectangle().fill(Color.black).frame(width: 30, height: 1, alignment: .center).offset(y: -10)
+                    }
+                    Spacer().frame(width: 24)
+                    VStack {
+                        Text("Liked").font(.system(size: 14))
+                        Rectangle().fill(Color.gray).frame(width: 30, height: 1, alignment: .center).offset(y: -10)
+                    }
+                    Spacer()
+                }
+//                Button(action: {
+//                    Task {
+//                        await loginModel.signOut()
+//                    }
+//                }) {
+//                    Text("Log Out")
+//                }
             }
         }
     }
