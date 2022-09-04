@@ -1,5 +1,5 @@
 //
-//  RescueDataSource.swift
+//  MapDataSource.swift
 //  Paws-up
 //
 //  Created by Hanning Xu on 7/3/22.
@@ -13,17 +13,17 @@ import MapKit
 
 let rescueDataSource = "locations"
 
-class RescueDataSource: DataSource {
-    static let shared = RescueDataSource()
+class MapDataSource: DataSource {
+    static let shared = MapDataSource()
     
     static var storageRef = Storage.storage().reference()
     
-    @Published var locations: Array<RescueModel.Location> = []
+    @Published var locations: Array<MapModel.Location> = []
     
     static var fetchDispatch: DispatchGroup = DispatchGroup()
     
     init() {
-        RescueDataSource.fetchLocations()
+        MapDataSource.fetchLocations()
     }
     
     // Fetch the list of gyms and report back to the completionHandler.
@@ -36,12 +36,12 @@ class RescueDataSource: DataSource {
                 print("[Error @ PostDataSource.fetchItems()]: \(err)")
                 return
             } else {
-                let locations = querySnapshot!.documents.map { (document) -> RescueModel.Location in
+                let locations = querySnapshot!.documents.map { (document) -> MapModel.Location in
                     let dict = document.data()
                     return parseLocation(dict)
                 }
                 completion(locations)
-                RescueDataSource.shared.locations = locations
+                MapDataSource.shared.locations = locations
             }
         }
     }
@@ -49,14 +49,14 @@ class RescueDataSource: DataSource {
     static func fetchLocations() {
         self.fetchItems { resources in
             print("done")
-            for location in RescueDataSource.shared.locations {
+            for location in MapDataSource.shared.locations {
                 print(location.id)
             }
         }
     }
     
     
-    static func parseLocation(_ dict: [String: Any]) -> RescueModel.Location {
+    static func parseLocation(_ dict: [String: Any]) -> MapModel.Location {
         let dic = dict as! Dictionary<String, String>
         // Create a reference to the file you want to download
         print(dic["id"]!)
@@ -67,7 +67,7 @@ class RescueDataSource: DataSource {
         let coordinate = CLLocationCoordinate2D(latitude: Double(dic["latitude"]!)!,
                                                 longitude: Double(dic["longitude"]!)!)
         
-        let location = RescueModel.Location(message: dic["message"]!,
+        let location = MapModel.Location(message: dic["message"]!,
                                             timeStamp: dic["timeStamp"]!,
                                             photo: photo!,
                                             petType: dic["petType"]!,

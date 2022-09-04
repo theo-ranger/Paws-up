@@ -118,6 +118,25 @@ class PostViewModel: ObservableObject {
     }
 }
 
+class FilteredPostViewModel: ObservableObject {
+    @Published var posts: [Content] = []
+    @Published var postRepository = PostRepository()
+    
+    private var cancellables: Set<AnyCancellable> = []
+
+    private var postModel: PostModel = PostModel()
+    
+    init() {
+        postRepository.$posts
+            .assign(to: \.posts, on: self)
+            .store(in: &cancellables)
+    }
+    
+    func fetchPosts() {
+        postRepository.partialFetchItems(inputArray: [])
+    }
+}
+
 
 class ProfileViewModel: ObservableObject {
     static let profileArray = ["John DeNero", "1978", "denero@berkeley.edu", "Dog"]

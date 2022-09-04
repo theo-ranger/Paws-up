@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  StarterView.swift
 //  Paws-up
 //
 //  Created by Hanning Xu and Jiayu Shi on 2/12/22.
@@ -8,20 +8,18 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct StarterView: View {
     @ObservedObject var loginModel = LoginViewModel()
-    
     @ObservedObject var postModel = PostViewModel()
-    
     @ObservedObject var profileViewModel = ProfileViewModel()
     
-    var rescueModel = RescueViewModel()
+    var mapModel = MapViewModel()
     
     var body: some View {
         VStack {
             if (loginModel.isLoggedIn) {
                 //TestView(postModel: postModel, loginModel: loginModel)
-                HomePageView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, rescueModel: rescueModel)
+                HomePageView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, mapModel: mapModel)
             } else {
                 LoginView(loginModel: loginModel)
             }

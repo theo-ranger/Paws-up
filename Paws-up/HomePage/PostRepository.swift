@@ -9,6 +9,7 @@ import Foundation
 import Firebase
 import FirebaseStorage
 import UIKit
+import FirebaseFunctions
 
 let path = "posts"
 
@@ -16,6 +17,7 @@ class PostRepository: ObservableObject {
     var databaseRef = Database.database().reference()
     var storageRef = Storage.storage().reference()
     let db = Firestore.firestore()
+    lazy var functions = Functions.functions()
     
     @Published var posts: [Content] = []
     
@@ -24,6 +26,26 @@ class PostRepository: ObservableObject {
     init() {
         fetchPosts()
     }
+    
+    func partialFetchItems(inputArray: [String]) {
+        let db = Firestore.firestore()
+        db.collection(path).whereField("tags", arrayContainsAny: inputArray)
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                } else {
+                    let posts = querySnapshot!.documents.map { (document) -> Content in
+                        let dict = document.data()
+                        return self.parsePost(dict)!
+                    }
+                    self.posts = posts
+                    for document in querySnapshot!.documents {
+                        print("\(document.documentID) => \(document.data())")
+                    }
+                }
+        }
+    }
+
     
     func fetchItems(_ completion: @escaping DataSource.completionHandler) {
         print("post fetch")

@@ -9,6 +9,9 @@ import UIKit
 import SwiftUI
 import Firebase
 
+/**
+  LoginView defines a View for first time users' login actions.
+*/
 struct LoginView: View {
     @ObservedObject var loginModel: LoginViewModel
     let LIGHT_GREY = Color(red: 239.0/255.0,
@@ -73,22 +76,9 @@ struct LoginView: View {
         }
 }
 
-//struct TestView: View {
-//    @ObservedObject var postModel: PostViewModel
-//    @ObservedObject var loginModel: LoginViewModel
-//
-//    var body: some View {
-//        VStack {
-//            List(postModel.posts) { post in
-//                CardView(postModel: postModel, post: post, username: loginModel.getEmail())
-//            }
-//            Button("Add Post") {
-//                postModel.addPost(userName: "", title: "test", description: "", image: UIImage(imageLiteralResourceName: "denero"))
-//            }
-//        }
-//    }
-//}
-
+/**
+  CardView defines a View for each individual post.
+*/
 struct CardView: View {
     var postModel: PostViewModel
     var post: Content
@@ -138,85 +128,95 @@ struct CardView: View {
     }
 }
 
-
-struct HomePageView: View {
+/**
+  PostView defines the subview for the Community Tab.
+*/
+struct PostView: View {
     @ObservedObject var loginModel: LoginViewModel
-
     @ObservedObject var postModel: PostViewModel
-
-    @ObservedObject var profileViewModel: ProfileViewModel
-
-    var rescueModel: RescueViewModel
+    var profileViewModel: ProfileViewModel
     
-    @Binding var activeLabels: [String]
+    var body: some View {
+        NavigationView {
+            VStack {
+                HStack {
+                    Button(action: { }, label: {
+                        Image(systemName: "magnifyingglass").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+                    })
+                    Spacer()
+                    Button(action: { }, label: {
+                        NavigationLink(destination: NewPostView(postModel: postModel, loginModel: loginModel)) {
+                            Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+                        }
+                    })
+                }
+                Spacer()
+                //FilterBar(labels: $activeLabels)
+                // Here's the filter view
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
+                        // Show only posts with active labels marked by activeLabels, an @Binding variable.
+                        //.filter {$0.tags.contains(where: activeLabels.contains)}
+                        ForEach(postModel.posts) { post in
+                            NavigationLink(
+                                destination:
+                                    DetailedPostView(post: post)) {
+                                        CardView(postModel: postModel, post: post, username: loginModel.getEmail())
+                              }
+                        }
+                    }
+                }
+                    .navigationBarHidden(true)
+                    .animation(.default, value: true)
+            }
+        }
+    }
+}
+
+/**
+  HomePageView defines a startar View for the entrance of the app.
+*/
+struct HomePageView: View {
+    var loginModel: LoginViewModel
+    var postModel: PostViewModel
+    var profileViewModel: ProfileViewModel
+    var mapModel: MapViewModel
+    
+    //@Binding var activeLabels: [String]
     
     var body: some View {
         Spacer()
         HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
-            NavigationView {
-                VStack {
-                    HStack {
-                        Button(action: { }, label: {
-                            NavigationLink(destination: ProfileView(viewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel)) {
-                                Image(systemName: "person.circle").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
-                            }
-                        }).frame(alignment: Alignment.topTrailing)
-                        Spacer()
-                        SearchBar(text: .constant(""))
-                        Spacer()
-                        NewPostButton(loginModel: loginModel, postModel: postModel)
-                    }
-                    Spacer()
-                    //FilterBar(labels: $activeLabels)
-                    Spacer()
-                    // Here's the filter view
-                    ScrollView {
-                        LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
-                            // Show only posts with active labels marked by activeLabels, an @State variable.
-                            ForEach(postModel.posts.filter {$0.tags.contains(where: activeLabels.contains)}) { post in
-                                NavigationLink(
-                                    destination:
-                                        ImageView(post: post)) {
-                                            CardView(postModel: postModel, post: post, username: loginModel.getEmail())
-                                  }
-                            }
-                        }
-                    }
-                        .navigationBarHidden(true)
-                        .animation(.default, value: true)
-                }
-            }.tabItem {
-                Image(systemName: "house")
-                Text("Home")}.tag(1)
-            DonationView().tabItem {
-                Image(systemName: "pawprint.fill")
-                Text("Donation") }.tag(2)
-            Text("Adoption Page").tabItem {
-                Image(systemName: "bandage")
-                Text("Adoption") }.tag(3)
-            RescueView(rescueModel: rescueModel, loginModel: loginModel).tabItem {
-                Image(systemName: "exclamationmark.bubble.circle")
-                Text("Report")}.tag(4)
-            Text("Pet Dating Page").tabItem {
-                Image(systemName: "heart")
-                Text("Pet Dating")}.tag(5)
+            PostView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel).tabItem {
+                Image(systemName: "circle.hexagonpath")
+                Text("Community")}.tag(1)
+            MapView(rescueModel: mapModel, loginModel: loginModel).tabItem {
+                Image(systemName: "location")
+                Text("Maps")}.tag(2)
+            Text("Donation+ View").tabItem {
+                Image(systemName: "giftcard")
+                Text("Donation+")}.tag(3)
+            ProfileView(profileViewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel).tabItem {
+                Image(systemName: "person.circle")
+                Text("Profile")}.tag(3)
             }.accentColor(Color("logo-pink"))
         }
     }
 }
 
+/**
+  PostView defines the subview for the Profile Tab.
+*/
 struct ProfileView: View {
-    var viewModel: ProfileViewModel
-
+    var profileViewModel: ProfileViewModel
     var profile: ProfileModel.Profile
-
     var loginModel: LoginViewModel
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
                 Spacer()
-                CircleImage(image: Image("denero"))
+                Image("denero")
                     .offset(y: -130)
                     .padding(.bottom, -130)
                 Text("UID: " + loginModel.getUID())
@@ -234,38 +234,9 @@ struct ProfileView: View {
 }
 
 
-struct CircleImage: View {
-    var image: Image
-
-    var body: some View {
-        image
-            .clipShape(Circle())
-            .overlay {
-                Circle().stroke(.white, lineWidth: 4)
-            }
-            .shadow(radius: 7)
-    }
-}
-
-
-struct NewPostButton: View {
-    var loginModel: LoginViewModel
-    var postModel: PostViewModel
-    var body: some View {
-        penIcon.frame(alignment: Alignment.topTrailing)
-        Spacer()
-    }
-    
-    var penIcon: some View {
-        Button(action: { }, label: {
-            NavigationLink(destination: NewPostView(postModel: postModel, loginModel: loginModel)) {
-                Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
-            }
-        })
-    }
-}
-
-
+/**
+  NewPostView defines a View for adding new posts.
+*/
 struct NewPostView: View {
     var postModel: PostViewModel
     var loginModel: LoginViewModel
@@ -322,42 +293,10 @@ struct NewPostView: View {
     }
 }
 
-
-struct SearchBar: View {
-    @Binding var text: String
- 
-    @State private var isEditing = false
- 
-    var body: some View {
-        HStack {
-            TextField("Search ...", text: $text)
-                .padding(7)
-                .padding(.horizontal, 25)
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-                .padding(.horizontal, 5)
-                .onTapGesture {
-                    self.isEditing = true
-                }
- 
-            if isEditing {
-                Button(action: {
-                    self.isEditing = false
-                    self.text = ""
- 
-                }) {
-                    Text("Cancel")
-                }
-                .padding(.trailing, 10)
-                .transition(.move(edge: .trailing))
-                .animation(.default, value: true)
-            }
-        }
-    }
-}
-
-
-struct ImageView: View {
+/**
+  DetailedPostView defines a View for adding new posts.
+*/
+struct DetailedPostView: View {
     var post: Content
 
     var body: some View {
@@ -426,6 +365,6 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
 struct View_Previews: PreviewProvider {
     static var previews: some View {
         NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
-        HomePageView(loginModel: LoginViewModel(), postModel: PostViewModel(), profileViewModel: ProfileViewModel(), rescueModel: RescueViewModel())
+        HomePageView(loginModel: LoginViewModel(), postModel: PostViewModel(), profileViewModel: ProfileViewModel(), mapModel: MapViewModel())
     }
 }

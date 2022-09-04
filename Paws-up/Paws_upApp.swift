@@ -19,7 +19,7 @@ struct Paws_upApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StarterView()
             //MapTestView(place: IdentifiablePlace(lat: 37.871684, long: -122.259934), region: MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03)))
         }
     }

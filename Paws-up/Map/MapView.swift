@@ -1,5 +1,5 @@
 //
-//  RescueView.swift
+//  MapView.swift
 //  Paws-up
 //
 //  Created by 那桐 on 6/20/22.
@@ -13,30 +13,26 @@ import Foundation
 import SwiftUI
 import MapKit
 
-struct RescueView: View {
-    var rescueModel: RescueViewModel
+struct MapView: View {
+    var rescueModel: MapViewModel
     var loginModel: LoginViewModel
     
     var mapView = MKMapView()
     
-    @State var currentLocation = RescueModel.Location(message: "", timeStamp: "", photo: UIImage(imageLiteralResourceName: "denero"), petType: "", zip: "", id: "", name: "", coordinate: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), username: "", title: "")
+    @State var currentLocation = MapModel.Location(message: "", timeStamp: "", photo: UIImage(imageLiteralResourceName: "denero"), petType: "", zip: "", id: "", name: "", coordinate: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), username: "", title: "")
     @State var showingDetail = false
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934), span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03))
 
     var body: some View {
         NavigationView {
-            VStack {
-                NewLocationButton(loginModel: loginModel, rescueModel: rescueModel)
-                ZStack {
-                    Map(coordinateRegion: $region, annotationItems: RescueDataSource.shared.locations) { location in
-                        MapAnnotation(coordinate: location.coordinate) {
-                            MarkerView(showingDetail: $showingDetail, currentLocation: $currentLocation, location: location)
-                        }
+            ZStack {
+                Map(coordinateRegion: $region, annotationItems: MapDataSource.shared.locations) { location in
+                    MapAnnotation(coordinate: location.coordinate) {
+                        MarkerView(showingDetail: $showingDetail, currentLocation: $currentLocation, location: location)
                     }
-                        .frame(width: 400, height: 600)
-                    if showingDetail {
-                        SmallCardView(location: currentLocation, showingDetail: $showingDetail).offset(y: UIScreen.main.bounds.size.height / 2 - 200)
-                    }
+                }.ignoresSafeArea()
+                if showingDetail {
+                    SmallCardView(location: currentLocation, showingDetail: $showingDetail).offset(y: UIScreen.main.bounds.size.height / 2 - 200)
                 }
             }
         }
@@ -55,8 +51,8 @@ struct RescueView: View {
 //}
 struct MarkerView: View {
     @Binding var showingDetail: Bool
-    @Binding var currentLocation: RescueModel.Location
-    var location: RescueModel.Location
+    @Binding var currentLocation: MapModel.Location
+    var location: MapModel.Location
     var body: some View {
         
         ZStack {
@@ -71,7 +67,7 @@ struct MarkerView: View {
 }
 
 struct SmallCardView: View {
-    var location: RescueModel.Location
+    var location: MapModel.Location
     @Binding var showingDetail: Bool
     var body: some View {
         ZStack {
@@ -91,7 +87,7 @@ struct SmallCardView: View {
 
 struct NewLocationButton: View {
     var loginModel: LoginViewModel
-    var rescueModel: RescueViewModel
+    var rescueModel: MapViewModel
     var body: some View {
         penIcon.frame(alignment: Alignment.topTrailing)
         Spacer()
@@ -107,7 +103,7 @@ struct NewLocationButton: View {
 }
 
 struct NewLocationView: View {
-    var rescueModel: RescueViewModel
+    var rescueModel: MapViewModel
     var loginModel: LoginViewModel
 
     @State private var title: String = ""
@@ -173,7 +169,6 @@ struct NewLocationView: View {
 
 struct RescueView_Previews: PreviewProvider {
     static var previews: some View {
-        let rescueModel = RescueViewModel()
-        RescueView(rescueModel: rescueModel, loginModel: LoginViewModel())
+        MapView(rescueModel: MapViewModel(), loginModel: LoginViewModel())
     }
 }

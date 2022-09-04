@@ -8,20 +8,32 @@
 import SwiftUI
 
 struct FilterBar: View {
-    @Binding var labels: [String]
+    // which labels are currently selected
+    // @Binding var labels: [String]
+    let labels: [String] = []
+    @State var values: [Bool] = []
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(0..<3) {
-                    FilterCell(label: "Item \($0)")
-                        .frame(width: 70, height: 50)
+                ForEach(labels.indices, id: \.self) { index in
+                    Button(action: {values[index].toggle()
+                        // update homepage posts
+                    }, label: {
+                        if values[index] {
+                            Text(labels[index]).foregroundColor(.white)
+                                .background(RoundedRectangle(cornerRadius: 4).foregroundColor(Color("logo-pink")))
+                        } else {
+                            Text(labels[index]).foregroundColor(.black)
+                                .background(RoundedRectangle(cornerRadius: 4).stroke().foregroundColor(.gray))
+                        }
+                    })
                 }
             }
         }
     }
 }
-
+// combine the two views, make
 struct FilterCell: View {
     @State var isSelected = false
     var label: String
@@ -48,8 +60,6 @@ struct FilterCell: View {
 //}
 //
 struct FilterBar_Previews: PreviewProvider {
-    var selected: Bool = false
-
     static var previews: some View {
         FilterBar()
     }

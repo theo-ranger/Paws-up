@@ -1,5 +1,5 @@
 //
-//  RescueViewModel.swift
+//  MapViewModel.swift
 //  Paws-up
 //
 //  Created by 那桐 on 6/20/22.
@@ -9,11 +9,11 @@ import Foundation
 import MapKit
 import SwiftUI
 
-class RescueViewModel {
-    private var rescueModel: RescueModel = RescueModel()
-    @Published var locationRepository = RescueDataSource()
+class MapViewModel {
+    private var rescueModel: MapModel = MapModel()
+    @Published var locationRepository = MapDataSource()
     
-    let berkeley = RescueModel.Location(message: "",
+    let berkeley = MapModel.Location(message: "",
                                         timeStamp: "",
                                         photo: UIImage(imageLiteralResourceName: "denero"),
                                         petType: "",
@@ -23,7 +23,7 @@ class RescueViewModel {
                                         coordinate: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934),
                                         username: "",
                                         title: "")
-    let location1 = RescueModel.Location(message: "",
+    let location1 = MapModel.Location(message: "",
                                          timeStamp: "",
                                          photo: UIImage(imageLiteralResourceName: "denero"),
                                          petType: "",
@@ -33,7 +33,7 @@ class RescueViewModel {
                                          coordinate: CLLocationCoordinate2D(latitude: 37.881684, longitude: -122.269934),
                                          username: "",
                                          title: "")
-    let location2 = RescueModel.Location(message: "",
+    let location2 = MapModel.Location(message: "",
                                         timeStamp: "",
                                          photo: UIImage(imageLiteralResourceName: "denero"),
                                         petType: "",
@@ -50,6 +50,6 @@ class RescueViewModel {
     }
     
     func fetchLocations() {
-        RescueDataSource.fetchLocations()
+        MapDataSource.fetchLocations()
     }
 }

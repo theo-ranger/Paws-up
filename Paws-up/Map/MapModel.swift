@@ -1,5 +1,5 @@
 //
-//  RescueModel.swift
+//  MapModel.swift
 //  Paws-up
 //
 //  Created by 那桐 on 6/20/22.
@@ -14,7 +14,7 @@ import FirebaseStorage
 import FirebaseCore
 import FirebaseFirestore
 
-struct RescueModel {
+struct MapModel {
     
     struct Location: Identifiable {
         var message: String
