@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02113C0A28E10A880073B34D /* MapItemPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 02113C0928E10A880073B34D /* MapItemPicker */; };
+		02113C0D28E11F860073B34D /* LocationPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 02113C0C28E11F860073B34D /* LocationPicker */; };
 		022288FA28C568910095E46A /* MapTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022288F928C568910095E46A /* MapTestView.swift */; };
 		02712E852872859200E698F9 /* MapDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02712E842872859200E698F9 /* MapDataSource.swift */; };
 		02712E872872860C00E698F9 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02712E862872860C00E698F9 /* DataManager.swift */; };
@@ -84,6 +86,8 @@
 			files = (
 				966B5CE72845B79000C57260 /* FirebaseDatabase in Frameworks */,
 				966B5CEB2845B79000C57260 /* FirebaseStorage in Frameworks */,
+				02113C0A28E10A880073B34D /* MapItemPicker in Frameworks */,
+				02113C0D28E11F860073B34D /* LocationPicker in Frameworks */,
 				028153B328BAA8D2009B70ED /* FirebaseFunctions in Frameworks */,
 				966B5CE52845B79000C57260 /* FirebaseAuth in Frameworks */,
 				966B5CE92845B79000C57260 /* FirebaseFirestore in Frameworks */,
@@ -230,6 +234,8 @@
 				966B5CE82845B79000C57260 /* FirebaseFirestore */,
 				966B5CEA2845B79000C57260 /* FirebaseStorage */,
 				028153B228BAA8D2009B70ED /* FirebaseFunctions */,
+				02113C0928E10A880073B34D /* MapItemPicker */,
+				02113C0C28E11F860073B34D /* LocationPicker */,
 			);
 			productName = "Paws-up";
 			productReference = 02873E2627B8CB5E001D46CC /* Paws-up.app */;
@@ -306,6 +312,8 @@
 			packageReferences = (
 				966B5CE32845B79000C57260 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				028153B128BAA8D2009B70ED /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				02113C0828E10A880073B34D /* XCRemoteSwiftPackageReference "swiftui-map-item-picker" */,
+				02113C0B28E11F860073B34D /* XCRemoteSwiftPackageReference "LocationPickerForSwiftUI" */,
 			);
 			productRefGroup = 02873E2727B8CB5E001D46CC /* Products */;
 			projectDirPath = "";
@@ -691,6 +699,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		02113C0828E10A880073B34D /* XCRemoteSwiftPackageReference "swiftui-map-item-picker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-map-item-picker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		02113C0B28E11F860073B34D /* XCRemoteSwiftPackageReference "LocationPickerForSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alessiorubicini/LocationPickerForSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		028153B128BAA8D2009B70ED /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -710,6 +734,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		02113C0928E10A880073B34D /* MapItemPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 02113C0828E10A880073B34D /* XCRemoteSwiftPackageReference "swiftui-map-item-picker" */;
+			productName = MapItemPicker;
+		};
+		02113C0C28E11F860073B34D /* LocationPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 02113C0B28E11F860073B34D /* XCRemoteSwiftPackageReference "LocationPickerForSwiftUI" */;
+			productName = LocationPicker;
+		};
 		028153B228BAA8D2009B70ED /* FirebaseFunctions */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 966B5CE32845B79000C57260 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

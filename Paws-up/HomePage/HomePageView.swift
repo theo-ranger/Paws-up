@@ -8,6 +8,10 @@
 import UIKit
 import SwiftUI
 import Firebase
+import CoreLocation
+import MapKit
+import MapItemPicker
+import LocationPicker
 
 /**
   LoginView defines a View for first time users' login actions.
@@ -136,6 +140,9 @@ struct PostView: View {
     @ObservedObject var postModel: PostViewModel
     var profileViewModel: ProfileViewModel
     
+    @State private var navigateTo: AnyView?
+    @State private var isActive = false
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -144,11 +151,31 @@ struct PostView: View {
                         Image(systemName: "magnifyingglass").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
                     })
                     Spacer()
-                    Button(action: { }, label: {
-                        NavigationLink(destination: NewPostView(postModel: postModel, loginModel: loginModel)) {
-                            Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+                    Menu {
+                        Button(action: {
+                            navigateTo = AnyView(NewPostView(postModel: postModel, loginModel: loginModel))
+                            isActive = true
+                        }, label: {
+//                            NavigationLink(destination: NewPostView(postModel: postModel, loginModel: loginModel)) {
+                                Text("New Post")
+                                Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink"))
+//                            }
+                        })
+                        Button(role: .destructive) {
+                            navigateTo = AnyView(NewPostView(postModel: postModel, loginModel: loginModel))
+                            isActive = true
+                        } label: {
+                            Text("Report Lost Pet")
+                            Image(systemName: "exclamationmark.bubble")
                         }
-                    })
+                        
+                    } label: {
+                        Image(systemName: "plus").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+                    }.background(
+                        NavigationLink(destination: self.navigateTo, isActive: $isActive) {
+                            EmptyView()
+                        })
+
                 }
                 Spacer()
                 //FilterBar(labels: $activeLabels)
@@ -166,15 +193,15 @@ struct PostView: View {
                         }
                     }
                 }
-                    .navigationBarHidden(true)
-                    .animation(.default, value: true)
+                .navigationBarHidden(true)
+                .animation(.default, value: true)
             }
         }
     }
 }
 
 /**
-  HomePageView defines a startar View for the entrance of the app.
+  HomePageView defines a starter View for the entrance of the app.
 */
 struct HomePageView: View {
     var loginModel: LoginViewModel
@@ -190,7 +217,12 @@ struct HomePageView: View {
             PostView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel).tabItem {
                 Image(systemName: "circle.hexagonpath")
                 Text("Community")}.tag(1)
-            MapView(rescueModel: mapModel, loginModel: loginModel).tabItem {
+            MapTestView(place: [IdentifiablePlace(id: UUID(), lat: 37.871684, long: -122.259934)], region: MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: 37.334_900,
+                                               longitude: -122.009_020),
+                latitudinalMeters: 750,
+                longitudinalMeters: 750
+            )).tabItem {
                 Image(systemName: "location")
                 Text("Maps")}.tag(2)
             Text("Donation+ View").tabItem {
@@ -248,6 +280,10 @@ struct NewPostView: View {
     @State private var isImagePickerDisplay = false
     @State private var tagInput: String = ""
     private let tags: [String] = ["Dogs", "Cats", "Adoption"]
+    @State private var showingPicker = false
+    
+    @State private var coordinates = CLLocationCoordinate2D(latitude: 37.333747, longitude: -122.011448)
+    @State private var showSheet = false
     
     var body: some View {
         Form {
@@ -261,6 +297,15 @@ struct NewPostView: View {
                 TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
                     print("description onEditingChanged - \(changed)")
                 })
+            }
+            
+            Section(header: Text("location")) {
+                Button("Search Location") {
+                    showingPicker = true
+                }
+                Button("Select On Map") {
+                    self.showSheet.toggle()
+                }
             }
             
             Section(header: Text("Image")) {
@@ -286,6 +331,27 @@ struct NewPostView: View {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
         }.navigationTitle("Add Post")
+        .mapItemPicker(isPresented: $showingPicker) { item in
+            if let name = item?.name {
+                print("Selected \(name)")
+            }
+        }
+        .sheet(isPresented: $showSheet) {
+                NavigationView {
+                    
+                    // Just put the view into a sheet or navigation link
+                    LocationPicker(instructions: "Tap somewhere to select your coordinates", coordinates: $coordinates)
+                        
+                    // You can assign it some NavigationView modifiers
+                        .navigationTitle("Location Picker")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .navigationBarItems(leading: Button(action: {
+                            self.showSheet.toggle()
+                        }, label: {
+                            Text("Close").foregroundColor(.red)
+                        }))
+                }
+            }
     }
     
     func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {

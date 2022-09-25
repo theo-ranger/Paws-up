@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import MapKit
+import MapItemPicker
 
 struct IdentifiablePlace: Identifiable {
     let id: UUID
@@ -21,17 +22,27 @@ struct IdentifiablePlace: Identifiable {
 }
 
 struct MapTestView: View {
-    let place: IdentifiablePlace
+    let place: [IdentifiablePlace]
     @State var region: MKCoordinateRegion
+    @State private var showingPicker = false
 
     var body: some View {
         ZStack {
             Map(coordinateRegion: $region,
-                annotationItems: [place])
+                annotationItems: place)
             { place in
                 MapAnnotation(coordinate: place.location) {
                     Image("denero")
                     let _ = print(region.center)
+                }
+            }
+            
+            Button("Choose location") {
+                showingPicker = true
+            }
+            .mapItemPicker(isPresented: $showingPicker) { item in
+                if let name = item?.name {
+                    print("Selected \(name)")
                 }
             }
             

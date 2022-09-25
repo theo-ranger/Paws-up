@@ -150,7 +150,7 @@ struct NewLocationView: View {
             
             Section(header: Text("Tags")) {
                 Button(action: { }, label: {
-                    NavigationLink(destination: MapTestView(place: IdentifiablePlace(lat: 37.334_90, long: -122.009_020), region: theregion)) {
+                    NavigationLink(destination: MapTestView(place: [IdentifiablePlace(lat: 37.334_90, long: -122.009_020)], region: theregion)) {
                         Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
                     }
                 })

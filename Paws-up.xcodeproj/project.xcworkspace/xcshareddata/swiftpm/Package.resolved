@@ -82,6 +82,15 @@
       }
     },
     {
+      "identity" : "locationpickerforswiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/alessiorubicini/LocationPickerForSwiftUI",
+      "state" : {
+        "revision" : "8abd6171a4ff0af2fea59f1721d4783efc11e6a5",
+        "version" : "1.1.1"
+      }
+    },
+    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
@@ -106,6 +115,15 @@
       "state" : {
         "revision" : "e1499bc69b9040b29184f7f2996f7bab467c1639",
         "version" : "1.19.0"
+      }
+    },
+    {
+      "identity" : "swiftui-map-item-picker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lorenzofiamingo/swiftui-map-item-picker",
+      "state" : {
+        "revision" : "48e0bdbcecc901b0cfd6962f0b42225136789c07",
+        "version" : "2.0.0"
       }
     }
   ],
