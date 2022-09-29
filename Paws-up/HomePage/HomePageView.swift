@@ -162,7 +162,7 @@ struct PostView: View {
 //                            }
                         })
                         Button(role: .destructive) {
-                            navigateTo = AnyView(NewPostView(postModel: postModel, loginModel: loginModel))
+                            navigateTo = AnyView(NewReportView(postModel: postModel, loginModel: loginModel))
                             isActive = true
                         } label: {
                             Text("Report Lost Pet")
@@ -321,10 +321,71 @@ struct NewPostView: View {
     @State private var isImagePickerDisplay = false
     @State private var tagInput: String = ""
     private let tags: [String] = ["Dogs", "Cats", "Adoption"]
+    
+    var body: some View {
+        Form {
+            Section(header: Text("Title")) {
+                TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
+                    print("title onEditingChanged - \(changed)")
+                })
+            }
+            
+            Section(header: Text("Description")) {
+                TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
+                    print("description onEditingChanged - \(changed)")
+                })
+            }
+            
+            Section(header: Text("Image")) {
+                Button("Camera") {
+                    self.sourceType = .camera
+                    self.isImagePickerDisplay.toggle()
+                }
+                Button("Photo") {
+                    self.sourceType = .photoLibrary
+                    self.isImagePickerDisplay.toggle()
+                }
+            }
+            
+            Section(header: Text("Tags")) {
+                Picker("Selected Tag", selection: $tagInput) {
+                    ForEach(tags, id: \.self) {
+                        Text($0)
+                    }
+                }
+            }
+            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
+                ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
+            }
+        }.navigationTitle("Add Post")
+    }
+    
+    func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
+        postModel.addPost(userName: username, title: title, description: description, image: image, tags: tags)
+    }
+}
+
+/**
+  NewReportView defines a View for adding new reports.
+*/
+struct NewReportView: View {
+    var postModel: PostViewModel
+    var loginModel: LoginViewModel
+
+    @State private var title: String = ""
+    @State private var description: String = ""
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State private var selectedImage = UIImage(named: "cat-portrait")
+    @State private var isImagePickerDisplay = false
+    @State private var tagInput: String = ""
+    private let tags: [String] = ["Dogs", "Cats", "Adoption"]
     @State private var showingPicker = false
     
     @State private var coordinates = CLLocationCoordinate2D(latitude: 37.333747, longitude: -122.011448)
     @State private var showSheet = false
+    @State private var radius: Int = 10
+    
     
     var body: some View {
         Form {
@@ -341,6 +402,14 @@ struct NewPostView: View {
             }
             
             Section(header: Text("location")) {
+                Text("Latitude: " + coordinates.latitude.description).foregroundColor(.gray)
+                Text("Longitude: " + coordinates.longitude.description).foregroundColor(.gray)
+                Text("Radius: " + String(radius)).foregroundColor(.gray)
+                Picker("Radius", selection: $radius) {
+                    ForEach(1...100, id: \.self) { radius in
+                        Text("\(radius)")
+                    }
+                }
                 Button("Search Location") {
                     showingPicker = true
                 }
@@ -367,13 +436,15 @@ struct NewPostView: View {
                     }
                 }
             }
-            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
+            Button(action: { addLocation(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput, coordinates: coordinates, radius: radius)}, label: {Text("Publish").foregroundColor(Color("logo-pink")).font(.system(size: 20));
             }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
-        }.navigationTitle("Add Post")
+        }.navigationTitle("Report Lost Pet")
         .mapItemPicker(isPresented: $showingPicker) { item in
             if let name = item?.name {
+                coordinates = item!.placemark.coordinate
+                print(coordinates.latitude)
                 print("Selected \(name)")
             }
         }
@@ -395,8 +466,9 @@ struct NewPostView: View {
             }
     }
     
-    func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
-        postModel.addPost(userName: username, title: title, description: description, image: image, tags: tags)
+    func addLocation(username: String, title: String, description: String, image: UIImage, tags: String, coordinates: CLLocationCoordinate2D, radius: Int) {
+        print(coordinates)
+        print(radius)
     }
 }
 
