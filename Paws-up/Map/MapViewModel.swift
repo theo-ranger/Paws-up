@@ -10,43 +10,40 @@ import MapKit
 import SwiftUI
 
 class MapViewModel {
-    private var rescueModel: MapModel = MapModel()
+    private var mapModel: MapModel = MapModel()
     @Published var locationRepository = MapDataSource()
     
-    let berkeley = MapModel.Location(message: "",
-                                        timeStamp: "",
-                                        photo: UIImage(imageLiteralResourceName: "denero"),
-                                        petType: "",
-                                        zip: "",
-                                        id: "",
-                                        name: "Berkeley",
+    let berkeley = MapModel.Location(id: "a",
+                                        username: "aa",
+                                        title: "world",
+                                        description: "hello",
+                                        image: UIImage(imageLiteralResourceName: "denero"),
+                                        tags: "Berkeley",
                                         coordinate: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.259934),
-                                        username: "",
-                                        title: "")
-    let location1 = MapModel.Location(message: "",
-                                         timeStamp: "",
-                                         photo: UIImage(imageLiteralResourceName: "denero"),
-                                         petType: "",
-                                         zip: "",
-                                         id: "",
-                                         name: "location1",
-                                         coordinate: CLLocationCoordinate2D(latitude: 37.881684, longitude: -122.269934),
-                                         username: "",
-                                         title: "")
-    let location2 = MapModel.Location(message: "",
-                                        timeStamp: "",
-                                         photo: UIImage(imageLiteralResourceName: "denero"),
-                                        petType: "",
-                                        zip: "",
-                                        id: "",
-                                        name: "location2",
+                                        radius: 10)
+    let location1 = MapModel.Location(id: "b",
+                                        username: "bb",
+                                        title: "world",
+                                        description: "hello",
+                                        image: UIImage(imageLiteralResourceName: "denero"),
+                                        tags: "Berkeley",
+                                        coordinate: CLLocationCoordinate2D(latitude: 37.881684, longitude: -122.269934),
+                                        radius: 10)
+    let location2 = MapModel.Location(id: "c",
+                                        username: "cc",
+                                        title: "world",
+                                        description: "hello",
+                                        image: UIImage(imageLiteralResourceName: "denero"),
+                                        tags: "Berkeley",
                                         coordinate: CLLocationCoordinate2D(latitude: 37.871684, longitude: -122.249934),
-                                        username: "",
-                                        title: "")
+                                        radius: 10)
     
-    func addLocation(message: String, photo: UIImage, petType: String, zip: String, name: String, coordinate: CLLocationCoordinate2D, username: String,
-                 title: String) {
-        rescueModel.addLocation(message: message, photo: photo, petType: petType, zip: zip, name: name, coordinate: coordinate, username: username, title: title)
+//    func addLocation(message: String, photo: UIImage, petType: String, zip: String, name: String, coordinate: CLLocationCoordinate2D, username: String,
+//                 title: String) {
+//        rescueModel.addLocation(message: message, photo: photo, petType: petType, zip: zip, name: name, coordinate: coordinate, username: username, title: title)
+//    }
+    func addLocation(username: String, title: String, description: String, image: UIImage, tags: String, coordinates: CLLocationCoordinate2D, radius: Int) {
+        mapModel.addLocation(username: username, title: title, description: description, image: image, tags: tags, coordinates: coordinates, radius: radius)
     }
     
     func fetchLocations() {

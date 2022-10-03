@@ -139,6 +139,7 @@ struct PostView: View {
     @ObservedObject var loginModel: LoginViewModel
     @ObservedObject var postModel: PostViewModel
     var profileViewModel: ProfileViewModel
+    var mapModel: MapViewModel
     
     @State private var navigateTo: AnyView?
     @State private var isActive = false
@@ -162,7 +163,7 @@ struct PostView: View {
 //                            }
                         })
                         Button(role: .destructive) {
-                            navigateTo = AnyView(NewReportView(postModel: postModel, loginModel: loginModel))
+                            navigateTo = AnyView(NewReportView(mapModel: mapModel, loginModel: loginModel))
                             isActive = true
                         } label: {
                             Text("Report Lost Pet")
@@ -214,15 +215,16 @@ struct HomePageView: View {
     var body: some View {
         Spacer()
         HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
-            PostView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel).tabItem {
+            PostView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, mapModel: mapModel).tabItem {
                 Image(systemName: "circle.hexagonpath")
                 Text("Community")}.tag(1)
-            MapTestView(place: [IdentifiablePlace(id: UUID(), lat: 37.871684, long: -122.259934)], region: MKCoordinateRegion(
-                center: CLLocationCoordinate2D(latitude: 37.334_900,
-                                               longitude: -122.009_020),
-                latitudinalMeters: 750,
-                longitudinalMeters: 750
-            )).tabItem {
+//            MapTestView(place: [IdentifiablePlace(id: UUID(), lat: 37.871684, long: -122.259934)], region: MKCoordinateRegion(
+//                center: CLLocationCoordinate2D(latitude: 37.334_900,
+//                                               longitude: -122.009_020),
+//                latitudinalMeters: 750,
+//                longitudinalMeters: 750))
+            MapView(rescueModel: mapModel, loginModel: loginModel)
+                .tabItem {
                 Image(systemName: "location")
                 Text("Maps")}.tag(2)
             Text("Donation+ View").tabItem {
@@ -370,7 +372,7 @@ struct NewPostView: View {
   NewReportView defines a View for adding new reports.
 */
 struct NewReportView: View {
-    var postModel: PostViewModel
+    var mapModel: MapViewModel
     var loginModel: LoginViewModel
 
     @State private var title: String = ""
@@ -469,6 +471,7 @@ struct NewReportView: View {
     func addLocation(username: String, title: String, description: String, image: UIImage, tags: String, coordinates: CLLocationCoordinate2D, radius: Int) {
         print(coordinates)
         print(radius)
+        mapModel.addLocation(username: username, title: title, description: description, image: image, tags: tags, coordinates: coordinates, radius: radius)
     }
 }
 

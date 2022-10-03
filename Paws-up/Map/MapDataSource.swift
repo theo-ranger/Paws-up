@@ -61,22 +61,20 @@ class MapDataSource: DataSource {
         // Create a reference to the file you want to download
         print(dic["id"]!)
         // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-        var photo = UIImage(named: "cat-portrait")
-        photo = dic["photo"]?.imageFromBase64
+        var image = UIImage(named: "cat-portrait")
+        image = dic["image"]?.imageFromBase64
         
-        let coordinate = CLLocationCoordinate2D(latitude: Double(dic["latitude"]!)!,
-                                                longitude: Double(dic["longitude"]!)!)
+        let coordinate = CLLocationCoordinate2D(latitude: Double(dic["lat"]!)!,
+                                                longitude: Double(dic["long"]!)!)
         
-        let location = MapModel.Location(message: dic["message"]!,
-                                            timeStamp: dic["timeStamp"]!,
-                                            photo: photo!,
-                                            petType: dic["petType"]!,
-                                            zip: dic["zip"]!,
-                                            id: dic["id"]!,
-                                            name: dic["name"]!,
-                                            coordinate: coordinate,
-                                            username: dic["username"]!,
-                                            title: dic["title"]!)
+        let location = MapModel.Location(id: dic["id"]!,
+                                         username: dic["username"]!,
+                                         title: dic["title"]!,
+                                         description: dic["description"]!,
+                                         image: image!,
+                                         tags: dic["tags"]!,
+                                         coordinate: coordinate,
+                                         radius: Int(dic["radius"]!)!)
         
         return location
     }
