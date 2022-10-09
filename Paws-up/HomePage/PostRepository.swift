@@ -28,7 +28,6 @@ class PostRepository: ObservableObject {
     }
     
     func partialFetchItems(inputArray: [String]) {
-        let db = Firestore.firestore()
         db.collection(path).whereField("tags", arrayContainsAny: inputArray)
             .getDocuments() { (querySnapshot, err) in
                 if let err = err {
@@ -48,9 +47,7 @@ class PostRepository: ObservableObject {
 
     
     func fetchItems(_ completion: @escaping DataSource.completionHandler) {
-        print("post fetch")
-        let db = Firestore.firestore()
-        
+        print("post fetch")        
         db.collection(path).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("[Error @ PostDataSource.fetchItems()]: \(err)")

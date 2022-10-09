@@ -33,28 +33,7 @@ struct MapModel {
     
     // MARK: -Intent(s)
     
-    func addLocation(username: String, title: String, description: String, image: UIImage, tags: String, coordinates: CLLocationCoordinate2D, radius: Int) {
-        print(coordinates)
-        let uid = UUID().uuidString
-        db.collection("locations").document(uid).setData([
-            "id": uid,
-            "timeStamp": String(NSDate().timeIntervalSince1970),
-            "username": username,
-            "title": title,
-            "description": description,
-            "image": String(image.base64!),
-            "tags": tags,
-            "lat": String(coordinates.latitude),
-            "long": String(coordinates.longitude),
-            "radius": String(radius)
-        ]) { err in
-            if let err = err {
-                print("Error writing document: \(err)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
+    
     
 //    func addLocation1(message: String, photo: UIImage, petType: String, zip: String, name: String, coordinate: CLLocationCoordinate2D, username: String,
 //        title: String) {

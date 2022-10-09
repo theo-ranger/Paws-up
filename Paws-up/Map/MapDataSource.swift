@@ -16,6 +16,8 @@ let rescueDataSource = "locations"
 class MapDataSource: DataSource {
     static let shared = MapDataSource()
     
+    static let db = Firestore.firestore()
+    
     static var storageRef = Storage.storage().reference()
     
     @Published var locations: Array<MapModel.Location> = []
@@ -77,5 +79,29 @@ class MapDataSource: DataSource {
                                          radius: Int(dic["radius"]!)!)
         
         return location
+    }
+    
+    static func addLocation(username: String, title: String, description: String, image: UIImage, tags: String, coordinates: CLLocationCoordinate2D, radius: Int) {
+        print(coordinates)
+        let uid = UUID().uuidString
+        db.collection("locations").document(uid).setData([
+            "id": uid,
+            "timeStamp": String(NSDate().timeIntervalSince1970),
+            "username": username,
+            "title": title,
+            "description": description,
+            "image": String(image.base64!),
+            "tags": tags,
+            "lat": String(coordinates.latitude),
+            "long": String(coordinates.longitude),
+            "radius": String(radius)
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+        fetchLocations()
     }
 }

@@ -43,10 +43,10 @@ class MapViewModel {
 //        rescueModel.addLocation(message: message, photo: photo, petType: petType, zip: zip, name: name, coordinate: coordinate, username: username, title: title)
 //    }
     func addLocation(username: String, title: String, description: String, image: UIImage, tags: String, coordinates: CLLocationCoordinate2D, radius: Int) {
-        mapModel.addLocation(username: username, title: title, description: description, image: image, tags: tags, coordinates: coordinates, radius: radius)
+        MapDataSource.addLocation(username: username, title: title, description: description, image: image, tags: tags, coordinates: coordinates, radius: radius)
     }
     
-    func fetchLocations() {
-        MapDataSource.fetchLocations()
-    }
+//    func fetchLocations() {
+//        MapDataSource.fetchLocations()
+//    }
 }
