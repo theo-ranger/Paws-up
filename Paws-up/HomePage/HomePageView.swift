@@ -524,18 +524,79 @@ struct NewReportView: View {
 */
 struct DetailedPostView: View {
     var post: Content
+    var images = ["image1", "image2", "image3"]
+    
+    let logoPink = UIColor(red: 231/255, green: 84/255, blue: 128/255, alpha: 1)
+    
+    @State var liked = false
+
+    
+    func setupAppearance() {
+        UIPageControl.appearance().currentPageIndicatorTintColor = logoPink
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.2)
+    }
 
     var body: some View {
-        VStack {
-            Text("Title: " + post.title)
-            Text("By: " + post.userName)
-            Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
-            Text("Description: " + post.description)
-            Text(post.timeStamp)
-            //Image(uiImage: post.image)
-                //.resizable()
-                //.aspectRatio(contentMode: .fit)
+        ScrollView {
+            VStack {
+                HStack {
+                    Image("denero")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .clipShape(Circle())
+                        .frame(width: 30.0, height: 30.0)
+                    Text(post.userName)
+                    Spacer()
+                    Image(systemName: "person.crop.circle.badge.plus")
+                        .foregroundColor(Color("Logo-Pink"))
+                        .padding()
+                        .font(.system(size: 25))
+                }
+                
+                GeometryReader { proxy in
+                    TabView {
+                        ForEach(self.images, id: \.self) { imageName in
+                            Image(imageName)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: proxy.size.width, height: proxy.size.height)
+                        }
+                    }
+                    .tabViewStyle(PageTabViewStyle())
+                    .onAppear {
+                        setupAppearance()
+                    }
+                }
+                
+                Spacer()
+                
+                HStack {
+                    Button(action: {
+                        liked = !liked
+                    }) {
+                        if liked {Image(systemName: "heart.fill").font(.system(size: 25)).foregroundColor(Color("Logo-Pink"))}
+                        else {Image(systemName: "heart").font(.system(size: 25)).foregroundColor(Color("Logo-Pink"))}
+                    }
+                    Image(systemName: "message")
+                        .font(.system(size: 25))
+                        .foregroundColor(.black)
+                    Spacer()
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 25))
+                        .foregroundColor(.black)
+                }
+                
+                //                Text("Title: " + post.title)
+                //            Text("By: " + post.userName)
+                //                Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
+                Text("Description: " + post.description)
+                //                Text(post.timeStamp)
+                //                Image(uiImage: post.image)
+                //                    .resizable()
+                //                    .aspectRatio(contentMode: .fit)
+            }
         }
+        
     }
     // TODO: Resize image
 
@@ -547,6 +608,7 @@ struct DetailedPostView: View {
         return dateString
     }
 }
+
 
 
 struct ImagePickerView: UIViewControllerRepresentable {
@@ -589,11 +651,8 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
 }
 
 struct View_Previews: PreviewProvider {
+    
     static var previews: some View {
-        Group {
-            NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
-            NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
-        }
-        HomePageView(loginModel: LoginViewModel(), postModel: PostViewModel(), profileViewModel: ProfileViewModel(), mapModel: MapViewModel())
+        NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
     }
 }
