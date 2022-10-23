@@ -80,16 +80,28 @@ struct SmallCardView: View {
     @Binding var showingDetail: Bool
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color("Logo-Pink"))
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(.white)
                 .frame(width: UIScreen.main.bounds.size.width - 50, height: 160)
-            Text(location.title).foregroundColor(.white)
+            Image("coco")
+                .resizable()
+                .aspectRatio(1.0, contentMode: .fit)
+                .clipped()
+                .frame(width: 125, height: 125)
+                .cornerRadius(10)
+                .offset(x: -110)
+            
+            VStack {
+                Text(" Coco \n  Owner: Kelsey \n  Contact: (510)747-2639 \n  Male, 4 yrs, 6 lbs, caramel")
+            }.offset(x: 60)
+            
+//            Text(location.title).foregroundColor(.black)
             Button(action: {
                 self.showingDetail = false
             }) {
                 Image(systemName: "multiply").resizable()
-                    .frame(width: 20.0, height: 20.0).foregroundColor(.white)
-            }.offset(x: 140, y: -60)
+                    .frame(width: 20.0, height: 20.0).foregroundColor(.black)
+            }.offset(x: 165, y: -55)
         }
     }
 }

@@ -33,7 +33,7 @@ struct LoginView: View {
                                .padding(.bottom, 75)
                Text("Log in or Sign up")
                    .font(.largeTitle)
-                   .foregroundColor(Color("logo-pink"))
+                   .foregroundColor(Color("Logo-Pink"))
                    .fontWeight(.semibold)
                    .padding(.bottom, 20)
                TextField("Email", text: $loginModel.email)
@@ -59,7 +59,7 @@ struct LoginView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(width: 220, height: 60)
-                    .background(Color("logo-pink"))
+                    .background(Color("Logo-Pink"))
                     .cornerRadius(15.0)
                     .padding(.bottom, 20)
                }
@@ -73,7 +73,7 @@ struct LoginView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(width: 220, height: 60)
-                    .background(Color("logo-pink"))
+                    .background(Color("Logo-Pink"))
                     .cornerRadius(15.0)
                }
            }.padding()
@@ -104,14 +104,13 @@ struct CardView: View {
             Image(uiImage: post.image.imageFromBase64!)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 170, height: 200, alignment: .center)
+                .frame(width: 180, height: 220, alignment: .center)
                 .clipped()
+                .cornerRadius(20)
+            Text(post.title).foregroundColor(.black)
             HStack {
-                VStack {
-                    Text(post.title).foregroundColor(.black)
-                    Text(username).foregroundColor(.black)
-                }
-                Spacer()
+                Text(username).foregroundColor(.black)
+//                Spacer()
                 HStack {
                     Button(action: {
                         liked.toggle()
@@ -121,11 +120,12 @@ struct CardView: View {
                             likeList.append(username)
                         }
                         postModel.likePost(userName: username, post: post)
-                    }, label: {
-                        if liked {Image(systemName: "heart.fill")}
-                        else {Image(systemName: "heart")}
-                    })
-                    Text(String(likeList.count))
+                    }) {
+                        if liked {Image(systemName: "heart.fill").foregroundColor(.red)}
+                        else {Image(systemName: "heart").foregroundColor(.red)}
+                        
+                    }
+                    Text(String(likeList.count)).foregroundColor(.red)
                 }
             }
         }
@@ -149,7 +149,10 @@ struct PostView: View {
             VStack {
                 HStack {
                     Button(action: { }, label: {
-                        Image(systemName: "magnifyingglass").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(Color("Logo-Pink"))
+                            .padding()
+                            .font(.system(size: 25))
                     })
                     Spacer()
                     Menu {
@@ -159,7 +162,8 @@ struct PostView: View {
                         }, label: {
 //                            NavigationLink(destination: NewPostView(postModel: postModel, loginModel: loginModel)) {
                                 Text("New Post")
-                                Image(systemName: "square.and.pencil").foregroundColor(Color("logo-pink"))
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(Color("Logo-Pink"))
 //                            }
                         })
                         Button(role: .destructive) {
@@ -171,7 +175,10 @@ struct PostView: View {
                         }
                         
                     } label: {
-                        Image(systemName: "plus").foregroundColor(Color("logo-pink")).padding().font(.system(size: 25))
+                        Image(systemName: "plus")
+                            .foregroundColor(Color("Logo-Pink"))
+                            .padding()
+                            .font(.system(size: 25))
                     }.background(
                         NavigationLink(destination: self.navigateTo, isActive: $isActive) {
                             EmptyView()
@@ -182,7 +189,7 @@ struct PostView: View {
                 //FilterBar(labels: $activeLabels)
                 // Here's the filter view
                 ScrollView {
-                    LazyVGrid(columns: [GridItem(spacing: 30), GridItem(spacing: 30)],spacing: 10) {
+                    LazyVGrid(columns: [GridItem(spacing: -5), GridItem(spacing: 5)],spacing: 20) {
                         // Show only posts with active labels marked by activeLabels, an @Binding variable.
                         //.filter {$0.tags.contains(where: activeLabels.contains)}
                         ForEach(postModel.posts) { post in
@@ -233,7 +240,7 @@ struct HomePageView: View {
             ProfileView(profileViewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel).tabItem {
                 Image(systemName: "person.circle")
                 Text("Profile")}.tag(3)
-            }.accentColor(Color("logo-pink"))
+            }.accentColor(Color("Logo-Pink"))
                 .onAppear {
                 // correct the transparency bug for Tab bars
                 let tabBarAppearance = UITabBarAppearance()
@@ -259,11 +266,18 @@ struct ProfileView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Spacer()
-                    Image("denero").clipShape(Circle())
-                    Spacer()
-                }
+                Image("profilebg")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .opacity(0.8)
+                    .overlay(
+                        Image("denero").clipShape(Circle())
+                            .position(x: 200, y: 200)
+                    )
+                Spacer()
+                Spacer()
+                Spacer()
+                Spacer()
                 HStack {
                     Spacer()
                     Text("John Denero").font(.system(size: 30))
@@ -295,6 +309,36 @@ struct ProfileView: View {
                         Rectangle().fill(Color.gray).frame(width: 30, height: 1, alignment: .center).offset(y: -10)
                     }
                     Spacer()
+                }
+                VStack {
+                    HStack {
+                        Image("image1")
+                            .resizable()
+                            .aspectRatio(1.0, contentMode: .fit)
+                            .clipped()
+                        Image("image2")
+                            .resizable()
+                            .aspectRatio(1.0, contentMode: .fit)
+                            .clipped()
+                        Image("image3")
+                            .resizable()
+                            .aspectRatio(1.0, contentMode: .fit)
+                            .clipped()
+                    }
+                    HStack {
+                        Image("image4")
+                            .resizable()
+                            .aspectRatio(1.0, contentMode: .fit)
+                            .clipped()
+                        Image("image5")
+                            .resizable()
+                            .aspectRatio(1.0, contentMode: .fit)
+                            .clipped()
+                        Image("image6")
+                            .resizable()
+                            .aspectRatio(1.0, contentMode: .fit)
+                            .clipped()
+                    }
                 }
 //                Button(action: {
 //                    Task {
@@ -356,8 +400,8 @@ struct NewPostView: View {
                     }
                 }
             }
-            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput)}, label: {Text("Publish Post").foregroundColor(Color("logo-pink")).font(.system(size: 20));
-            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
+            Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput)}, label: {Text("Publish Post").foregroundColor(Color("Logo-Pink")).font(.system(size: 20));
+            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("Logo-Pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
         }.navigationTitle("Add Post")
@@ -438,8 +482,8 @@ struct NewReportView: View {
                     }
                 }
             }
-            Button(action: { addLocation(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput, coordinates: coordinates, radius: radius)}, label: {Text("Publish").foregroundColor(Color("logo-pink")).font(.system(size: 20));
-            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("logo-pink")).sheet(isPresented: self.$isImagePickerDisplay) {
+            Button(action: { addLocation(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput, coordinates: coordinates, radius: radius)}, label: {Text("Publish").foregroundColor(Color("Logo-Pink")).font(.system(size: 20));
+            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("Logo-Pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
         }.navigationTitle("Report Lost Pet")
@@ -480,18 +524,79 @@ struct NewReportView: View {
 */
 struct DetailedPostView: View {
     var post: Content
+    var images = ["image1", "image2", "image3"]
+    
+    let logoPink = UIColor(red: 231/255, green: 84/255, blue: 128/255, alpha: 1)
+    
+    @State var liked = false
+
+    
+    func setupAppearance() {
+        UIPageControl.appearance().currentPageIndicatorTintColor = logoPink
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.2)
+    }
 
     var body: some View {
-        VStack {
-            Text("Title: " + post.title)
-            Text("By: " + post.userName)
-            Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
-            Text("Description: " + post.description)
-            Text(post.timeStamp)
-            //Image(uiImage: post.image)
-                //.resizable()
-                //.aspectRatio(contentMode: .fit)
+        ScrollView {
+            VStack {
+                HStack {
+                    Image("denero")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .clipShape(Circle())
+                        .frame(width: 30.0, height: 30.0)
+                    Text(post.userName)
+                    Spacer()
+                    Image(systemName: "person.crop.circle.badge.plus")
+                        .foregroundColor(Color("Logo-Pink"))
+                        .padding()
+                        .font(.system(size: 25))
+                }
+                
+                GeometryReader { proxy in
+                    TabView {
+                        ForEach(self.images, id: \.self) { imageName in
+                            Image(imageName)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: proxy.size.width, height: proxy.size.height)
+                        }
+                    }
+                    .tabViewStyle(PageTabViewStyle())
+                    .onAppear {
+                        setupAppearance()
+                    }
+                }
+                
+                Spacer()
+                
+                HStack {
+                    Button(action: {
+                        liked = !liked
+                    }) {
+                        if liked {Image(systemName: "heart.fill").font(.system(size: 25)).foregroundColor(Color("Logo-Pink"))}
+                        else {Image(systemName: "heart").font(.system(size: 25)).foregroundColor(Color("Logo-Pink"))}
+                    }
+                    Image(systemName: "message")
+                        .font(.system(size: 25))
+                        .foregroundColor(.black)
+                    Spacer()
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 25))
+                        .foregroundColor(.black)
+                }
+                
+                //                Text("Title: " + post.title)
+                //            Text("By: " + post.userName)
+                //                Text("Posted on: " + convertToDate(timeStamp: post.timeStamp))
+                Text("Description: " + post.description)
+                //                Text(post.timeStamp)
+                //                Image(uiImage: post.image)
+                //                    .resizable()
+                //                    .aspectRatio(contentMode: .fit)
+            }
         }
+        
     }
     // TODO: Resize image
 
@@ -503,6 +608,7 @@ struct DetailedPostView: View {
         return dateString
     }
 }
+
 
 
 struct ImagePickerView: UIViewControllerRepresentable {
@@ -545,8 +651,8 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
 }
 
 struct View_Previews: PreviewProvider {
+    
     static var previews: some View {
         NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
-        HomePageView(loginModel: LoginViewModel(), postModel: PostViewModel(), profileViewModel: ProfileViewModel(), mapModel: MapViewModel())
     }
 }
