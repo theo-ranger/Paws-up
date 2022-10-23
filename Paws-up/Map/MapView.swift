@@ -81,7 +81,7 @@ struct SmallCardView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color("logo-pink"))
+                .fill(Color("Logo-Pink"))
                 .frame(width: UIScreen.main.bounds.size.width - 50, height: 160)
             Text(location.title).foregroundColor(.white)
             Button(action: {
