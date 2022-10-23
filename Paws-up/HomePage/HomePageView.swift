@@ -524,7 +524,7 @@ struct NewReportView: View {
 */
 struct DetailedPostView: View {
     var post: Content
-//    var images = ["image1", "image2", "image3"]
+    var images = ["image1", "image2", "image3"]
     
     let logoPink = UIColor(red: 231/255, green: 84/255, blue: 128/255, alpha: 1)
     
@@ -555,12 +555,12 @@ struct DetailedPostView: View {
                 
                 GeometryReader { proxy in
                     TabView {
-//                        ForEach(self.images, id: \.self) { imageName in
+                        ForEach(self.images, id: \.self) { imageName in
                         Image(uiImage: post.image.imageFromBase64!)
                             .resizable()
                             .scaledToFill()
                             .frame(width: proxy.size.width, height: proxy.size.height)
-//                        }
+                        }
                     }
                     .tabViewStyle(PageTabViewStyle())
                     .onAppear {

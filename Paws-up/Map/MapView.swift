@@ -83,18 +83,23 @@ struct SmallCardView: View {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(.white)
                 .frame(width: UIScreen.main.bounds.size.width - 50, height: 160)
-            Image("coco")
-                .resizable()
-                .aspectRatio(1.0, contentMode: .fit)
-                .clipped()
-                .frame(width: 125, height: 125)
-                .cornerRadius(10)
-                .offset(x: -110)
-            
-            VStack {
-                Text(" Coco \n  Owner: Kelsey \n  Contact: (510)747-2639 \n  Male, 4 yrs, 6 lbs, caramel")
-            }.offset(x: 60)
-            
+            HStack {
+                Image(uiImage: location.image)
+                    .resizable()
+                    .aspectRatio(1.0, contentMode: .fit)
+                    .clipped()
+                    .frame(width: 125, height: 125)
+                    .cornerRadius(10)
+                VStack {
+                    Text(location.title)
+                    Text("Owner: Kelsey \n  Contact: (510)747-2639 \n  Male, 4 yrs, 6 lbs, caramel")
+                }
+                NavigationLink(
+                    destination:
+                        DetailedCardView(location: location)) {
+                            Text(">>>").foregroundColor(.blue)
+                  }
+            }
 //            Text(location.title).foregroundColor(.black)
             Button(action: {
                 self.showingDetail = false
@@ -103,6 +108,26 @@ struct SmallCardView: View {
                     .frame(width: 20.0, height: 20.0).foregroundColor(.black)
             }.offset(x: 165, y: -55)
         }
+    }
+}
+
+struct DetailedCardView: View {
+    var location: MapModel.Location
+
+    var body: some View {
+        VStack {
+            Image(uiImage: location.image).resizable().aspectRatio(1.0, contentMode: .fit)
+            Text("Title: " + location.title)
+        }
+    }
+    // TODO: Resize image
+
+    func convertToDate(timeStamp: String) -> String {
+        let date = NSDate(timeIntervalSince1970: Double(timeStamp)!)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+        let dateString = formatter.string(from: date as Date)
+        return dateString
     }
 }
 
