@@ -104,7 +104,7 @@ struct CardView: View {
             Image(uiImage: post.image.imageFromBase64!)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 180, height: 220, alignment: .center)
+                .frame(width: (UIScreen.main.bounds.size.width / 2) - 30, height: (UIScreen.main.bounds.size.width / 2), alignment: .center)
                 .clipped()
                 .cornerRadius(20)
             Text(post.title).foregroundColor(.black)
@@ -272,7 +272,7 @@ struct ProfileView: View {
                     .opacity(0.8)
                     .overlay(
                         Image("denero").clipShape(Circle())
-                            .position(x: 200, y: 200)
+                            .offset(y: 80)
                     )
                 Spacer()
                 Spacer()

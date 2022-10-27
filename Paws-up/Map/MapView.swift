@@ -41,7 +41,7 @@ struct MapView: View {
                     }
                 }.ignoresSafeArea()
                 if showingDetail {
-                    SmallCardView(location: currentLocation, showingDetail: $showingDetail).offset(y: UIScreen.main.bounds.size.height / 2 - 200)
+                    SmallCardView(location: currentLocation, showingDetail: $showingDetail).offset(y: UIScreen.main.bounds.size.height / 2 - 220)
                 }
             }
         }
@@ -81,7 +81,7 @@ struct SmallCardView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(.white)
+                .fill(Color("Logo-Pink"))
                 .frame(width: UIScreen.main.bounds.size.width - 50, height: 160)
             HStack {
                 Image(uiImage: location.image)
@@ -91,13 +91,14 @@ struct SmallCardView: View {
                     .frame(width: 125, height: 125)
                     .cornerRadius(10)
                 VStack {
-                    Text(location.title)
-                    Text("Owner: Kelsey \n  Contact: (510)747-2639 \n  Male, 4 yrs, 6 lbs, caramel")
+                    Text(location.title).foregroundColor(.white)
+                    Text("Owner: Kelsey \n  Contact: (510)747-2639 \n  Male, 4 yrs, 6 lbs, caramel").foregroundColor(.white)
                 }
                 NavigationLink(
                     destination:
                         DetailedCardView(location: location)) {
-                            Text(">>>").foregroundColor(.blue)
+                            Image(systemName: "chevron.right.2").resizable()
+                                .frame(width: 20.0, height: 20.0).foregroundColor(.blue)
                   }
             }
 //            Text(location.title).foregroundColor(.black)
@@ -105,8 +106,8 @@ struct SmallCardView: View {
                 self.showingDetail = false
             }) {
                 Image(systemName: "multiply").resizable()
-                    .frame(width: 20.0, height: 20.0).foregroundColor(.black)
-            }.offset(x: 165, y: -55)
+                    .frame(width: 20.0, height: 20.0).foregroundColor(.white)
+            }.offset(x: (UIScreen.main.bounds.size.width / 2) - 50, y: -55)
         }
     }
 }
