@@ -107,10 +107,10 @@ struct CardView: View {
                 .frame(width: (UIScreen.main.bounds.size.width / 2) - 30, height: (UIScreen.main.bounds.size.width / 2), alignment: .center)
                 .clipped()
                 .cornerRadius(20)
-            Text(post.title).foregroundColor(.black)
+            Text(post.title).lineLimit(1).foregroundColor(.black)
             HStack {
-                Text(username).foregroundColor(.black)
-//                Spacer()
+                Text(post.userName).frame(width: (UIScreen.main.bounds.size.width / 2) - 80).lineLimit(1).foregroundColor(.black)
+                Spacer()
                 HStack {
                     Button(action: {
                         liked.toggle()
@@ -121,13 +121,24 @@ struct CardView: View {
                         }
                         postModel.likePost(userName: username, post: post)
                     }) {
-                        if liked {Image(systemName: "heart.fill").foregroundColor(.red)}
-                        else {Image(systemName: "heart").foregroundColor(.red)}
+                        if liked {Image(systemName: "heart.fill").foregroundColor(Color("Logo-Pink"))}
+                        else {Image(systemName: "heart").foregroundColor(Color("Logo-Pink"))}
                         
                     }
-                    Text(String(likeList.count)).foregroundColor(.red)
-                }
+                    Text(String(likeList.count)).foregroundColor(Color("Logo-Pink"))
+                }.frame(width: 50)
             }
+        }.frame(width: (UIScreen.main.bounds.size.width / 2) - 30)
+    }
+}
+
+struct SearchView: View {
+    @State private var searchText = ""
+
+    var body: some View {
+        VStack {
+            Text("Searching for \(searchText)")
+                .searchable(text: $searchText)
         }
     }
 }
@@ -148,12 +159,14 @@ struct PostView: View {
         NavigationView {
             VStack {
                 HStack {
-                    Button(action: { }, label: {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(Color("Logo-Pink"))
-                            .padding()
-                            .font(.system(size: 25))
-                    })
+                    NavigationLink(
+                        destination:
+                            SearchView()) {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(Color("Logo-Pink"))
+                                    .padding()
+                                    .font(.system(size: 25))
+                      }
                     Spacer()
                     Menu {
                         Button(action: {
@@ -525,14 +538,11 @@ struct NewReportView: View {
 struct DetailedPostView: View {
     var post: Content
     var images = ["image1", "image2", "image3"]
-    
-    let logoPink = UIColor(red: 231/255, green: 84/255, blue: 128/255, alpha: 1)
-    
+        
     @State var liked = false
-
     
     func setupAppearance() {
-        UIPageControl.appearance().currentPageIndicatorTintColor = logoPink
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color("Logo-Pink"))
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.2)
     }
 
