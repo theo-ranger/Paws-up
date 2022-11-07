@@ -69,15 +69,14 @@ class MapDataSource: DataSource {
         let coordinate = CLLocationCoordinate2D(latitude: Double(dic["lat"]!)!,
                                                 longitude: Double(dic["long"]!)!)
         
-        let location = MapModel.Location(id: dic["id"]!,
-                                         username: dic["username"]!,
-                                         title: dic["title"]!,
-                                         description: dic["description"]!,
+        let location = MapModel.Location(id: dic["id"] ?? "<ID Not Found>",
+                                         username: dic["username"] ?? "<Username Not Found>",
+                                         title: dic["title"] ?? "<Title Not Found>",
+                                         description: dic["description"] ?? "",
                                          image: image!,
-                                         tags: dic["tags"]!,
+                                         tags: dic["tags"] ?? "",
                                          coordinate: coordinate,
-                                         radius: Int(dic["radius"]!)!)
-        
+                                         radius: Int(dic["radius"] ?? "0")!)
         return location
     }
     

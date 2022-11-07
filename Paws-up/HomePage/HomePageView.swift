@@ -463,7 +463,7 @@ struct NewPostView: View {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
         }.navigationBarTitle(Text("Add Post"), displayMode: .inline)
-            .navigationBarBackButtonHidden()
+            .navigationBarBackButtonHidden(false)
     }
     
     func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
