@@ -104,13 +104,13 @@ struct CardView: View {
             Image(uiImage: post.image.imageFromBase64!)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 180, height: 220, alignment: .center)
+                .frame(width: (UIScreen.main.bounds.size.width / 2) - 30, height: (UIScreen.main.bounds.size.width / 2), alignment: .center)
                 .clipped()
                 .cornerRadius(20)
-            Text(post.title).foregroundColor(.black)
+            Text(post.title).lineLimit(1).foregroundColor(.black)
             HStack {
-                Text(username).foregroundColor(.black)
-//                Spacer()
+                Text(post.userName).frame(width: (UIScreen.main.bounds.size.width / 2) - 80).lineLimit(1).foregroundColor(.black)
+                Spacer()
                 HStack {
                     Button(action: {
                         liked.toggle()
@@ -121,13 +121,24 @@ struct CardView: View {
                         }
                         postModel.likePost(userName: username, post: post)
                     }) {
-                        if liked {Image(systemName: "heart.fill").foregroundColor(.red)}
-                        else {Image(systemName: "heart").foregroundColor(.red)}
+                        if liked {Image(systemName: "heart.fill").foregroundColor(Color("Logo-Pink"))}
+                        else {Image(systemName: "heart").foregroundColor(Color("Logo-Pink"))}
                         
                     }
-                    Text(String(likeList.count)).foregroundColor(.red)
-                }
+                    Text(String(likeList.count)).foregroundColor(Color("Logo-Pink"))
+                }.frame(width: 50)
             }
+        }.frame(width: (UIScreen.main.bounds.size.width / 2) - 30)
+    }
+}
+
+struct SearchView: View {
+    @State private var searchText = ""
+
+    var body: some View {
+        VStack {
+            Text("Searching for \(searchText)")
+                .searchable(text: $searchText)
         }
     }
 }
@@ -148,12 +159,14 @@ struct PostView: View {
         NavigationView {
             VStack {
                 HStack {
-                    Button(action: { }, label: {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(Color("Logo-Pink"))
-                            .padding()
-                            .font(.system(size: 25))
-                    })
+                    NavigationLink(
+                        destination:
+                            SearchView()) {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(Color("Logo-Pink"))
+                                    .padding()
+                                    .font(.system(size: 25))
+                      }
                     Spacer()
                     Menu {
                         Button(action: {
@@ -272,7 +285,7 @@ struct ProfileView: View {
                     .opacity(0.8)
                     .overlay(
                         Image("denero").clipShape(Circle())
-                            .position(x: 200, y: 200)
+                            .offset(y: 80)
                     )
                 Spacer()
                 Spacer()
@@ -369,42 +382,88 @@ struct NewPostView: View {
     private let tags: [String] = ["Dogs", "Cats", "Adoption"]
     
     var body: some View {
-        Form {
-            Section(header: Text("Title")) {
-                TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
-                    print("title onEditingChanged - \(changed)")
-                })
+        VStack {
+            Section(){
+                TextField("Add Title...", text: $title)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 20)
+                TextField("Content", text: $description)
+                    .fixedSize(horizontal: false, vertical: false)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 20)
             }
             
-            Section(header: Text("Description")) {
-                TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
-                    print("description onEditingChanged - \(changed)")
-                })
-            }
-            
-            Section(header: Text("Image")) {
-                Button("Camera") {
-                    self.sourceType = .camera
-                    self.isImagePickerDisplay.toggle()
+            HStack {
+                LazyVGrid(columns: [GridItem(spacing: -5), GridItem(spacing: -5), GridItem(spacing: 5)],spacing: 20) {
+                    Image("image1")
+                        .resizable()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .clipped()
+                    Image("image2")
+                        .resizable()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .clipped()
+                    Image("image3")
+                        .resizable()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .clipped()
                 }
-                Button("Photo") {
-                    self.sourceType = .photoLibrary
-                    self.isImagePickerDisplay.toggle()
-                }
-            }
+            }.padding(.horizontal, 20)
             
-            Section(header: Text("Tags")) {
-                Picker("Selected Tag", selection: $tagInput) {
-                    ForEach(tags, id: \.self) {
-                        Text($0)
+            HStack {
+                LazyVGrid(columns: [GridItem(spacing: -5), GridItem(spacing: -5), GridItem(spacing: 5)],spacing: 20) {
+                    Image("image5")
+                        .resizable()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .clipped()
+                    Image("image6")
+                        .resizable()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .clipped()
+                    Menu {
+                        Button("Camera") {
+                            self.sourceType = .camera
+                            self.isImagePickerDisplay.toggle()
+                        }
+                        Button("Photo") {
+                            self.sourceType = .photoLibrary
+                            self.isImagePickerDisplay.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundColor(Color("Logo-Pink"))
+                            .padding()
+                            .font(.system(size: 25))
                     }
                 }
-            }
+                
+            }.padding(.horizontal, 20)
+            
+            TextField("# Add Tags", text: $tagInput)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding(.vertical, 12)
+                .padding(.horizontal, 20)
+                .onTapGesture {
+                    Picker("Selected Tag", selection: $tagInput) {
+                        ForEach(tags, id: \.self) {
+                            Text($0).tag(tags)
+                        }
+                    }
+                }
+            TextField("Add Location", text: .constant(""))
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding(.vertical, 12)
+                .padding(.horizontal, 20)
+                
+            
             Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput)}, label: {Text("Publish Post").foregroundColor(Color("Logo-Pink")).font(.system(size: 20));
             }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("Logo-Pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
-        }.navigationTitle("Add Post")
+        }.navigationBarTitle(Text("Add Post"), displayMode: .inline)
+            .navigationBarBackButtonHidden()
     }
     
     func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
@@ -525,19 +584,16 @@ struct NewReportView: View {
 struct DetailedPostView: View {
     var post: Content
     var images = ["image1", "image2", "image3"]
-    
-    let logoPink = UIColor(red: 231/255, green: 84/255, blue: 128/255, alpha: 1)
-    
+        
     @State var liked = false
-
     
     func setupAppearance() {
-        UIPageControl.appearance().currentPageIndicatorTintColor = logoPink
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color("Logo-Pink"))
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.2)
     }
 
     var body: some View {
-        ScrollView {
+       
             VStack {
                 HStack {
                     Image("denero")
@@ -556,10 +612,10 @@ struct DetailedPostView: View {
                 GeometryReader { proxy in
                     TabView {
                         ForEach(self.images, id: \.self) { imageName in
-                            Image(imageName)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: proxy.size.width, height: proxy.size.height)
+                        Image(uiImage: post.image.imageFromBase64!)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: proxy.size.width, height: proxy.size.height)
                         }
                     }
                     .tabViewStyle(PageTabViewStyle())
@@ -595,7 +651,7 @@ struct DetailedPostView: View {
                 //                    .resizable()
                 //                    .aspectRatio(contentMode: .fit)
             }
-        }
+        
         
     }
     // TODO: Resize image
