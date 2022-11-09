@@ -44,6 +44,25 @@ class PostRepository: ObservableObject {
                 }
         }
     }
+    
+    func partialFetchItems_copy(inputString: String) {
+        print("input string is \(inputString)")
+        db.collection(path).whereField("title", isEqualTo: inputString)
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                } else {
+                    let posts = querySnapshot!.documents.map { (document) -> Content in
+                        let dict = document.data()
+                        return self.parsePost(dict)!
+                    }
+                    self.posts = posts
+                    for document in querySnapshot!.documents {
+                        print("\(document.documentID) => \(document.data())")
+                    }
+                }
+        }
+    }
 
     
     func fetchItems(_ completion: @escaping DataSource.completionHandler) {

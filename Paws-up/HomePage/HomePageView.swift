@@ -132,14 +132,26 @@ struct CardView: View {
     }
 }
 
+// TODO: make search case insensitive
 struct SearchView: View {
+    @ObservedObject var postModel: PostViewModel
     @State private var searchText = ""
-
+    
     var body: some View {
         VStack {
-            Text("Searching for \(searchText)")
+            Text("")
                 .searchable(text: $searchText)
-        }
+            Button(action: {
+                postModel.postRepository.partialFetchItems_copy(inputString: searchText)
+            }, label: {
+                Text("Search for \(searchText)")
+            })
+            Spacer()
+        }.navigationBarItems(trailing: Button(action: {
+            postModel.postRepository.fetchPosts()
+        }, label: {
+            Text("Reset Search")
+        }))
     }
 }
 
@@ -161,7 +173,7 @@ struct PostView: View {
                 HStack {
                     NavigationLink(
                         destination:
-                            SearchView()) {
+                            SearchView(postModel: postModel)) {
                                 Image(systemName: "magnifyingglass")
                                     .foregroundColor(Color("Logo-Pink"))
                                     .padding()
@@ -213,6 +225,8 @@ struct PostView: View {
                               }
                         }
                     }
+                }.refreshable {
+                    print("Do your refresh work here")
                 }
                 .navigationBarHidden(true)
                 .animation(.default, value: true)
