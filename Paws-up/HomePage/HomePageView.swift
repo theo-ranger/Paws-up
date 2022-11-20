@@ -107,10 +107,10 @@ struct CardView: View {
                 .frame(width: (UIScreen.main.bounds.size.width / 2) - 30, height: (UIScreen.main.bounds.size.width / 2), alignment: .center)
                 .clipped()
                 .cornerRadius(20)
-            Text(post.title).lineLimit(1).foregroundColor(.black)
+            Text(post.title).foregroundColor(.red)
             HStack {
-                Text(post.userName).frame(width: (UIScreen.main.bounds.size.width / 2) - 80).lineLimit(1).foregroundColor(.black)
-                Spacer()
+                Text(username).foregroundColor(.black)
+//                Spacer()
                 HStack {
                     Button(action: {
                         liked.toggle()
@@ -121,37 +121,14 @@ struct CardView: View {
                         }
                         postModel.likePost(userName: username, post: post)
                     }) {
-                        if liked {Image(systemName: "heart.fill").foregroundColor(Color("Logo-Pink"))}
-                        else {Image(systemName: "heart").foregroundColor(Color("Logo-Pink"))}
+                        if liked {Image(systemName: "heart.fill").foregroundColor(.red)}
+                        else {Image(systemName: "heart").foregroundColor(.red)}
                         
                     }
-                    Text(String(likeList.count)).foregroundColor(Color("Logo-Pink"))
-                }.frame(width: 50)
+                    Text(String(likeList.count)).foregroundColor(.red)
+                }
             }
-        }.frame(width: (UIScreen.main.bounds.size.width / 2) - 30)
-    }
-}
-
-// TODO: make search case insensitive
-struct SearchView: View {
-    @ObservedObject var postModel: PostViewModel
-    @State private var searchText = ""
-    
-    var body: some View {
-        VStack {
-            Text("")
-                .searchable(text: $searchText)
-            Button(action: {
-                postModel.postRepository.partialFetchItems_copy(inputString: searchText)
-            }, label: {
-                Text("Search for \(searchText)")
-            })
-            Spacer()
-        }.navigationBarItems(trailing: Button(action: {
-            postModel.postRepository.fetchPosts()
-        }, label: {
-            Text("Reset Search")
-        }))
+        }
     }
 }
 
@@ -171,14 +148,12 @@ struct PostView: View {
         NavigationView {
             VStack {
                 HStack {
-                    NavigationLink(
-                        destination:
-                            SearchView(postModel: postModel)) {
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(Color("Logo-Pink"))
-                                    .padding()
-                                    .font(.system(size: 25))
-                      }
+                    Button(action: { }, label: {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(Color("Logo-Pink"))
+                            .padding()
+                            .font(.system(size: 25))
+                    })
                     Spacer()
                     Menu {
                         Button(action: {
@@ -192,7 +167,7 @@ struct PostView: View {
 //                            }
                         })
                         Button(role: .destructive) {
-                            navigateTo = AnyView(NewReportView(mapModel: mapModel, loginModel: loginModel))
+                            navigateTo = AnyView(NewReportView1(mapModel: mapModel, loginModel: loginModel))
                             isActive = true
                         } label: {
                             Text("Report Lost Pet")
@@ -225,8 +200,6 @@ struct PostView: View {
                               }
                         }
                     }
-                }.refreshable {
-                    print("Do your refresh work here")
                 }
                 .navigationBarHidden(true)
                 .animation(.default, value: true)
@@ -396,88 +369,42 @@ struct NewPostView: View {
     private let tags: [String] = ["Dogs", "Cats", "Adoption"]
     
     var body: some View {
-        VStack {
-            Section(){
-                TextField("Add Title...", text: $title)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.vertical, 12)
-                    .padding(.horizontal, 20)
-                TextField("Content", text: $description)
-                    .fixedSize(horizontal: false, vertical: false)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.vertical, 12)
-                    .padding(.horizontal, 20)
+        Form {
+            Section(header: Text("Title")) {
+                TextField("Enter title...", text: $title, onEditingChanged: { (changed) in
+                    print("title onEditingChanged - \(changed)")
+                })
             }
             
-            HStack {
-                LazyVGrid(columns: [GridItem(spacing: -5), GridItem(spacing: -5), GridItem(spacing: 5)],spacing: 20) {
-                    Image("image1")
-                        .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
-                        .clipped()
-                    Image("image2")
-                        .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
-                        .clipped()
-                    Image("image3")
-                        .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
-                        .clipped()
-                }
-            }.padding(.horizontal, 20)
+            Section(header: Text("Description")) {
+                TextField("Enter description...", text: $description, onEditingChanged: { (changed) in
+                    print("description onEditingChanged - \(changed)")
+                })
+            }
             
-            HStack {
-                LazyVGrid(columns: [GridItem(spacing: -5), GridItem(spacing: -5), GridItem(spacing: 5)],spacing: 20) {
-                    Image("image5")
-                        .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
-                        .clipped()
-                    Image("image6")
-                        .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
-                        .clipped()
-                    Menu {
-                        Button("Camera") {
-                            self.sourceType = .camera
-                            self.isImagePickerDisplay.toggle()
-                        }
-                        Button("Photo") {
-                            self.sourceType = .photoLibrary
-                            self.isImagePickerDisplay.toggle()
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                            .foregroundColor(Color("Logo-Pink"))
-                            .padding()
-                            .font(.system(size: 25))
+            Section(header: Text("Image")) {
+                Button("Camera") {
+                    self.sourceType = .camera
+                    self.isImagePickerDisplay.toggle()
+                }
+                Button("Photo") {
+                    self.sourceType = .photoLibrary
+                    self.isImagePickerDisplay.toggle()
+                }
+            }
+            
+            Section(header: Text("Tags")) {
+                Picker("Selected Tag", selection: $tagInput) {
+                    ForEach(tags, id: \.self) {
+                        Text($0)
                     }
                 }
-                
-            }.padding(.horizontal, 20)
-            
-            TextField("# Add Tags", text: $tagInput)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.vertical, 12)
-                .padding(.horizontal, 20)
-                .onTapGesture {
-                    Picker("Selected Tag", selection: $tagInput) {
-                        ForEach(tags, id: \.self) {
-                            Text($0).tag(tags)
-                        }
-                    }
-                }
-            TextField("Add Location", text: .constant(""))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.vertical, 12)
-                .padding(.horizontal, 20)
-                
-            
+            }
             Button(action: { addPost(username: loginModel.getEmail(), title: title, description: description, image: selectedImage!, tags: tagInput)}, label: {Text("Publish Post").foregroundColor(Color("Logo-Pink")).font(.system(size: 20));
             }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("Logo-Pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
-        }.navigationBarTitle(Text("Add Post"), displayMode: .inline)
-            .navigationBarBackButtonHidden(false)
+        }.navigationTitle("Add Post")
     }
     
     func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
@@ -488,6 +415,122 @@ struct NewPostView: View {
 /**
   NewReportView defines a View for adding new reports.
 */
+
+struct NewReportView1: View {
+    
+        var mapModel: MapViewModel
+        var loginModel: LoginViewModel
+        
+        @State private var navigateTo: AnyView?
+        @State private var selectedDate: Date = Date()
+        @State private var title: String = ""
+        @State private var isActive = false
+        
+    var body: some View {
+            VStack {
+            
+            Form {
+                Section(header: Text("When did you last seen your pet?")) {
+                    DatePicker("Select Date", selection: $selectedDate)
+                        .padding(.horizontal)
+                }
+                NavigationLink(destination: NewReportView2(mapModel: mapModel, loginModel: loginModel)) {
+                    Text("Next")
+                }
+            }
+        }
+    }
+
+}
+
+struct NewReportView2: View {
+    
+    var mapModel: MapViewModel
+    var loginModel: LoginViewModel
+    
+    
+    @State private var navigateTo: AnyView?
+    @State private var description: String = ""
+    @State private var title: String = ""
+    @State private var isActive = false
+    @State private var coordinates = CLLocationCoordinate2D(latitude: 37.333747, longitude: -122.011448)
+    
+    var body: some View {
+            VStack {
+                
+                Form {
+                    Section(header: Text("Where did you last seen your pet?")) {
+                        TextField("Keyword or Zip", text: $description, onEditingChanged: { (changed) in
+                            print("description onEditingChanged - \(changed)")
+                        })
+                        LocationPicker(instructions: "Tap somewhere to select your coordinates", coordinates: $coordinates)
+                    }
+                    NavigationLink(destination: NewReportView3(mapModel: mapModel, loginModel: loginModel)) {
+                        Text("Next")
+                    }
+                }
+
+                
+            }
+        
+    }
+
+}
+
+struct NewReportView3: View {
+    var mapModel: MapViewModel
+    var loginModel: LoginViewModel
+    
+    @State private var navigateTo: AnyView?
+    @State private var selectedImage = UIImage(named: "cat-portrait")
+    @State private var title: String = ""
+    @State private var isActive = true
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State private var isImagePickerDisplay = false
+    @State private var tagInput: String = ""
+    
+    var body: some View {
+        Form {
+                Section(header: Text("Any past pictures?")) {
+                    Button("Camera") {
+                        self.sourceType = .camera
+                        self.isImagePickerDisplay.toggle()
+                    }
+                    Button("Photo") {
+                        self.sourceType = .photoLibrary
+                        self.isImagePickerDisplay.toggle()
+                    }
+                    
+                }
+            NavigationLink(destination: NewReportView4(mapModel: mapModel, loginModel: loginModel)) {
+                Text("Next")
+            }
+            
+            }
+                
+            
+    }
+
+}
+
+struct NewReportView4: View {
+    var mapModel: MapViewModel
+    var loginModel: LoginViewModel
+
+    
+    var body: some View {
+        Form {
+                Section(header: Text("More")) {
+                }
+                }
+                
+            
+    }
+
+}
+
+
+
 struct NewReportView: View {
     var mapModel: MapViewModel
     var loginModel: LoginViewModel
@@ -598,11 +641,14 @@ struct NewReportView: View {
 struct DetailedPostView: View {
     var post: Content
     var images = ["image1", "image2", "image3"]
-        
+    
+    let logoPink = UIColor(red: 231/255, green: 84/255, blue: 128/255, alpha: 1)
+    
     @State var liked = false
+
     
     func setupAppearance() {
-        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color("Logo-Pink"))
+        UIPageControl.appearance().currentPageIndicatorTintColor = logoPink
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.2)
     }
 
