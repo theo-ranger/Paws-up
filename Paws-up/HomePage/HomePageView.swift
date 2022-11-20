@@ -4,7 +4,6 @@
 //
 //  Created by Hanning Xu and Jiayu Shi on 2/12/22.
 //
-
 import UIKit
 import SwiftUI
 import Firebase
@@ -669,7 +668,6 @@ struct DetailedPostView: View {
         
     }
     // TODO: Resize image
-
     func convertToDate(timeStamp: String) -> String {
         let date = NSDate(timeIntervalSince1970: Double(timeStamp)!)
         let formatter = DateFormatter()
