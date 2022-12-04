@@ -132,6 +132,30 @@ struct CardView: View {
     }
 }
 
+
+// TODO: make search case insensitive
+struct SearchView: View {
+    @ObservedObject var postModel: PostViewModel
+    @State private var searchText = ""
+    
+    var body: some View {
+        VStack {
+            Text("")
+                .searchable(text: $searchText)
+            Button(action: {
+                postModel.postRepository.partialFetchItems_copy(inputString: searchText)
+            }, label: {
+                Text("Search for \(searchText)")
+            })
+            Spacer()
+        }.navigationBarItems(trailing: Button(action: {
+            postModel.postRepository.fetchPosts()
+        }, label: {
+            Text("Reset Search")
+        }))
+    }
+}
+
 /**
   PostView defines the subview for the Community Tab.
 */
@@ -148,12 +172,14 @@ struct PostView: View {
         NavigationView {
             VStack {
                 HStack {
-                    Button(action: { }, label: {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(Color("Logo-Pink"))
-                            .padding()
-                            .font(.system(size: 25))
-                    })
+                    NavigationLink(
+                       destination:
+                           SearchView(postModel: postModel)) {
+                               Image(systemName: "magnifyingglass")
+                                   .foregroundColor(Color("Logo-Pink"))
+                                   .padding()
+                                   .font(.system(size: 25))
+                     }
                     Spacer()
                     Menu {
                         Button(action: {
@@ -200,6 +226,8 @@ struct PostView: View {
                               }
                         }
                     }
+                }.refreshable {
+                    print("Do your refresh work here")
                 }
                 .navigationBarHidden(true)
                 .animation(.default, value: true)
