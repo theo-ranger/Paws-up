@@ -482,21 +482,35 @@ struct NewReportView2: View {
     @State private var title: String = ""
     @State private var isActive = false
     @State private var coordinates = CLLocationCoordinate2D(latitude: 37.333747, longitude: -122.011448)
-    
+    @State private var reward: Int = 50
+    let elapsedTime = Binding(
+                get: { $reward },
+                set: { $reward = Int($0) } // Or other custom logic
+            )
+    @State private var isEditing = false
     var body: some View {
             VStack {
                 
-                Form {
-                    Section(header: Text("Where did you last seen your pet?")) {
-                        TextField("Keyword or Zip", text: $description, onEditingChanged: { (changed) in
-                            print("description onEditingChanged - \(changed)")
+                    Section(header: Text("Description")) {
+                        TextField("Weight / Personality / Appearance", text: $description, onEditingChanged: { (changed) in
+                            //print("description onEditingChanged - \(changed)")
                         })
-                        LocationPicker(instructions: "Tap somewhere to select your coordinates", coordinates: $coordinates)
                     }
+                Section(header: Text("Reward Amount (Optional)")) {
+                    
+                }
+                Slider(
+                    value: elapsedTime,
+                    in: 0...100,
+                    onEditingChanged: { editing in
+                        isEditing = editing
+                    }
+                )
+                    
                     NavigationLink(destination: NewReportView3(mapModel: mapModel, loginModel: loginModel)) {
                         Text("Next")
                     }
-                }
+                
 
                 
             }
@@ -516,6 +530,7 @@ struct NewReportView3: View {
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var isImagePickerDisplay = false
     @State private var tagInput: String = ""
+    @State private var phoneNumber: String = ""
     
     var body: some View {
         Form {
@@ -530,6 +545,11 @@ struct NewReportView3: View {
                     }
                     
                 }
+            Section(header: Text("Phone Number")) {
+                TextField("", text: $phoneNumber, onEditingChanged: { (changed) in
+                    //print("description onEditingChanged - \(changed)")
+                })
+            }
             NavigationLink(destination: NewReportView4(mapModel: mapModel, loginModel: loginModel)) {
                 Text("Next")
             }
