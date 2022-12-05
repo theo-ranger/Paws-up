@@ -446,25 +446,83 @@ struct NewPostView: View {
 
 struct NewReportView1: View {
     
-        var mapModel: MapViewModel
-        var loginModel: LoginViewModel
-        
-        @State private var navigateTo: AnyView?
-        @State private var selectedDate: Date = Date()
-        @State private var title: String = ""
-        @State private var isActive = false
-        
+    var mapModel: MapViewModel
+    var loginModel: LoginViewModel
+    
+    @State private var navigateTo: AnyView?
+    @State private var selectedDate: Date = Date()
+    @State private var title: String = ""
+    @State private var isActive = false
+    
+    @State private var bookImage = UIImage(named: "book")
+    
     var body: some View {
-            VStack {
-            
-            Form {
-                Section(header: Text("When did you last seen your pet?")) {
-                    DatePicker("Select Date", selection: $selectedDate)
-                        .padding(.horizontal)
+        VStack {
+            Text("Sorry to hear about that")
+                .font(.system(size: 16, weight: .bold, design: .default))
+            Text("")
+            Text("We are here to help you find your pet!")
+                .font(.system(size: 11, design: .default))
+            Image("woman-with-dog")
+            ZStack {
+                VStack {
+                    Rectangle()
+                        .fill(Color.gray)
+                        .frame(width: 220, height: 2)
+                    Text("d")
+                        .font(.system(size: 9, design: .default))
+                        .opacity(0)
                 }
-                NavigationLink(destination: NewReportView2(mapModel: mapModel, loginModel: loginModel)) {
-                    Text("Next")
+                HStack {
+                    Spacer()
+                    VStack {
+                        Circle()
+                            .strokeBorder(Color.white, lineWidth: 2)
+                            .background(Circle().foregroundColor(Color("Logo-Pink")))
+                            .frame(width: 13, height: 13)
+                        Text("Basic Info")
+                            .font(.system(size: 9, design: .default))
+                            .foregroundColor(Color("Logo-Pink"))
+                    }
+                    Spacer()
+                    VStack {
+                        Circle()
+                            .fill(Color.gray)
+                            .frame(width: 11, height: 11)
+                        Text("Pet Info")
+                            .font(.system(size: 9, design: .default))
+                            .foregroundColor(Color.gray)
+                    }
+                    Spacer()
+                    VStack {
+                        Circle()
+                            .fill(Color.gray)
+                            .frame(width: 11, height: 11)
+                        Text("Contact")
+                            .font(.system(size: 9, design: .default))
+                            .foregroundColor(Color.gray)
+                    }
+                    Spacer()
                 }
+            }
+            Text("When did you lost your pet?")
+                .font(.system(size: 13, weight: .semibold, design: .default))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 50)
+                .padding(.top, 20)
+            HStack {
+                Image(systemName: "calendar")
+                    .padding(.leading, 50)
+                DatePicker("", selection: $selectedDate, in: Date()...)
+                    .padding(.trailing, 100)
+            }
+            Text("Where did you lost your pet?")
+                .font(.system(size: 13, weight: .semibold, design: .default))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 50)
+                .padding(.top, 20)
+            NavigationLink(destination: NewReportView2(mapModel: mapModel, loginModel: loginModel)) {
+                Text("Next")
             }
         }
     }
@@ -482,27 +540,71 @@ struct NewReportView2: View {
     @State private var title: String = ""
     @State private var isActive = false
     @State private var coordinates = CLLocationCoordinate2D(latitude: 37.333747, longitude: -122.011448)
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State private var isImagePickerDisplay = false
+    
+    @State private var isFemale = false
+    @State private var isSpay = false
+    
     
     var body: some View {
-            VStack {
-                
-                Form {
-                    Section(header: Text("Where did you last seen your pet?")) {
-                        TextField("Keyword or Zip", text: $description, onEditingChanged: { (changed) in
-                            print("description onEditingChanged - \(changed)")
+        VStack {
+            Form {
+                Text ("Pets Pictures")
+                VStack {
+                    HStack {
+                        Image("lostpetPic").resizable()
+                            .aspectRatio(1.0, contentMode: .fit)
+                            .clipped()
+                            .frame(width: 96, height: 96)
+                            .cornerRadius(10)
+                        Button(action: {
+                            self.sourceType = .photoLibrary
+                            self.isImagePickerDisplay.toggle()
+                        }, label: {
+                            Image("addlostpet")
                         })
-                        LocationPicker(instructions: "Tap somewhere to select your coordinates", coordinates: $coordinates)
-                    }
-                    NavigationLink(destination: NewReportView3(mapModel: mapModel, loginModel: loginModel)) {
-                        Text("Next")
                     }
                 }
-
-                
+                Text ("Gender")
+                VStack {
+                    HStack {
+                        Button("Female") {
+                            self.isFemale = true
+                        }
+                        Button("Male") {
+                            self.isFemale = false
+                        }
+                        
+                    }
+                }
+                Text ("Spay/Neuter?")
+                VStack {
+                    HStack {
+                        Button("Yes") {
+                            self.isSpay = true
+                        }
+                        Button("No") {
+                            self.isSpay = false
+                        }
+                        
+                    }
+                }
+                Text ("Size")
+                VStack {
+                    HStack {
+                        Button("Small") {}
+                        Button("Medium") {}
+                        Button("Large") {}
+                    }
+                }
+            
+                NavigationLink(destination: NewReportView3(mapModel: mapModel, loginModel: loginModel)) {
+                    Text("Next")
+                }
             }
-        
+        }
     }
-
 }
 
 struct NewReportView3: View {
@@ -512,6 +614,7 @@ struct NewReportView3: View {
     @State private var navigateTo: AnyView?
     @State private var selectedImage = UIImage(named: "cat-portrait")
     @State private var title: String = ""
+    @State private var amount: String = ""
     @State private var isActive = true
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var isImagePickerDisplay = false
@@ -519,17 +622,23 @@ struct NewReportView3: View {
     
     var body: some View {
         Form {
-                Section(header: Text("Any past pictures?")) {
-                    Button("Camera") {
-                        self.sourceType = .camera
-                        self.isImagePickerDisplay.toggle()
-                    }
-                    Button("Photo") {
-                        self.sourceType = .photoLibrary
-                        self.isImagePickerDisplay.toggle()
-                    }
-                    
+            Section(header: Text("Any past pictures?")) {
+                Button("Camera") {
+                    self.sourceType = .camera
+                    self.isImagePickerDisplay.toggle()
                 }
+                Button("Photo") {
+                    self.sourceType = .photoLibrary
+                    self.isImagePickerDisplay.toggle()
+                }
+                
+            }
+            Section(header: Text("Reward Amount")) {
+                            TextField("Enter amount...", text: $amount, onEditingChanged: { (changed) in
+                                print("description onEditingChanged - \(changed)")
+                            })
+                        }
+            
             NavigationLink(destination: NewReportView4(mapModel: mapModel, loginModel: loginModel)) {
                 Text("Next")
             }
@@ -798,5 +907,9 @@ struct View_Previews: PreviewProvider {
     
     static var previews: some View {
         NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
+        NewReportView1(mapModel: MapViewModel(), loginModel: LoginViewModel())
+        NewReportView2(mapModel: MapViewModel(), loginModel: LoginViewModel())
+        NewReportView3(mapModel: MapViewModel(), loginModel: LoginViewModel())
+        NewReportView4(mapModel: MapViewModel(), loginModel: LoginViewModel())
     }
 }
