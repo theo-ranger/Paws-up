@@ -443,27 +443,240 @@ struct NewPostView: View {
 /**
   NewReportView defines a View for adding new reports.
 */
-
 struct NewReportView1: View {
-    
+
     var mapModel: MapViewModel
     var loginModel: LoginViewModel
-    
+
     @State private var navigateTo: AnyView?
     @State private var selectedDate: Date = Date()
     @State private var title: String = ""
     @State private var isActive = false
-    
+
     @State private var bookImage = UIImage(named: "book")
-    
+    @State private var petName: String = ""
+    @State var clicked = [true, false, false]
+
+    var body: some View {
+        GeometryReader { g in
+            VStack {
+                Text("Sorry to hear about that")
+                    .font(.system(size: g.size.width * 0.05, weight: .bold, design: .default))
+                Text("")
+                Text("We are here to help you find your pet!")
+                    .font(.system(size: g.size.width * 0.032))
+                Image("woman-with-dog")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: g.size.width * 0.32, height: g.size.width * 0.32)
+                ZStack {
+                    VStack {
+                        Rectangle()
+                            .fill(Color.gray)
+                            .frame(width: 220, height: 2)
+                        Text("d")
+                            .font(.system(size: 9, design: .default))
+                            .opacity(0)
+                    }
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Circle()
+                                .strokeBorder(Color.white, lineWidth: 2)
+                                .background(Circle().foregroundColor(Color("Logo-Pink")))
+                                .frame(width: g.size.width * 0.032, height: g.size.width * 0.032)
+                            Text("Basic Info")
+                                .font(.system(size: g.size.width * 0.032))
+                                .foregroundColor(Color("Logo-Pink"))
+                        }
+                        Spacer()
+                        VStack {
+                            Circle()
+                                .fill(Color.gray)
+                                .frame(width: g.size.width * 0.032, height: g.size.width * 0.032)
+                            Text("Pet Info")
+                                .font(.system(size: g.size.width * 0.032))
+                                .foregroundColor(Color.gray)
+                        }
+                        Spacer()
+                        VStack {
+                            Circle()
+                                .fill(Color.gray)
+                                .frame(width: g.size.width * 0.032, height: g.size.width * 0.032)
+                            Text("Contact")
+                                .font(.system(size: g.size.width * 0.032))
+                                .foregroundColor(Color.gray)
+                        }
+                        Spacer()
+                    }
+                }
+                VStack {
+                    Text("Species")
+                        .font(.system(size: g.size.width * 0.032, weight: .semibold, design: .default))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 50)
+                        .padding(.top, 20)
+                    if clicked[0] {
+                        HStack {
+                            Button(action: {clicked = [true, false, false]}) {
+                                HStack {
+                                    Image("cat")
+                                    Text("Cat")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .background(Color("Logo-Pink"))
+                            .cornerRadius(10)
+                            Button(action: {clicked = [false, true, false]}) {
+                                HStack {
+                                    Image("pet")
+                                    Text("Dog")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                            Button(action: {clicked = [false, false, true]}) {
+                                HStack {
+                                    Image("rabbit")
+                                    Text("Other")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                        }
+                    } else if clicked[1] {
+                        HStack {
+                            Button(action: {clicked = [true, false, false]}) {
+                                HStack {
+                                    Image("cat")
+                                    Text("Cat")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                            Button(action: {clicked = [false, true, false]}) {
+                                HStack {
+                                    Image("pet")
+                                    Text("Dog")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .background(Color("Logo-Pink"))
+                            .cornerRadius(10)
+                            Button(action: {clicked = [false, false, true]}) {
+                                HStack {
+                                    Image("rabbit")
+                                    Text("Other")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                        }
+                    } else {
+                        HStack {
+                            Button(action: {clicked = [true, false, false]}) {
+                                HStack {
+                                    Image("cat")
+                                    Text("Cat")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                            Button(action: {clicked = [false, true, false]}) {
+                                HStack {
+                                    Image("pet")
+                                    Text("Dog")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                            Button(action: {clicked = [false, false, true]}) {
+                                HStack {
+                                    Image("rabbit")
+                                    Text("Other")
+                                }
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .background(Color("Logo-Pink"))
+                            .cornerRadius(10)
+                        }
+                    }
+
+                }
+                VStack {
+                    Text("Pet's name")
+                        .font(.system(size: g.size.width * 0.032, weight: .semibold, design: .default))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 50)
+                        .padding(.top, 20)
+                    TextField("Enter your pet's name...", text: $title)
+                        .padding(.leading, 50)
+                        .padding(.trailing, 50)
+                        .textFieldStyle(.roundedBorder)
+                }
+                Text("When did you lost your pet?")
+                    .font(.system(size: g.size.width * 0.032, weight: .semibold, design: .default))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 50)
+                    .padding(.top, 20)
+                HStack {
+                    Image(systemName: "calendar")
+                        .padding(.leading, 50)
+                    DatePicker("", selection: $selectedDate, in: Date()...)
+                        .padding(.trailing, 60)
+                }
+                VStack {
+                    Text("Where did you lost your pet?")
+                        .font(.system(size: g.size.width * 0.032, weight: .semibold, design: .default))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 50)
+                        .padding(.top, 20)
+                    HStack {
+                        Image(systemName: "location")
+                            .padding(.leading, 50)
+
+                    }
+                    Spacer()
+                    NavigationLink(destination: NewReportView2(mapModel: mapModel, loginModel: loginModel)) {
+                        Text("Next")
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
+struct NewReportView2: View {
+
+    var mapModel: MapViewModel
+    var loginModel: LoginViewModel
+
+    @State private var navigateTo: AnyView?
+    @State private var description: String = ""
+    @State private var title: String = ""
+    @State private var isActive = false
+    @State private var coordinates = CLLocationCoordinate2D(latitude: 37.333747, longitude: -122.011448)
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State private var isImagePickerDisplay = false
+
+    @State private var isFemale = false
+    @State private var isSpay = false
+    @State private var petdescription: String = ""
+
+
     var body: some View {
         VStack {
-            Text("Sorry to hear about that")
-                .font(.system(size: 16, weight: .bold, design: .default))
-            Text("")
-            Text("We are here to help you find your pet!")
-                .font(.system(size: 11, design: .default))
-            Image("woman-with-dog")
             ZStack {
                 VStack {
                     Rectangle()
@@ -505,107 +718,68 @@ struct NewReportView1: View {
                     Spacer()
                 }
             }
-            Text("When did you lost your pet?")
-                .font(.system(size: 13, weight: .semibold, design: .default))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 50)
-                .padding(.top, 20)
-            HStack {
-                Image(systemName: "calendar")
-                    .padding(.leading, 50)
-                DatePicker("", selection: $selectedDate, in: Date()...)
-                    .padding(.trailing, 100)
-            }
-            Text("Where did you lost your pet?")
-                .font(.system(size: 13, weight: .semibold, design: .default))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 50)
-                .padding(.top, 20)
-            NavigationLink(destination: NewReportView2(mapModel: mapModel, loginModel: loginModel)) {
-                Text("Next")
-            }
-        }
-    }
-
-}
-
-struct NewReportView2: View {
-    
-    var mapModel: MapViewModel
-    var loginModel: LoginViewModel
-    
-    
-    @State private var navigateTo: AnyView?
-    @State private var description: String = ""
-    @State private var title: String = ""
-    @State private var isActive = false
-    @State private var coordinates = CLLocationCoordinate2D(latitude: 37.333747, longitude: -122.011448)
-    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    @State private var isImagePickerDisplay = false
-    
-    @State private var isFemale = false
-    @State private var isSpay = false
-    
-    
-    var body: some View {
-        VStack {
-            Form {
-                Text ("Pets Pictures")
-                VStack {
-                    HStack {
-                        Image("lostpetPic").resizable()
+            Text ("Pets Pictures").frame(maxWidth: .infinity, alignment: .leading).padding()
+            VStack {
+                HStack {
+                    Image("tiff").resizable()
+                        .aspectRatio(1.0, contentMode: .fit)
+                        .clipped()
+                        .frame(width: 96, height: 96)
+                        .cornerRadius(10)
+                    Button(action: {
+                        self.sourceType = .photoLibrary
+                        self.isImagePickerDisplay.toggle()
+                    }, label: {
+                        Image("add button").resizable()
                             .aspectRatio(1.0, contentMode: .fit)
                             .clipped()
                             .frame(width: 96, height: 96)
                             .cornerRadius(10)
-                        Button(action: {
-                            self.sourceType = .photoLibrary
-                            self.isImagePickerDisplay.toggle()
-                        }, label: {
-                            Image("addlostpet")
-                        })
-                    }
-                }
-                Text ("Gender")
-                VStack {
-                    HStack {
-                        Button("Female") {
-                            self.isFemale = true
-                        }
-                        Button("Male") {
-                            self.isFemale = false
-                        }
-                        
-                    }
-                }
-                Text ("Spay/Neuter?")
-                VStack {
-                    HStack {
-                        Button("Yes") {
-                            self.isSpay = true
-                        }
-                        Button("No") {
-                            self.isSpay = false
-                        }
-                        
-                    }
-                }
-                Text ("Size")
-                VStack {
-                    HStack {
-                        Button("Small") {}
-                        Button("Medium") {}
-                        Button("Large") {}
-                    }
-                }
-            
+                    })
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }.padding()
+            Text ("Gender").frame(maxWidth: .infinity, alignment: .leading).padding()
+            VStack {
+                HStack {
+                    Button("Female") {
+                        self.isFemale = true
+                    }.buttonStyle(.bordered).tint(.pink)
+                    Button("Male") {
+                        self.isFemale = false
+                    }.buttonStyle(.bordered).tint(.blue)
+
+                }.padding(.top, -20)
+            }.frame(maxWidth: .infinity, alignment: .leading).padding()
+            Text ("Spay/Neuter?").frame(maxWidth: .infinity, alignment: .leading).padding()
+            VStack {
+                HStack {
+                    Button("Yes") {
+                        self.isSpay = true
+                    }.buttonStyle(.bordered)
+                    Button("No") {
+                        self.isSpay = false
+                    }.buttonStyle(.bordered)
+                }.padding(.top, -20)
+            }.frame(maxWidth: .infinity, alignment: .leading).padding()
+            Text ("Size").frame(maxWidth: .infinity, alignment: .leading).padding()
+            VStack {
+                HStack {
+                    Button("Small") {}.buttonStyle(.bordered)
+                    Button("Medium") {}.buttonStyle(.bordered)
+                    Button("Large") {}.buttonStyle(.bordered)
+                }.padding(.top, -20)
+            }.frame(maxWidth: .infinity, alignment: .leading).padding().tint(.orange)
+            Group {
+                Text("Pet Description").frame(maxWidth: .infinity, alignment: .leading).padding()
+                TextField("Weight / Personality / Appearance", text: $petdescription).textFieldStyle(.roundedBorder).padding().padding(.top, -20)
                 NavigationLink(destination: NewReportView3(mapModel: mapModel, loginModel: loginModel)) {
-                    Text("Next")
-                }
+                            Text("Next")
+                        }
             }
         }
     }
 }
+
 
 struct NewReportView3: View {
     var mapModel: MapViewModel
@@ -619,35 +793,94 @@ struct NewReportView3: View {
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var isImagePickerDisplay = false
     @State private var tagInput: String = ""
+    @State private var reward = 50.0
+    @State private var isEditing = false
     
     var body: some View {
-        Form {
-            Section(header: Text("Any past pictures?")) {
-                Button("Camera") {
-                    self.sourceType = .camera
-                    self.isImagePickerDisplay.toggle()
-                }
-                Button("Photo") {
-                    self.sourceType = .photoLibrary
-                    self.isImagePickerDisplay.toggle()
-                }
-                
+        VStack {
+            VStack {
+                Text("Sorry to hear about that")
+                    .font(.system(size: 18, weight: .bold, design: .default))
+                Text("")
+                Text("We are here to help you find your pet!")
+                    .font(.system(size: 14, design: .default))
             }
-            Section(header: Text("Reward Amount")) {
-                            TextField("Enter amount...", text: $amount, onEditingChanged: { (changed) in
-                                print("description onEditingChanged - \(changed)")
-                            })
-                        }
+            
+            ZStack {
+                VStack {
+                    Rectangle()
+                        .fill(Color.gray)
+                        .frame(width: 220, height: 2)
+                    Text("d")
+                        .font(.system(size: 9, design: .default))
+                        .opacity(0)
+                }
+                HStack {
+                    Spacer()
+                    VStack {
+                        Circle()
+                            .strokeBorder(Color.white, lineWidth: 2)
+                            .background(Circle().foregroundColor(Color("Logo-Pink")))
+                            .frame(width: 13, height: 13)
+                        Text("Basic Info")
+                            .font(.system(size: 9, design: .default))
+                            .foregroundColor(Color("Logo-Pink"))
+                    }
+                    Spacer()
+                    VStack {
+                        Circle()
+                            .fill(Color.gray)
+                            .frame(width: 11, height: 11)
+                        Text("Pet Info")
+                            .font(.system(size: 9, design: .default))
+                            .foregroundColor(Color.gray)
+                    }
+                    Spacer()
+                    VStack {
+                        Circle()
+                            .fill(Color.gray)
+                            .frame(width: 11, height: 11)
+                        Text("Contact")
+                            .font(.system(size: 9, design: .default))
+                            .foregroundColor(Color.gray)
+                    }
+                    Spacer()
+                }
+            }
+            
+            Section(header: Text("Phone number")
+                .frame(maxWidth: .infinity, alignment: .leading).padding()) {
+                    TextField("enter", text: $amount).textFieldStyle(.roundedBorder).padding().padding(.top, -20)
+                }
+            Text("or")
+            Section() {
+                TextField("Enter amount...", text: $amount, onEditingChanged: { (changed) in
+                    print("description onEditingChanged - \(changed)")
+                })
+            }
+            
+            Section(header: Text("Reward Amount (Optional)")
+                .frame(maxWidth: .infinity, alignment: .leading).padding()) {
+                    VStack {
+                        Slider(
+                            value: $reward,
+                            in: 0...1000,
+                            onEditingChanged: { editing in
+                                isEditing = editing
+                            }
+                        )
+                        Text("\(Int(reward))")
+                            .foregroundColor(isEditing ? .red : .blue)
+                    }
+                }
+            
             
             NavigationLink(destination: NewReportView4(mapModel: mapModel, loginModel: loginModel)) {
                 Text("Next")
-            }
-            
-            }
                 
-            
+            }
+        }
     }
-
 }
 
 struct NewReportView4: View {
