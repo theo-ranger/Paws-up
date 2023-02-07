@@ -673,7 +673,9 @@ struct NewReportView2: View {
     @State private var isFemale = false
     @State private var isSpay = false
     @State private var petdescription: String = ""
-
+    @State var clicked_gender = [true, false]
+    @State var clicked_spay = [true, false]
+    @State var clicked_size = [true, false, false]
 
     var body: some View {
         VStack {
@@ -739,36 +741,143 @@ struct NewReportView2: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }.padding()
             Text ("Gender").frame(maxWidth: .infinity, alignment: .leading).padding()
-            VStack {
+            if clicked_gender[0] {
                 HStack {
-                    Button("Female") {
-                        self.isFemale = true
-                    }.buttonStyle(.bordered).tint(.pink)
-                    Button("Male") {
-                        self.isFemale = false
-                    }.buttonStyle(.bordered).tint(.blue)
-
-                }.padding(.top, -20)
-            }.frame(maxWidth: .infinity, alignment: .leading).padding()
+                    Button(action: {clicked_gender = [true, false]}) {
+                      Text("Female")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .background(Color("Logo-Pink"))
+                    .cornerRadius(10)
+                    Button(action: {clicked_gender = [false, true]}) {
+                        Text("Male")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                }
+            } else if clicked_gender[1] {
+                HStack {
+                    Button(action: {clicked_gender = [true, false]}) {
+                        Text("Female")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                    Button(action: {clicked_gender = [false, true]}) {
+                        Text("Male")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .background(Color("Logo-Pink"))
+                    .cornerRadius(10)
+                }
+            }
             Text ("Spay/Neuter?").frame(maxWidth: .infinity, alignment: .leading).padding()
-            VStack {
+            if clicked_spay[0] {
                 HStack {
-                    Button("Yes") {
-                        self.isSpay = true
-                    }.buttonStyle(.bordered)
-                    Button("No") {
-                        self.isSpay = false
-                    }.buttonStyle(.bordered)
-                }.padding(.top, -20)
-            }.frame(maxWidth: .infinity, alignment: .leading).padding()
+                    Button(action: {clicked_spay = [true, false]}) {
+                      Text("Yes")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .background(Color("Logo-Pink"))
+                    .cornerRadius(10)
+                    Button(action: {clicked_spay = [false, true]}) {
+                        Text("No")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                }
+            } else if clicked_spay[1] {
+                HStack {
+                    Button(action: {clicked_spay = [true, false]}) {
+                        Text("Yes")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                    Button(action: {clicked_spay = [false, true]}) {
+                        Text("No")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .background(Color("Logo-Pink"))
+                    .cornerRadius(10)
+                }
+            }
             Text ("Size").frame(maxWidth: .infinity, alignment: .leading).padding()
-            VStack {
+            if clicked_size[0] {
                 HStack {
-                    Button("Small") {}.buttonStyle(.bordered)
-                    Button("Medium") {}.buttonStyle(.bordered)
-                    Button("Large") {}.buttonStyle(.bordered)
-                }.padding(.top, -20)
-            }.frame(maxWidth: .infinity, alignment: .leading).padding().tint(.orange)
+                    Button(action: {clicked_size = [true, false, false]}) {
+                        Text("Small")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .background(Color("Logo-Pink"))
+                    .cornerRadius(10)
+                    Button(action: {clicked_size = [false, true, false]}) {
+                        Text("Medium")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                    Button(action: {clicked_size = [false, false, true]}) {
+                        Text("Large")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                }
+            } else if clicked_size[1] {
+                HStack {
+                    Button(action: {clicked_size = [true, false, false]}) {
+                        Text("Small")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                    Button(action: {clicked_size = [false, true, false]}) {
+                        Text("Medium")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .background(Color("Logo-Pink"))
+                    .cornerRadius(10)
+                    Button(action: {clicked_size = [false, false, true]}) {
+                        Text("Large")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                }
+            } else {
+                HStack {
+                    Button(action: {clicked_size = [true, false, false]}) {
+                        Text("Small")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                    Button(action: {clicked_size = [false, true, false]}) {
+                        Text("Medium")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .cornerRadius(10)
+                    Button(action: {clicked_size = [false, false, true]}) {
+                        Text("Large")
+                    }
+                    .foregroundColor(Color.black)
+                    .buttonStyle(.bordered)
+                    .background(Color("Logo-Pink"))
+                    .cornerRadius(10)
+                }
+            }
+
+        }
             Group {
                 Text("Pet Description").frame(maxWidth: .infinity, alignment: .leading).padding()
                 TextField("Weight / Personality / Appearance", text: $petdescription).textFieldStyle(.roundedBorder).padding().padding(.top, -20)
@@ -777,7 +886,7 @@ struct NewReportView2: View {
                         }
             }
         }
-    }
+    
 }
 
 
