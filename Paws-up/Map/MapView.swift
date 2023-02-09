@@ -43,6 +43,36 @@ struct MapView: View {
                 if showingDetail {
                     SmallCardView(location: currentLocation, showingDetail: $showingDetail).offset(y: UIScreen.main.bounds.size.height / 2 - 220)
                 }
+                HStack {
+                    NavigationLink(destination: NewReportView1(mapModel: MapViewModel(), loginModel: LoginViewModel())) {
+        
+                        Text("I found a pet")
+                            .foregroundColor(Color.orange)
+                            .padding()
+                    }
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding()
+                    .shadow(color: Color.black.opacity(0.3),
+                                radius: 3,
+                                x: 3,
+                                y: 3)
+                    
+                    NavigationLink(destination: NewReportView1(mapModel: MapViewModel(), loginModel: LoginViewModel())) {
+        
+                        Text("I found a pet")
+                            .foregroundColor(Color.white)
+                            .padding()
+                    }
+                    .background(Color.orange)
+                    .cornerRadius(10)
+                    .padding()
+                    .shadow(color: Color.black.opacity(0.3),
+                                radius: 3,
+                                x: 3,
+                                y: 3)
+                }.frame(maxHeight: .infinity, alignment: .bottom)
+                
             }
         }
     }
@@ -71,8 +101,12 @@ struct MarkerView: View {
             }) {
                 Image(uiImage: location.image).resizable().frame(width: 40, height: 40).clipShape(Circle())
             }
+            
         }
+     
+        
     }
+    
 }
 
 struct SmallCardView: View {
@@ -108,6 +142,7 @@ struct SmallCardView: View {
                 Image(systemName: "multiply").resizable()
                     .frame(width: 20.0, height: 20.0).foregroundColor(.white)
             }.offset(x: (UIScreen.main.bounds.size.width / 2) - 50, y: -55)
+            
         }
     }
 }
@@ -219,3 +254,4 @@ struct RescueView_Previews: PreviewProvider {
         MapView(rescueModel: MapViewModel(), loginModel: LoginViewModel())
     }
 }
+
