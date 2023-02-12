@@ -10,6 +10,7 @@
 		02113C0A28E10A880073B34D /* MapItemPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 02113C0928E10A880073B34D /* MapItemPicker */; };
 		02113C0D28E11F860073B34D /* LocationPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 02113C0C28E11F860073B34D /* LocationPicker */; };
 		022288FA28C568910095E46A /* MapTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022288F928C568910095E46A /* MapTestView.swift */; };
+		022F78152998538E00850135 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022F78142998538E00850135 /* ProfileView.swift */; };
 		02712E852872859200E698F9 /* MapDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02712E842872859200E698F9 /* MapDataSource.swift */; };
 		02712E872872860C00E698F9 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02712E862872860C00E698F9 /* DataManager.swift */; };
 		028153B328BAA8D2009B70ED /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 028153B228BAA8D2009B70ED /* FirebaseFunctions */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		022288F928C568910095E46A /* MapTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTestView.swift; sourceTree = "<group>"; };
+		022F78142998538E00850135 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		02712E842872859200E698F9 /* MapDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataSource.swift; sourceTree = "<group>"; };
 		02712E862872860C00E698F9 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		02873E2627B8CB5E001D46CC /* Paws-up.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Paws-up.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -205,6 +207,7 @@
 			children = (
 				965BAFD7284877F8008468E6 /* PostRepository.swift */,
 				9653E3262861615600004B48 /* HomePageView.swift */,
+				022F78142998538E00850135 /* ProfileView.swift */,
 				02AE4C2528A07C2A0081F310 /* FilterView.swift */,
 				9653E3282861616D00004B48 /* HomePageModel.swift */,
 				9653E32A2861617D00004B48 /* HomePageViewModel.swift */,
@@ -365,6 +368,7 @@
 				02873E2C27B8CB5E001D46CC /* StarterView.swift in Sources */,
 				9653E331286161A600004B48 /* MapViewModel.swift in Sources */,
 				9653E32D2861619000004B48 /* MapView.swift in Sources */,
+				022F78152998538E00850135 /* ProfileView.swift in Sources */,
 				02712E852872859200E698F9 /* MapDataSource.swift in Sources */,
 				9653E32B2861617D00004B48 /* HomePageViewModel.swift in Sources */,
 				9653E33328616A8000004B48 /* DonationView.swift in Sources */,

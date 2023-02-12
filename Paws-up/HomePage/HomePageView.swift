@@ -387,6 +387,8 @@ struct ProfileView: View {
 struct NewPostView: View {
     var postModel: PostViewModel
     var loginModel: LoginViewModel
+    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     @State private var title: String = ""
     @State private var description: String = ""
@@ -395,6 +397,17 @@ struct NewPostView: View {
     @State private var isImagePickerDisplay = false
     @State private var tagInput: String = ""
     private let tags: [String] = ["Dogs", "Cats", "Adoption"]
+    
+    var btnBack : some View { Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                    Image("vector") // set image here
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.white)
+                    }
+                }
+            }
     
     var body: some View {
         Form {
@@ -433,6 +446,8 @@ struct NewPostView: View {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
         }.navigationTitle("Add Post")
+            .navigationBarBackButtonHidden(true)
+                    .navigationBarItems(leading: btnBack)
     }
     
     func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
@@ -456,6 +471,19 @@ struct NewReportView1: View {
     @State private var bookImage = UIImage(named: "book")
     @State private var petName: String = ""
     @State var clicked = [true, false, false]
+    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    var btnBack : some View { Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                    Image("vector") // set image here
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.white)
+                    }
+                }
+            }
 
     var body: some View {
         GeometryReader { g in
@@ -648,6 +676,8 @@ struct NewReportView1: View {
                     Spacer()
                     NavigationLink(destination: NewReportView2(mapModel: mapModel, loginModel: loginModel)) {
                         Text("Next")
+                            .navigationBarBackButtonHidden(true)
+                            .navigationBarItems(leading: btnBack)
                     }
                 }
             }
@@ -672,221 +702,190 @@ struct NewReportView2: View {
 
     @State private var isFemale = false
     @State private var isSpay = false
-    @State private var petdescription: String = ""
     @State var clicked_gender = [true, false]
     @State var clicked_spay = [true, false]
-    @State var clicked_size = [true, false, false]
-
-    var body: some View {
-        VStack {
-            ZStack {
-                VStack {
-                    Rectangle()
-                        .fill(Color.gray)
-                        .frame(width: 220, height: 2)
-                    Text("d")
-                        .font(.system(size: 9, design: .default))
-                        .opacity(0)
-                }
-                HStack {
-                    Spacer()
-                    VStack {
-                        Circle()
-                            .strokeBorder(Color.white, lineWidth: 2)
-                            .background(Circle().foregroundColor(Color("Logo-Pink")))
-                            .frame(width: 13, height: 13)
-                        Text("Basic Info")
-                            .font(.system(size: 9, design: .default))
-                            .foregroundColor(Color("Logo-Pink"))
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    var btnBack : some View { Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                    Image("vector") // set image here
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.white)
                     }
-                    Spacer()
-                    VStack {
-                        Circle()
-                            .fill(Color.gray)
-                            .frame(width: 11, height: 11)
-                        Text("Pet Info")
-                            .font(.system(size: 9, design: .default))
-                            .foregroundColor(Color.gray)
-                    }
-                    Spacer()
-                    VStack {
-                        Circle()
-                            .fill(Color.gray)
-                            .frame(width: 11, height: 11)
-                        Text("Contact")
-                            .font(.system(size: 9, design: .default))
-                            .foregroundColor(Color.gray)
-                    }
-                    Spacer()
                 }
             }
-            Text ("Pets Pictures").frame(maxWidth: .infinity, alignment: .leading).padding()
+
+    var body: some View {
+        GeometryReader { g in
             VStack {
-                HStack {
-                    Image("tiff").resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
-                        .clipped()
-                        .frame(width: 96, height: 96)
-                        .cornerRadius(10)
-                    Button(action: {
-                        self.sourceType = .photoLibrary
-                        self.isImagePickerDisplay.toggle()
-                    }, label: {
-                        Image("add button").resizable()
+                Group {
+                    Text("Sorry to hear about that")
+                        .font(.system(size: g.size.width * 0.05, weight: .bold, design: .default))
+                    Text("")
+                    Text("We are here to help you find your pet!")
+                        .font(.system(size: g.size.width * 0.032))
+                }
+                Group {
+                    ZStack {
+                        VStack {
+                            Rectangle()
+                                .fill(Color.gray)
+                                .frame(width: 220, height: 2)
+                            Text("d")
+                                .font(.system(size: 9, design: .default))
+                                .opacity(0)
+                        }
+                        HStack {
+                            Spacer()
+                            VStack {
+                                Circle()
+                                    .strokeBorder(Color.white, lineWidth: 2)
+                                    .background(Circle().foregroundColor(Color("Logo-Pink")))
+                                    .frame(width: g.size.width * 0.032, height: g.size.width * 0.032)
+                                Text("Basic Info")
+                                    .font(.system(size: g.size.width * 0.032))
+                                    .foregroundColor(Color("Logo-Pink"))
+                            }
+                            Spacer()
+                            VStack {
+                                Circle()
+                                    .strokeBorder(Color.white, lineWidth: 2)
+                                    .background(Circle().foregroundColor(Color("Logo-Pink")))
+                                    .frame(width: g.size.width * 0.032, height: g.size.width * 0.032)
+                                Text("Pet Info")
+                                    .font(.system(size: g.size.width * 0.032))
+                                    .foregroundColor(Color.gray)
+                            }
+                            Spacer()
+                            VStack {
+                                Circle()
+                                    .fill(Color.gray)
+                                    .frame(width: g.size.width * 0.032, height: g.size.width * 0.032)
+                                Text("Contact")
+                                    .font(.system(size: g.size.width * 0.032))
+                                    .foregroundColor(Color.gray)
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+                Group {
+                    Text("Pets Pictures")
+                        .font(.system(size: g.size.width * 0.032, weight: .semibold, design: .default))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 50)
+                        .padding(.top, 20)
+                    HStack {
+                        Image("tiff").resizable()
                             .aspectRatio(1.0, contentMode: .fit)
                             .clipped()
                             .frame(width: 96, height: 96)
                             .cornerRadius(10)
-                    })
-                }.frame(maxWidth: .infinity, alignment: .leading)
-            }.padding()
-            Text ("Gender").frame(maxWidth: .infinity, alignment: .leading).padding()
-            if clicked_gender[0] {
-                HStack {
-                    Button(action: {clicked_gender = [true, false]}) {
-                      Text("Female")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .background(Color("Logo-Pink"))
-                    .cornerRadius(10)
-                    Button(action: {clicked_gender = [false, true]}) {
-                        Text("Male")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
+                            .offset(x:50)
+                        Button(action: {
+                            self.sourceType = .photoLibrary
+                            self.isImagePickerDisplay.toggle()
+                        }, label: {
+                            Image("addButton").resizable()
+                                .aspectRatio(1.0, contentMode: .fit)
+                                .clipped()
+                                .frame(width: 96, height: 96)
+                                .cornerRadius(10)
+                                .offset(x:50)
+                        })
+                    }.frame(maxWidth: .infinity, alignment: .leading)
                 }
-            } else if clicked_gender[1] {
-                HStack {
-                    Button(action: {clicked_gender = [true, false]}) {
-                        Text("Female")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                    Button(action: {clicked_gender = [false, true]}) {
-                        Text("Male")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .background(Color("Logo-Pink"))
-                    .cornerRadius(10)
-                }
-            }
-            Text ("Spay/Neuter?").frame(maxWidth: .infinity, alignment: .leading).padding()
-            if clicked_spay[0] {
-                HStack {
-                    Button(action: {clicked_spay = [true, false]}) {
-                      Text("Yes")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .background(Color("Logo-Pink"))
-                    .cornerRadius(10)
-                    Button(action: {clicked_spay = [false, true]}) {
-                        Text("No")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                }
-            } else if clicked_spay[1] {
-                HStack {
-                    Button(action: {clicked_spay = [true, false]}) {
-                        Text("Yes")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                    Button(action: {clicked_spay = [false, true]}) {
-                        Text("No")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .background(Color("Logo-Pink"))
-                    .cornerRadius(10)
-                }
-            }
-            Text ("Size").frame(maxWidth: .infinity, alignment: .leading).padding()
-            if clicked_size[0] {
-                HStack {
-                    Button(action: {clicked_size = [true, false, false]}) {
-                        Text("Small")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .background(Color("Logo-Pink"))
-                    .cornerRadius(10)
-                    Button(action: {clicked_size = [false, true, false]}) {
-                        Text("Medium")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                    Button(action: {clicked_size = [false, false, true]}) {
-                        Text("Large")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                }
-            } else if clicked_size[1] {
-                HStack {
-                    Button(action: {clicked_size = [true, false, false]}) {
-                        Text("Small")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                    Button(action: {clicked_size = [false, true, false]}) {
-                        Text("Medium")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .background(Color("Logo-Pink"))
-                    .cornerRadius(10)
-                    Button(action: {clicked_size = [false, false, true]}) {
-                        Text("Large")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                }
-            } else {
-                HStack {
-                    Button(action: {clicked_size = [true, false, false]}) {
-                        Text("Small")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                    Button(action: {clicked_size = [false, true, false]}) {
-                        Text("Medium")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .cornerRadius(10)
-                    Button(action: {clicked_size = [false, false, true]}) {
-                        Text("Large")
-                    }
-                    .foregroundColor(Color.black)
-                    .buttonStyle(.bordered)
-                    .background(Color("Logo-Pink"))
-                    .cornerRadius(10)
-                }
-            }
-
-        }
-            Group {
-                Text("Pet Description").frame(maxWidth: .infinity, alignment: .leading).padding()
-                TextField("Weight / Personality / Appearance", text: $petdescription).textFieldStyle(.roundedBorder).padding().padding(.top, -20)
-                NavigationLink(destination: NewReportView3(mapModel: mapModel, loginModel: loginModel)) {
-                            Text("Next")
+                Group {
+                    Text("Gender")
+                        .font(.system(size: g.size.width * 0.032, weight: .semibold, design: .default))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 50)
+                        .padding(.top, 20)
+                    if clicked_gender[0] {
+                        HStack {
+                            Button(action: {clicked_gender = [true, false]}) {
+                                Text("Female")
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .background(Color("Logo-Pink"))
+                            .cornerRadius(10)
+                            Button(action: {clicked_gender = [false, true]}) {
+                                Text("Male")
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
                         }
+                    } else if clicked_gender[1] {
+                        HStack {
+                            Button(action: {clicked_gender = [true, false]}) {
+                                Text("Female")
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                            Button(action: {clicked_gender = [false, true]}) {
+                                Text("Male")
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .background(Color("Logo-Pink"))
+                            .cornerRadius(10)
+                        }
+                    }
+                }
+                Group {
+                    Text("Spay/Neuter?")
+                        .font(.system(size: g.size.width * 0.032, weight: .semibold, design: .default))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 50)
+                        .padding(.top, 20)
+                    if clicked_spay[0] {
+                        HStack {
+                            Button(action: {clicked_spay = [true, false]}) {
+                                Text("Yes")
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .background(Color("Logo-Pink"))
+                            .cornerRadius(10)
+                            Button(action: {clicked_spay = [false, true]}) {
+                                Text("No")
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                        }
+                    } else if clicked_spay[1] {
+                        HStack {
+                            Button(action: {clicked_spay = [true, false]}) {
+                                Text("Yes")
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .cornerRadius(10)
+                            Button(action: {clicked_spay = [false, true]}) {
+                                Text("No")
+                            }
+                            .foregroundColor(Color.black)
+                            .buttonStyle(.bordered)
+                            .background(Color("Logo-Pink"))
+                            .cornerRadius(10)
+                        }
+                    }
+                }
+            
+                NavigationLink(destination: NewReportView3(mapModel: mapModel, loginModel: loginModel)) {
+                    Text("Next")
+                        .navigationBarBackButtonHidden(true)
+                        .navigationBarItems(leading: btnBack)
+                }
             }
         }
-    
+    }
 }
 
 
@@ -904,6 +903,23 @@ struct NewReportView3: View {
     @State private var tagInput: String = ""
     @State private var reward = 50.0
     @State private var isEditing = false
+    @State private var DM = false
+    @State private var noReward = false
+    @State private var petdescription: String = ""
+    @State var clicked_size = [true, false, false]
+    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    var btnBack : some View { Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                    Image("vector") // set image here
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.white)
+                    }
+                }
+            }
     
     var body: some View {
         VStack {
@@ -938,37 +954,133 @@ struct NewReportView3: View {
                     Spacer()
                     VStack {
                         Circle()
-                            .fill(Color.gray)
-                            .frame(width: 11, height: 11)
+                            .strokeBorder(Color.white, lineWidth: 2)
+                            .background(Circle().foregroundColor(Color("Logo-Pink")))
+                            .frame(width: 13, height: 13)
                         Text("Pet Info")
                             .font(.system(size: 9, design: .default))
-                            .foregroundColor(Color.gray)
+                            .foregroundColor(Color("Logo-Pink"))
                     }
                     Spacer()
                     VStack {
                         Circle()
-                            .fill(Color.gray)
-                            .frame(width: 11, height: 11)
+                            .strokeBorder(Color.white, lineWidth: 2)
+                            .background(Circle().foregroundColor(Color("Logo-Pink")))
+                            .frame(width: 13, height: 13)
                         Text("Contact")
                             .font(.system(size: 9, design: .default))
-                            .foregroundColor(Color.gray)
+                            .foregroundColor(Color("Logo-Pink"))
                     }
                     Spacer()
                 }
             }
             
+            Group {
+                Text("Size")
+                    .frame(maxWidth: .infinity, alignment: .leading).padding()
+                if clicked_size[0] {
+                    HStack {
+                        Button(action: {clicked_size = [true, false, false]}) {
+                            Text("Small")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .background(Color("Logo-Pink"))
+                        .cornerRadius(10)
+                        Button(action: {clicked_size = [false, true, false]}) {
+                            Text("Medium")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .cornerRadius(10)
+                        Button(action: {clicked_size = [false, false, true]}) {
+                            Text("Large")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .cornerRadius(10)
+                    }
+                } else if clicked_size[1] {
+                    HStack {
+                        Button(action: {clicked_size = [true, false, false]}) {
+                            Text("Small")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .cornerRadius(10)
+                        Button(action: {clicked_size = [false, true, false]}) {
+                            Text("Medium")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .background(Color("Logo-Pink"))
+                        .cornerRadius(10)
+                        Button(action: {clicked_size = [false, false, true]}) {
+                            Text("Large")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .cornerRadius(10)
+                    }
+                } else {
+                    HStack {
+                        Button(action: {clicked_size = [true, false, false]}) {
+                            Text("Small")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .cornerRadius(10)
+                        Button(action: {clicked_size = [false, true, false]}) {
+                            Text("Medium")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .cornerRadius(10)
+                        Button(action: {clicked_size = [false, false, true]}) {
+                            Text("Large")
+                        }
+                        .foregroundColor(Color.black)
+                        .buttonStyle(.bordered)
+                        .background(Color("Logo-Pink"))
+                        .cornerRadius(10)
+                    }
+                }
+                
+            }
+            
+            Group {
+                Text("Pet Description").frame(maxWidth: .infinity, alignment: .leading).padding()
+                TextField("Weight / Personality / Appearance", text: $petdescription).textFieldStyle(.roundedBorder).padding().padding(.top, -20)
+            }
+            
             Section(header: Text("Phone number")
                 .frame(maxWidth: .infinity, alignment: .leading).padding()) {
-                    TextField("enter", text: $amount).textFieldStyle(.roundedBorder).padding().padding(.top, -20)
+                    TextField("enter: ", text: $amount).textFieldStyle(.roundedBorder).padding().padding(.top, -20)
                 }
-            Text("or")
-            Section() {
+            Text("or");
+            Button(action: {
+                self.DM = !self.DM
+                }) {
+
+                Text("DM me via app")
+                    .font(.system(size: 15))
+                }
+                .frame(width: 140, height: 15, alignment: .center)
+                .padding(10)
+                .background(DM ? Color("Logo-Pink") : Color.gray)
+              
+            .foregroundColor(Color.black)
+            .buttonStyle(.bordered)
+            .cornerRadius(10)
+            
+                   
+            /*Section() {
                 TextField("Enter amount...", text: $amount, onEditingChanged: { (changed) in
                     print("description onEditingChanged - \(changed)")
                 })
-            }
+            }*/
             
-            Section(header: Text("Reward Amount (Optional)")
+            Section(header: Text("Reward Amount $ (Optional)")
                 .frame(maxWidth: .infinity, alignment: .leading).padding()) {
                     VStack {
                         Slider(
@@ -979,13 +1091,19 @@ struct NewReportView3: View {
                             }
                         )
                         Text("\(Int(reward))")
-                            .foregroundColor(isEditing ? .red : .blue)
+                            .foregroundColor(isEditing ? .red : .red)
                     }
                 }
             
-            
+            Spacer()
             NavigationLink(destination: NewReportView4(mapModel: mapModel, loginModel: loginModel)) {
-                Text("Next")
+                Text("Post").foregroundColor(Color("Logo-Pink"))
+                    .navigationBarBackButtonHidden(true)
+                            .navigationBarItems(leading: btnBack)
+                /*.padding().overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color("Logo-Pink"), lineWidth: 4))*/
+                    
                 
             }
         }
