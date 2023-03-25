@@ -12,6 +12,7 @@ struct StarterView: View {
     @ObservedObject var loginModel = LoginViewModel()
     @ObservedObject var postModel = PostViewModel()
     @ObservedObject var profileViewModel = ProfileViewModel()
+    @ObservedObject var userViewModel = UserViewModel()
     
     var mapModel = MapViewModel()
     
@@ -19,7 +20,7 @@ struct StarterView: View {
         VStack {
             if (loginModel.isLoggedIn) {
                 //TestView(postModel: postModel, loginModel: loginModel)
-                HomePageView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, mapModel: mapModel)
+                HomePageView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, mapModel: mapModel, userModel: userViewModel)
             } else {
                 LoginView(loginModel: loginModel)
             }

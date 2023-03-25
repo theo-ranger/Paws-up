@@ -164,6 +164,7 @@ struct PostView: View {
     @ObservedObject var postModel: PostViewModel
     var profileViewModel: ProfileViewModel
     var mapModel: MapViewModel
+    var userModel: UserViewModel
     
     @State private var navigateTo: AnyView?
     @State private var isActive = false
@@ -183,7 +184,7 @@ struct PostView: View {
                     Spacer()
                     Menu {
                         Button(action: {
-                            navigateTo = AnyView(NewPostView(postModel: postModel, loginModel: loginModel))
+                            navigateTo = AnyView(NewPostView(postModel: postModel, loginModel: loginModel, userModel: userModel))
                             isActive = true
                         }, label: {
 //                            NavigationLink(destination: NewPostView(postModel: postModel, loginModel: loginModel)) {
@@ -244,13 +245,14 @@ struct HomePageView: View {
     var postModel: PostViewModel
     var profileViewModel: ProfileViewModel
     var mapModel: MapViewModel
+    var userModel: UserViewModel
     
     //@Binding var activeLabels: [String]
     
     var body: some View {
         Spacer()
         HStack{TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
-            PostView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, mapModel: mapModel).tabItem {
+            PostView(loginModel: loginModel, postModel: postModel, profileViewModel: profileViewModel, mapModel: mapModel, userModel: userModel).tabItem {
                 Image(systemName: "circle.hexagonpath")
                 Text("Community")}.tag(1)
 //            MapTestView(place: [IdentifiablePlace(id: UUID(), lat: 37.871684, long: -122.259934)], region: MKCoordinateRegion(
@@ -387,6 +389,7 @@ struct ProfileView: View {
 struct NewPostView: View {
     var postModel: PostViewModel
     var loginModel: LoginViewModel
+    var userModel: UserViewModel
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
@@ -397,6 +400,7 @@ struct NewPostView: View {
     @State private var isImagePickerDisplay = false
     @State private var tagInput: String = ""
     private let tags: [String] = ["Dogs", "Cats", "Adoption"]
+    @State var followed = false
     
     var btnBack : some View { Button(action: {
                 self.presentationMode.wrappedValue.dismiss()
@@ -445,6 +449,25 @@ struct NewPostView: View {
             }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("Logo-Pink")).sheet(isPresented: self.$isImagePickerDisplay) {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
+            
+            Button(action: { addUser(name: "lalal", background: selectedImage!, profilePic: selectedImage!)}, label: {Text("user").foregroundColor(Color("Logo-Pink")).font(.system(size: 20));
+            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("Logo-Pink")).sheet(isPresented: self.$isImagePickerDisplay) {
+                ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
+            }
+            Button(action: { addUser(name: "blabla", background: selectedImage!, profilePic: selectedImage!)}, label: {Text("user1").foregroundColor(Color("Logo-Pink")).font(.system(size: 20));
+            }).padding(.trailing).buttonStyle(.bordered).foregroundColor(Color("Logo-Pink")).sheet(isPresented: self.$isImagePickerDisplay) {
+                ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
+            }
+            
+            Button(action: {
+                follow(name: "jaja", user: currentUser)
+                followed = !followed
+            }) {
+                if followed {Text("following")}
+                else {Text("follow").foregroundColor(Color("Logo-Pink")).font(.system(size: 20))}
+            }
+                     
+            
         }.navigationTitle("Add Post")
             .navigationBarBackButtonHidden(true)
                     .navigationBarItems(leading: btnBack)
@@ -453,6 +476,13 @@ struct NewPostView: View {
     func addPost(username: String, title: String, description: String, image: UIImage, tags: String) {
         postModel.addPost(userName: username, title: title, description: description, image: image, tags: tags)
     }
+    func addUser(name: String, background: UIImage, profilePic: UIImage) {
+        userModel.addUser(name: name, background: background, profilePic: profilePic)
+    }
+    func follow(name: String, user: Profile) {
+        userModel.follow(name: name, user: user)
+    }
+    
 }
 
 /**
@@ -1366,7 +1396,7 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
 struct View_Previews: PreviewProvider {
     
     static var previews: some View {
-        NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel())
+        NewPostView(postModel: PostViewModel(), loginModel: LoginViewModel(), userModel: UserViewModel())
         NewReportView1(mapModel: MapViewModel(), loginModel: LoginViewModel())
         NewReportView2(mapModel: MapViewModel(), loginModel: LoginViewModel())
         NewReportView3(mapModel: MapViewModel(), loginModel: LoginViewModel())

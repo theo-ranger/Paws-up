@@ -91,6 +91,31 @@ class LoginViewModel: ObservableObject {
     }
 }
 
+class UserViewModel: ObservableObject {
+    @Published var users: [Profile] = []
+    @Published var userRepository = UserRepository()
+    
+    private var cancellables: Set<AnyCancellable> = []
+    
+    init() {
+        userRepository.$users
+            .assign(to: \.users, on: self)
+            .store(in: &cancellables)
+    }
+    
+    func fetchUsers() {
+        userRepository.fetchUsers()
+    }
+    
+    func addUser(name: String, background: UIImage, profilePic: UIImage) {
+        userRepository.addUser(name: name, background: background, profilePic: profilePic)
+    }
+    
+    func follow(name: String, user: Profile) {
+        userRepository.follow(name: name, user: user)
+    }
+}
+
 class PostViewModel: ObservableObject {
     @Published var posts: [Content] = []
     @Published var postRepository = PostRepository()

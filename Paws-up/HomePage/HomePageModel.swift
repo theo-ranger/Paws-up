@@ -24,6 +24,9 @@ struct Content: Identifiable, Codable {
     var tags: [String]
 }
 
+//var currentUser: Profile?
+var currentUser = Profile(id: "A4E7D540-54CF-48A1-B5D4-FC383E87B01A", profilePic: "abcd", background: "abcd", name: "lala", followers: ["a", "b"], following: ["c", "d"], posts: ["1","2"])
+
 struct PostModel {
     
 }

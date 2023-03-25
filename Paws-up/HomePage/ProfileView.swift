@@ -114,22 +114,15 @@ import FirebaseFunctions
 //    }
 //}
 //
-//struct Profile: Identifiable {
-//    let databaseRef = Database.database().reference()
-//    let storageRef = Storage.storage().reference()
-//    //let userRef = storageRef.child("users")
-//    let db = Firestore.firestore()
-//
-//    lazy var functions = Functions.functions()
-//
-//    var id: String
-//    var profilePic: Image
-//    var backgroundPic: Image
-//    var description: String
-//    var userName: String
-//    var followers: [String]
-//    var followees: [String]
-//    var posts: [Date:Image]
-//
-//
-//}
+struct Profile: Identifiable {
+
+    var id: String
+    var profilePic: String
+    var background: String
+    var name: String
+    var followers: [String]
+    var following: [String]
+    var posts: [String]
+
+
+}
