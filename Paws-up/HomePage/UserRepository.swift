@@ -42,15 +42,12 @@ class UserRepository: ObservableObject {
         }
     }
     
-    
-    
     func fetchUsers() {
         self.fetchItems { resources in
             self.users
             print("done")
         }
     }
-    
     
     func parseUser(_ dict: [String: Any]) -> Profile? {
         guard let followers = dict["followers"] as? [String] else {
@@ -97,18 +94,19 @@ class UserRepository: ObservableObject {
         fetchUsers()
     }
     
-    func follow(name: String, user: Profile) {
-        let userRef = db.collection("users").document(user.id)
-        userRef.getDocument { (document, error) in
+    func follow(followee: Profile, follower: Profile) {
+        let followerRef = db.collection("users").document(follower.id)
+        let followeeRef = db.collection("users").document(followee.id)
+        followerRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 let user = self.parseUser(document.data()!)
                 var following = user!.following
-                if following.contains(name) {
-                    following = following.filter(){$0 != name}
+                if following.contains(followee.id) {
+                    following = following.filter(){$0 != followee.id}
                 } else {
-                    following.append(name)
+                    following.append(followee.id)
                 }
-                userRef.updateData([
+                followerRef.updateData([
                     "following": following
                 ]) { err in
                     if let err = err {
@@ -121,5 +119,29 @@ class UserRepository: ObservableObject {
                 print("Document does not exist")
             }
         }
+        
+        followeeRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let user = self.parseUser(document.data()!)
+                var followers = user!.followers
+                if followers.contains(follower.id) {
+                    followers = followers.filter(){$0 != follower.id}
+                } else {
+                    followers.append(follower.id)
+                }
+                followeeRef.updateData([
+                    "followers": followers
+                ]) { err in
+                    if let err = err {
+                        print("Error adding document: \(err)")
+                    } else {
+                        print("Document modified with ID: \(document.documentID)")
+                    }
+                }
+            } else {
+                print("Document does not exist")
+            }
+        }
+
     }
 }

@@ -27,6 +27,8 @@ struct Content: Identifiable, Codable {
 //var currentUser: Profile?
 var currentUser = Profile(id: "A4E7D540-54CF-48A1-B5D4-FC383E87B01A", profilePic: "abcd", background: "abcd", name: "lala", followers: ["a", "b"], following: ["c", "d"], posts: ["1","2"])
 
+var testUser = Profile(id: "9B8810FB-F4CD-4716-955D-DAEB25662036", profilePic: "abcd", background: "abcd", name: "jaja", followers: ["a", "b"], following: ["c", "d"], posts: ["1","2"])
+
 struct PostModel {
     
 }
@@ -62,5 +64,3 @@ struct ProfileModel {
         var favoriteAnimal: String
     }
 }
-
-

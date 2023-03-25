@@ -70,7 +70,6 @@ class LoginViewModel: ObservableObject {
         
     }
     
-    
     func getEmail() -> String {
         if currentUser != nil {
             return (currentUser?.email!)!
@@ -112,8 +111,8 @@ class UserViewModel: ObservableObject {
         userRepository.addUser(name: name, background: background, profilePic: profilePic)
     }
     
-    func follow(name: String, user: Profile) {
-        userRepository.follow(name: name, user: user)
+    func follow(followee: Profile, follower: Profile) {
+        userRepository.follow(followee: followee, follower: follower)
     }
 }
 
@@ -142,10 +141,6 @@ class PostViewModel: ObservableObject {
     func likePost(userName: String, post: Content) {
         postRepository.likePost(userName: userName, post: post)
     }
-    
-    func getPost(postIdArray: [String]) {
-            postRepository.getPost(postIdArray: postIdArray)
-        }
 }
 
 class FilteredPostViewModel: ObservableObject {

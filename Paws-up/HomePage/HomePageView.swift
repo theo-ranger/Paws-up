@@ -463,13 +463,13 @@ struct NewPostView: View {
                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
             }
             
-            Button(action: {
-                follow(name: "jaja", user: currentUser)
-                followed = !followed
-            }) {
-                if followed {Text("following")}
-                else {Text("follow").foregroundColor(Color("Logo-Pink")).font(.system(size: 20))}
-            }
+//            Button(action: {
+//                follow(name: "jaja", user: currentUser)
+//                followed = !followed
+//            }) {
+//                if followed {Text("following")}
+//                else {Text("follow").foregroundColor(Color("Logo-Pink")).font(.system(size: 20))}
+//            }
                      
             
         }.navigationTitle("Add Post")
@@ -483,8 +483,8 @@ struct NewPostView: View {
     func addUser(name: String, background: UIImage, profilePic: UIImage) {
         userModel.addUser(name: name, background: background, profilePic: profilePic)
     }
-    func follow(name: String, user: Profile) {
-        userModel.follow(name: name, user: user)
+    func follow(followee: Profile, follower: Profile) {
+        userModel.follow(followee: followee, follower: follower)
     }
     
 }

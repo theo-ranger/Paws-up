@@ -64,12 +64,6 @@ class PostRepository: ObservableObject {
         }
     }
     
-    //given a list of post IDs, return a list of posts from
-    //func fetchIdsToPost(inputString: String) {
-        
-    //}
-
-    
     func fetchItems(_ completion: @escaping DataSource.completionHandler) {
         print("post fetch")        
         db.collection(path).getDocuments() { (querySnapshot, err) in
@@ -87,6 +81,7 @@ class PostRepository: ObservableObject {
         }
     }
     
+    //given a list of post IDs, return a list of posts from
     func getPost(postIdArray: [String]) -> [Content?] {
             var dic = [String:Content]()
             for post in self.posts {
@@ -99,7 +94,6 @@ class PostRepository: ObservableObject {
             }
             print(posts)
             return posts
-
         }
     
     func fetchPosts() {
