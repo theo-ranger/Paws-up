@@ -70,6 +70,7 @@ class LoginViewModel: ObservableObject {
         
     }
     
+    
     func getEmail() -> String {
         if currentUser != nil {
             return (currentUser?.email!)!
@@ -141,6 +142,10 @@ class PostViewModel: ObservableObject {
     func likePost(userName: String, post: Content) {
         postRepository.likePost(userName: userName, post: post)
     }
+    
+    func getPost(postIdArray: [String]) {
+            postRepository.getPost(postIdArray: postIdArray)
+        }
 }
 
 class FilteredPostViewModel: ObservableObject {

@@ -42,12 +42,15 @@ class UserRepository: ObservableObject {
         }
     }
     
+    
+    
     func fetchUsers() {
         self.fetchItems { resources in
             self.users
             print("done")
         }
     }
+    
     
     func parseUser(_ dict: [String: Any]) -> Profile? {
         guard let followers = dict["followers"] as? [String] else {

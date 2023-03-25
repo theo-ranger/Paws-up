@@ -267,7 +267,7 @@ struct HomePageView: View {
             Text("Donation+ View").tabItem {
                 Image(systemName: "giftcard")
                 Text("Donation+")}.tag(3)
-            ProfileView(profileViewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel).tabItem {
+            ProfileView(profileViewModel: profileViewModel, profile: profileViewModel.profile, loginModel: loginModel, postModel: postModel).tabItem {
                 Image(systemName: "person.circle")
                 Text("Profile")}.tag(3)
             }.accentColor(Color("Logo-Pink"))
@@ -292,93 +292,97 @@ struct ProfileView: View {
     var profileViewModel: ProfileViewModel
     var profile: ProfileModel.Profile
     var loginModel: LoginViewModel
-
+    var postModel: PostViewModel
+    
+    var placeholder: [Content] = [Content(id: "testID", timeStamp: "2344567", title: "testTitle", description: "no description", userName: "fake user", image: "image1", likedUsers: [], tags: [])]
+    
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-                Image("profilebg")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .opacity(0.8)
-                    .overlay(
-                        Image("denero").clipShape(Circle())
-                            .offset(y: 80)
-                    )
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
-                HStack {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 10) {
+                    Image("profilebg")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .opacity(0.8)
+                        .overlay(
+                            Image("denero").clipShape(Circle())
+                                .offset(y: 80)
+                        )
                     Spacer()
-                    Text("John Denero").font(.system(size: 30))
                     Spacer()
-                }
-                HStack {
                     Spacer()
-                    VStack {
-                        Text("2.3k").font(.system(size: 18))
-                        Text("Followers").font(.system(size: 14))
-                    }
-                    Spacer().frame(width: 20)
-                    VStack {
-                        Text("417").font(.system(size: 18))
-                        Text("Following").font(.system(size: 14))
-                    }
                     Spacer()
-                }
-//                Text("Email: " + loginModel.getEmail())
-                HStack {
-                    Spacer()
-                    VStack {
-                        Text("Posts").font(.system(size: 14))
-                        Rectangle().fill(Color.black).frame(width: 30, height: 1, alignment: .center).offset(y: -10)
-                    }
-                    Spacer().frame(width: 24)
-                    VStack {
-                        Text("Liked").font(.system(size: 14))
-                        Rectangle().fill(Color.gray).frame(width: 30, height: 1, alignment: .center).offset(y: -10)
-                    }
-                    Spacer()
-                }
-                VStack {
                     HStack {
-                        Image("image1")
-                            .resizable()
-                            .aspectRatio(1.0, contentMode: .fit)
-                            .clipped()
-                        Image("image2")
-                            .resizable()
-                            .aspectRatio(1.0, contentMode: .fit)
-                            .clipped()
-                        Image("image3")
-                            .resizable()
-                            .aspectRatio(1.0, contentMode: .fit)
-                            .clipped()
+                        Spacer()
+                        Text("John Denero").font(.system(size: 30))
+                        Spacer()
                     }
                     HStack {
-                        Image("image4")
-                            .resizable()
-                            .aspectRatio(1.0, contentMode: .fit)
-                            .clipped()
-                        Image("image5")
-                            .resizable()
-                            .aspectRatio(1.0, contentMode: .fit)
-                            .clipped()
-                        Image("image6")
-                            .resizable()
-                            .aspectRatio(1.0, contentMode: .fit)
-                            .clipped()
+                        Spacer()
+                        VStack {
+                            Text("2.3k").font(.system(size: 18))
+                            Text("Followers").font(.system(size: 14))
+                        }
+                        Spacer().frame(width: 20)
+                        VStack {
+                            Text("417").font(.system(size: 18))
+                            Text("Following").font(.system(size: 14))
+                        }
+                        Spacer()
                     }
+    //                Text("Email: " + loginModel.getEmail())
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text("Posts").font(.system(size: 14))
+                            Rectangle().fill(Color.black).frame(width: 30, height: 1, alignment: .center).offset(y: -10)
+                        }
+                        Spacer().frame(width: 24)
+                        VStack {
+                            Text("Liked").font(.system(size: 14))
+                            Rectangle().fill(Color.gray).frame(width: 30, height: 1, alignment: .center).offset(y: -10)
+                        }
+                        Spacer()
+                    }
+                    VStack {
+                        HStack {
+                            ForEach(placeholder) { post in
+                                NavigationLink(
+                                    destination:
+                                        DetailedPostView(post: post)) {
+                                            Image("image1")
+                                                .resizable()
+                                                .aspectRatio(1.0, contentMode: .fit)
+                                                .clipped()
+                                        }
+                            }
+                        }
+                        HStack {
+                            Image("image4")
+                                .resizable()
+                                .aspectRatio(1.0, contentMode: .fit)
+                                .clipped()
+                            Image("image5")
+                                .resizable()
+                                .aspectRatio(1.0, contentMode: .fit)
+                                .clipped()
+                            Image("image6")
+                                .resizable()
+                                .aspectRatio(1.0, contentMode: .fit)
+                                .clipped()
+                        }
+                    }
+    //                Button(action: {
+    //                    Task {
+    //                        await loginModel.signOut()
+    //                    }
+    //                }) {
+    //                    Text("Log Out")
+    //                }
                 }
-//                Button(action: {
-//                    Task {
-//                        await loginModel.signOut()
-//                    }
-//                }) {
-//                    Text("Log Out")
-//                }
             }
         }
+        
     }
 }
 
