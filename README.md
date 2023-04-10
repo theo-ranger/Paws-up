@@ -1,11 +1,9 @@
 # Paws Up
 An iOS App built for the community of pet lovers.
 
-<iframe src="https://giphy.com/embed/n2Z4LyvfyWfjm6fdgH" width="240" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/n2Z4LyvfyWfjm6fdgH">via GIPHY</a></p>
-
-<iframe src="https://giphy.com/embed/uKN3jy1GGcfVMEpGRa" width="240" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/uKN3jy1GGcfVMEpGRa">via GIPHY</a></p>
-
-<iframe src="https://giphy.com/embed/fp8marND6wkRNpNdSR" width="240" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/fp8marND6wkRNpNdSR">via GIPHY</a></p>
+![](./demo1.gif)
+![](./demo2.gif)
+![](./demo3.gif)
 
 ## Getting Started
 Requirements: *Xcode 14.0 or above.* The firebase package dependencies should appear after cloning from this repository. However, without authorization to our firebase database, any online features should be unavailable.
