@@ -2,8 +2,6 @@
 An iOS App built for the community of pet lovers.
 
 ![](./demo1.gif)
-![](./demo2.gif)
-![](./demo3.gif)
 
 ## Getting Started
 Requirements: *Xcode 14.0 or above.* The firebase package dependencies should appear after cloning from this repository. However, without authorization to our firebase database, any online features should be unavailable.
@@ -22,8 +20,12 @@ Requirements: *Xcode 14.0 or above.* The firebase package dependencies should ap
 ### Homepage
 An instagram-like page where the users can create posts to share their love of animals. Users can also make special posts if they find a lost pet or have lost a pet themselves.
 
+![](./demo2.gif)
+
 ### Maps
 Integrates Apple Maps which can be used to provide locations of lost pets. If users find a lost pet, they can mark it on the map. Users can also mark their own pet if they have lost a pet.
+
+![](./demo3.gif)
 
 ### Profile
 This page also works like instagram which displays basic information and users’ published posts.
