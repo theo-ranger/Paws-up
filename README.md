@@ -1,12 +1,11 @@
 # Paws Up
 An iOS App built for the community of pet lovers.
 
-<br />
-<p align=“row”>
-<img src= “https://media.giphy.com/media/n2Z4LyvfyWfjm6fdgH/giphy.gif” width=“400” >
-<img src= “https://media.giphy.com/media/uKN3jy1GGcfVMEpGRa/giphy.gif” width=“400” >
-<img src= “https://media.giphy.com/media/fp8marND6wkRNpNdSR/giphy.gif” width=“400” >
-</p>
+<iframe src="https://giphy.com/embed/n2Z4LyvfyWfjm6fdgH" width="240" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/n2Z4LyvfyWfjm6fdgH">via GIPHY</a></p>
+
+<iframe src="https://giphy.com/embed/uKN3jy1GGcfVMEpGRa" width="240" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/uKN3jy1GGcfVMEpGRa">via GIPHY</a></p>
+
+<iframe src="https://giphy.com/embed/fp8marND6wkRNpNdSR" width="240" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/fp8marND6wkRNpNdSR">via GIPHY</a></p>
 
 ## Getting Started
 Requirements: *Xcode 14.0 or above.* The firebase package dependencies should appear after cloning from this repository. However, without authorization to our firebase database, any online features should be unavailable.
